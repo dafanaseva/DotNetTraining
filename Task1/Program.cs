@@ -9,21 +9,18 @@ try
 
     var fileName = Environment.GetCommandLineArgs()[1];
 
-    if (!File.Exists(fileName))
-    {
-        throw new ArgumentException("File does not exist");
-    }
+    using var streamReader = new StreamReader(fileName);
+    var words = WordsBuilderHelper.ReadWords(streamReader).ToList();
 
-    using var reader = new FileReader(fileName);
+    using var streamWriter = File.CreateText($"result_{Guid.NewGuid().ToString()}.csv");
+    WordsBuilderHelper.WriteWords(words, streamWriter);
 
-    var service = new StatisticsService(reader, new CsvWriter<WordStatistics>($"results_{Guid.NewGuid()}"));
-
-    service.PrintStatistics();
+    Console.WriteLine($"Words found:{words.Count}");
 
     Console.ReadLine();
 }
 catch (Exception ex)
 {
-    Console.WriteLine(ex.Message);
+    Console.WriteLine(ex.ToString());
     Console.ReadLine();
 }
