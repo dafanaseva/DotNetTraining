@@ -7,7 +7,12 @@ try
     var executionContext = new ExecutionContext(new Stack<float>(), new Dictionary<string, float>());
 
     var readFromFile = Environment.GetCommandLineArgs().Length <= 1;
-    var fileName = Environment.GetCommandLineArgs()[1];
+
+    var fileName = string.Empty;
+    if (readFromFile)
+    {
+         fileName = Environment.GetCommandLineArgs()[1];
+    }
 
     var commandCreator = new CommandCreator("config.json");
 
