@@ -8,24 +8,22 @@ public class Push : Command
     {
         var argument = arguments[0];
 
-        float value;
-        if (argument is string)
+        if (argument is string parameterName)
         {
-            if (executionContext.Parameters.TryGetValue(argument.ToString(), out value))
+            if (executionContext.Parameters.TryGetValue(parameterName, out var value))
             {
-
+                executionContext.Stack.Push(value);
+                return;
             }
-            else throw new Exception();
         }
-        else if (argument is float)
+
+        if (argument is float parameterValue)
         {
-            value = Convert.ToSingle(argument);
+            executionContext.Stack.Push(parameterValue);
         }
         else
         {
-            throw new Exception();
+            throw new Exception("Wrong parameter");
         }
-
-        executionContext.Stack.Push(value);
     }
 }
