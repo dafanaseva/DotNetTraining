@@ -5,52 +5,43 @@ using NUnit.Framework;
 
 namespace Task1.Tests;
 
-public class WordsBuilderHelperTests
+[TestFixture, FixtureLifeCycle(LifeCycle.InstancePerTestCase)]
+internal sealed class WordsBuilderHelperTests
 {
-    [SetUp]
-    public void Setup()
+    private readonly Mock<TextReader> _spyTextReader = new();
+    private readonly Mock<TextWriter> _spyTextWriter = new();
+
+    [Test]
+    public void TestReadWords_TwoLettersInWord_ShouldReadTwice()
     {
+        // Arrange
+        _spyTextReader.SetupSequence(x => x.Read()).Returns('a').Returns('a');
+        _spyTextReader.SetupSequence(x => x.Peek()).Returns('a').Returns('a').Returns(-1);
+
+        // Act
+        WordsBuilderHelper.ReadWords(_spyTextReader.Object);
+
+        // Assert
+        _spyTextReader.Verify(t => t.Read(), Times.Exactly(2));
     }
 
     [Test]
-    public void ReadWordsTest()
+    public void TestWriteWords_OneWord_ShouldWriteOnce()
     {
-        // Arrange
-        var mockReader = new Mock<TextReader>();
-
-        mockReader.SetupSequence(x => x.Read()).Returns('a').Returns('a');
-        mockReader.SetupSequence(x => x.Peek()).Returns('a').Returns('a').Returns(-1);
-
         // Act
-        WordsBuilderHelper.ReadWords(mockReader.Object);
+        WordsBuilderHelper.WriteWords(new List<WordInfo> { new("aaa", 1, new Frequency(100)) }, _spyTextWriter.Object);
 
         // Assert
-        mockReader.Verify(t => t.Read(), Times.Exactly(2));
+        _spyTextWriter.Verify(t => t.WriteLine(It.IsAny<string>()), Times.Once);
     }
 
     [Test]
-    public void WriteWordsTest()
+    public void TestWriteWords_NoWords_ShouldNeverWrite()
     {
-        // Arrange
-        var mockWriter = new Mock<TextWriter>();
-
         // Act
-        WordsBuilderHelper.WriteWords(new List<WordInfo> { new("aaa", 1, 100) }, mockWriter.Object);
+        WordsBuilderHelper.WriteWords(new List<WordInfo>(), _spyTextWriter.Object);
 
         // Assert
-        mockWriter.Verify(t => t.WriteLine(It.IsAny<string>()), Times.Once);
-    }
-
-    [Test]
-    public void WriteNothingTest()
-    {
-        // Arrange
-        var mockWriter = new Mock<TextWriter>();
-
-        // Act
-        WordsBuilderHelper.WriteWords(new List<WordInfo>(), mockWriter.Object);
-
-        // Assert
-        mockWriter.Verify(t => t.WriteLine(It.IsAny<string>()), Times.Never);
+        _spyTextWriter.Verify(t => t.WriteLine(It.IsAny<string>()), Times.Never);
     }
 }

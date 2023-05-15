@@ -4,121 +4,103 @@ using NUnit.Framework;
 
 namespace Task1.Tests;
 
-[TestFixture]
-public class WordsBuilderTests
+[TestFixture, FixtureLifeCycle(LifeCycle.InstancePerTestCase)]
+internal sealed class WordsBuilderTests
 {
-    [SetUp]
-    public void Setup()
-    {
-    }
+    private readonly WordsBuilder _systemUnderTest = new ();
 
     [Test]
-    public void EmptyTextTest()
+    public void TestGetWords_NoText_ShouldReturnEmptyList()
     {
-        // Arrange
-        var wordsBuilder = new WordsBuilder();
-
         // Act
-        var result = wordsBuilder.GetWords();
+        var result = _systemUnderTest.GetWords();
 
         // Assert
         Assert.IsFalse(result.Any());
     }
 
     [Test]
-    public void LettersTest()
+    public void TestGetWords_AppendLetters_ShouldReturnForEachLetter()
     {
-        // Arrange
-        var wordsBuilder = new WordsBuilder();
-
         // Act
         foreach (var symbol in "a b c")
         {
-            wordsBuilder.Append(symbol);
+            _systemUnderTest.Append(symbol);
         }
 
         // Assert
-        var result = wordsBuilder.GetWords();
+        var result = _systemUnderTest.GetWords();
 
         Assert.AreEqual(
             new List<WordInfo>
             {
-                new("a", 1, 33.33),
-                new("b", 1, 33.33),
-                new("c", 1, 33.33),
+                new("a", 1, new Frequency(33.33)),
+                new("b", 1, new Frequency(33.33)),
+                new("c", 1, new Frequency(33.33))
             },
             result);
     }
 
     [Test]
-    public void UpperCaseTest()
+    public void TestGetWords_AppendWordsWithUpperCaseLetters_ShouldReturnIgnoredUpperCase()
     {
-        // Arrange
-        var wordsBuilder = new WordsBuilder();
-
         // Act
         foreach (var symbol in "cat CAt dog")
         {
-            wordsBuilder.Append(symbol);
+            _systemUnderTest.Append(symbol);
         }
 
         // Assert
-        var result = wordsBuilder.GetWords();
+        var result = _systemUnderTest.GetWords();
 
         Assert.AreEqual(
             new List<WordInfo>
             {
-                new("cat", 2, 66.67),
-                new("dog", 1, 33.33)
+                new("cat", 2, new Frequency(66.67)),
+                new("dog", 1, new Frequency(33.33))
             },
             result);
     }
 
     [Test]
-    public void IncludeNumbersTest()
+    public void TestGetWords_AppendNumbersInWords_ShouldReturnForEachWord()
     {
-        // Arrange
-        var wordsBuilder = new WordsBuilder();
-
         // Act
         foreach (var symbol in "111 111 d0g")
         {
-            wordsBuilder.Append(symbol);
+            _systemUnderTest.Append(symbol);
         }
 
         // Assert
-        var result = wordsBuilder.GetWords();
+        var result = _systemUnderTest.GetWords();
 
         Assert.AreEqual(
             new List<WordInfo>
             {
-                new("111", 2, 66.67),
-                new("d0g", 1, 33.33),
+                new("111", 2, new Frequency(66.67)),
+                new("d0g", 1, new Frequency(33.33)),
             },
             result);
     }
 
     [Test]
-    public void IncludeOtherSymbolsTest()
+    public void TestGetWords_AppendOtherSymbols_ShouldIgnoreOtherSymbols()
     {
-        // Arrange
-        var wordsBuilder = new WordsBuilder();
-
         // Act
         foreach (var symbol in "aaa,bbb.ccc aaa!bbb")
         {
-            wordsBuilder.Append(symbol);
+            _systemUnderTest.Append(symbol);
         }
 
         // Assert
-        var result = wordsBuilder.GetWords();
+        var result = _systemUnderTest.GetWords();
 
         Assert.AreEqual(
             new List<WordInfo>
             {
-                new("aaa", 2, 40),
-                new("bbb", 2, 40),
-                new("ccc", 1, 20),
+                new("aaa", 2, new Frequency(40)),
+                new("bbb", 2, new Frequency(40)),
+                new("ccc", 1, new Frequency(20)),
             },
             result);
     }

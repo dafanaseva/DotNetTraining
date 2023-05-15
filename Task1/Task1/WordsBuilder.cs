@@ -1,77 +1,71 @@
 using System.Text;
 
-namespace Task1
+namespace Task1;
+
+internal sealed class WordsBuilder
 {
-    public sealed class WordsBuilder
+    private int _totalWordsCount;
+    private readonly Dictionary<string, int> _result;
+
+    private readonly StringBuilder _stringBuilder;
+
+    public WordsBuilder()
     {
-        private int _totalWordsCount;
-        private readonly Dictionary<string, int> _result;
+        _totalWordsCount = 0;
+        _result = new Dictionary<string, int>();
 
-        private readonly StringBuilder _stringBuilder;
+        _stringBuilder = new StringBuilder();
+    }
 
-        public WordsBuilder()
+    public void Append(char symbol)
+    {
+        if (char.IsLetterOrDigit(symbol))
         {
-            _totalWordsCount = 0;
-            _result = new Dictionary<string, int>();
-
-            _stringBuilder = new StringBuilder();
+            _stringBuilder.Append(symbol);
         }
-
-        public void Append(char symbol)
+        else
         {
-            if (char.IsLetterOrDigit(symbol))
+            if (_stringBuilder.Length <= 0)
             {
-                _stringBuilder.Append(symbol);
-            }
-            else
-            {
-                if (_stringBuilder.Length <= 0)
-                {
-                    return;
-                }
-
-                AddOrUpdateWord(GetInvariantString(_stringBuilder));
-            }
-        }
-
-        public IEnumerable<WordInfo> GetWords()
-        {
-            if (_stringBuilder.Length > 0)
-            {
-                AddOrUpdateWord(GetInvariantString(_stringBuilder));
+                return;
             }
 
-            return _result.OrderByDescending(t => t.Value)
-                          .Select(t => new WordInfo(t.Key, t.Value, GetFrequency(t.Value, _totalWordsCount)))
-                          .ToList();
+            AddOrUpdateWord(GetInvariantString(_stringBuilder));
         }
+    }
 
-        private void AddOrUpdateWord(string word)
+    public IEnumerable<WordInfo> GetWords()
+    {
+        if (_stringBuilder.Length > 0)
         {
-            _totalWordsCount++;
-
-            if (_result.ContainsKey(word))
-            {
-                _result[word] += 1;
-            }
-            else
-            {
-                _result[word] = 1;
-            }
+            AddOrUpdateWord(GetInvariantString(_stringBuilder));
         }
 
-        private static double GetFrequency(int count, int totalCount)
+        return _result.OrderByDescending(t => t.Value)
+            .Select(t => new WordInfo(t.Key, t.Value, new Frequency(t.Value, _totalWordsCount)))
+            .ToList();
+    }
+
+    private void AddOrUpdateWord(string word)
+    {
+        _totalWordsCount++;
+
+        if (_result.ContainsKey(word))
         {
-            return decimal.ToDouble(Math.Round(decimal.Divide(count, totalCount) * 100, 2));
+            _result[word] += 1;
         }
-
-        private static string GetInvariantString(StringBuilder stringBuilder)
+        else
         {
-            var result = stringBuilder.ToString().ToLowerInvariant();
-
-            stringBuilder.Clear();
-
-            return result;
+            _result[word] = 1;
         }
+    }
+
+    private static string GetInvariantString(StringBuilder stringBuilder)
+    {
+        var result = stringBuilder.ToString().ToLowerInvariant();
+
+        stringBuilder.Clear();
+
+        return result;
     }
 }

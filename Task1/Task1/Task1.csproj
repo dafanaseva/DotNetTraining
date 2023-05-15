@@ -11,6 +11,9 @@
     <None Update="lorem.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>Task1.Tests</_Parameter1>
+    </AssemblyAttribute>
   </ItemGroup>
 
 </Project>

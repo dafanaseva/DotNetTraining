@@ -1,6 +1,6 @@
 namespace Task1;
 
-public static class WordsBuilderHelper
+internal static class WordsBuilderHelper
 {
     public static IEnumerable<WordInfo> ReadWords(TextReader reader)
     {
