@@ -2,19 +2,22 @@
 using Task2.Read;
 using ExecutionContext = Task2.Calculator.ExecutionContext;
 
+const string configName = "config.json";
+const int fileNameArgumentIndex = 1;
+
 try
 {
     var executionContext = new ExecutionContext(new Stack<float>(), new Dictionary<string, float>());
 
-    var readFromFile = Environment.GetCommandLineArgs().Length <= 1;
+    var readFromFile = Environment.GetCommandLineArgs().Length <= fileNameArgumentIndex;
 
     var fileName = string.Empty;
     if (readFromFile)
     {
-         fileName = Environment.GetCommandLineArgs()[1];
+         fileName = Environment.GetCommandLineArgs()[fileNameArgumentIndex];
     }
 
-    var commandCreator = new CommandCreator("config.json");
+    var commandCreator = new CommandCreator(configName);
 
     using var streamReader = readFromFile
         ? new StreamReader(fileName)

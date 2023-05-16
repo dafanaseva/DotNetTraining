@@ -1,6 +1,6 @@
 ﻿namespace Task2.Read;
 
-public static class TextReaderHelper
+internal static class TextReaderHelper
 {
     public static IEnumerable<string> ReadLines(this TextReader reader)
     {

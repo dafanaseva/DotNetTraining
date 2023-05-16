@@ -1,6 +1,6 @@
 ﻿namespace Task2.Calculator.Commands;
 
-public sealed class Multiplication : Command
+internal sealed class Multiplication : Command
 {
     public override void Execute(ExecutionContext executionContext, params object[] arguments)
     {

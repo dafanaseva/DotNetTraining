@@ -1,37 +1,40 @@
 ﻿using System.Text.RegularExpressions;
+using Task2.Read.Exceptions;
 
 namespace Task2.Read;
 
-public static partial class CommandParser
+internal static class CommandParser
 {
-    private static readonly Regex NameAndParameters = MyRegex();
+    private const int CaptureGroupStartIndex = 1;
 
-    public static CommandInput Parse(string input)
+    private static readonly Regex CommandNameAndArguments =
+        new("^([A-Z\\*\\/\\-\\#\\+]+)\\s*(\\w+)*\\s*(\\d+[\\.\\,]?\\d*)*");
+
+    public static CommandInfo Parse(string input)
     {
-        if (!NameAndParameters.IsMatch(input))
+        if (!CommandNameAndArguments.IsMatch(input))
         {
-            throw new ArgumentException(input);
+            throw new ParsingCommandInfoException($"Wrong command syntax: {input}");
         }
 
-        var matches = GetMatches(input, NameAndParameters);
+        var matches = GetMatches(input, CommandNameAndArguments);
 
-        return new CommandInput((string)matches[0], matches.Skip(1).ToArray());
+        var commandName = matches.First();
+
+        return new CommandInfo(commandName, matches.Skip(CaptureGroupStartIndex).Select(x => (object)x).ToArray());
     }
 
-    private static List<object> GetMatches(string input, Regex regex)
+    private static List<string> GetMatches(string input, Regex regex)
     {
         var groups = regex.Matches(input).First().Groups;
 
-        var matches = new List<object>();
+        var matches = new List<string>();
 
         foreach (Group group in groups)
         {
             matches.Add(group.Value);
         }
 
-        return matches.Skip(1).ToList();
+        return matches.Skip(CaptureGroupStartIndex).ToList();
     }
-
-    [GeneratedRegex("^([A-Z\\*\\/\\-\\#\\+]+)\\s*(\\w+)*\\s*(\\d+[\\.\\,]?\\d*)*")]
-    private static partial Regex MyRegex();
 }

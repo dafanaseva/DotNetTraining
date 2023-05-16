@@ -1,6 +1,6 @@
 ﻿namespace Task2.Calculator;
 
-public class ExecutionContext
+internal sealed class ExecutionContext
 {
     public Stack<float> Stack { get; }
     public Dictionary<string, float> Parameters { get; }

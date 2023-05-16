@@ -2,7 +2,7 @@
 
 namespace Task2.Calculator.Commands;
 
-public class Push : Command
+internal sealed class Push : Command
 {
     public override void Execute(ExecutionContext executionContext, params object[] arguments)
     {

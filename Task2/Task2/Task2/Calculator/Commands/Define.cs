@@ -1,12 +1,25 @@
-﻿namespace Task2.Calculator.Commands;
+﻿using Task2.Calculator.Exceptions;
 
-public class Define : Command
+namespace Task2.Calculator.Commands;
+
+internal sealed class Define : Command
 {
+    private const int ParameterNameIndex = 0;
+    private const int ParameterValueIndex = 1;
+
     public override void Execute(ExecutionContext executionContext, params object[] arguments)
     {
-        var argumentName = (string)arguments[0];
-        var argumentValue = Convert.ToSingle(arguments[1]);
+        try
+        {
+            var argumentName = (string)arguments[ParameterNameIndex];
+            var argumentValue = Convert.ToSingle(arguments[ParameterValueIndex]);
 
-        executionContext.Parameters[argumentName] = argumentValue;
+            executionContext.Parameters[argumentName] = argumentValue;
+        }
+        catch (Exception)
+        {
+            // todo: message to common constants
+            throw new InvalidCommandArgumentException("Wrong argument passed");
+        }
     }
 }

@@ -1,11 +1,22 @@
-﻿namespace Task2.Calculator.Commands;
+﻿using Task2.Calculator.Exceptions;
 
-public class Comment : Command
+namespace Task2.Calculator.Commands;
+
+internal sealed class Comment : Command
 {
+    private const int CommentArgumentIndex = 0;
+
     public override void Execute(ExecutionContext executionContext, params object[] arguments)
     {
-        var comment = (string)arguments[0];
+        try
+        {
+            var comment = (string)arguments[CommentArgumentIndex];
 
-        Console.WriteLine(comment);
+            Console.WriteLine(comment);
+        }
+        catch (Exception)
+        {
+            throw new InvalidCommandArgumentException("Wrong argument");
+        }
     }
 }

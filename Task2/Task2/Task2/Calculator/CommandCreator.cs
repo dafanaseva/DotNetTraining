@@ -1,8 +1,9 @@
-﻿using System.Text.Json;
+﻿using System.Diagnostics.Contracts;
+using System.Text.Json;
 
 namespace Task2.Calculator;
 
-public class CommandCreator
+internal sealed class CommandCreator
 {
     private readonly Dictionary<string, string> _commands;
 
@@ -13,6 +14,8 @@ public class CommandCreator
 
         _commands = JsonSerializer.Deserialize<Dictionary<string, string>>(output) ?? new Dictionary<string, string>();
     }
+
+    [Pure]
     public Command CreateCommand(string command)
     {
         if (!_commands.TryGetValue(command, out var typeName))

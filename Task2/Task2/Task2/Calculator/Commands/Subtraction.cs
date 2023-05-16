@@ -1,6 +1,6 @@
 ﻿namespace Task2.Calculator.Commands;
 
-public class Substraction : Command
+internal sealed class Subtraction : Command
 {
     public override void Execute(ExecutionContext executionContext, params object[] arguments)
     {
