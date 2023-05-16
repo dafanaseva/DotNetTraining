@@ -34,9 +34,9 @@ internal sealed class WordsBuilderTests
         Assert.AreEqual(
             new List<WordInfo>
             {
-                new("a", 1, new Frequency(33.33)),
-                new("b", 1, new Frequency(33.33)),
-                new("c", 1, new Frequency(33.33))
+                WordInfo.CreateInstance("a", 1, Frequency.CreateInstance(33.33)),
+                WordInfo.CreateInstance("b", 1, Frequency.CreateInstance(33.33)),
+                WordInfo.CreateInstance("c", 1, Frequency.CreateInstance(33.33))
             },
             result);
     }
@@ -56,8 +56,8 @@ internal sealed class WordsBuilderTests
         Assert.AreEqual(
             new List<WordInfo>
             {
-                new("cat", 2, new Frequency(66.67)),
-                new("dog", 1, new Frequency(33.33))
+                WordInfo.CreateInstance("cat", 2, Frequency.CreateInstance(66.67)),
+                WordInfo.CreateInstance("dog", 1, Frequency.CreateInstance(33.33))
             },
             result);
     }
@@ -77,8 +77,8 @@ internal sealed class WordsBuilderTests
         Assert.AreEqual(
             new List<WordInfo>
             {
-                new("111", 2, new Frequency(66.67)),
-                new("d0g", 1, new Frequency(33.33)),
+                WordInfo.CreateInstance("111", 2, Frequency.CreateInstance(66.67)),
+                WordInfo.CreateInstance("d0g", 1, Frequency.CreateInstance(33.33)),
             },
             result);
     }
@@ -98,9 +98,9 @@ internal sealed class WordsBuilderTests
         Assert.AreEqual(
             new List<WordInfo>
             {
-                new("aaa", 2, new Frequency(40)),
-                new("bbb", 2, new Frequency(40)),
-                new("ccc", 1, new Frequency(20)),
+                WordInfo.CreateInstance("aaa", 2, Frequency.CreateInstance(40)),
+                WordInfo.CreateInstance("bbb", 2, Frequency.CreateInstance(40)),
+                WordInfo.CreateInstance("ccc", 1, Frequency.CreateInstance(20)),
             },
             result);
     }

@@ -29,7 +29,7 @@ internal sealed class WordsBuilderHelperTests
     public void TestWriteWords_OneWord_ShouldWriteOnce()
     {
         // Act
-        WordsBuilderHelper.WriteWords(new List<WordInfo> { new("aaa", 1, new Frequency(100)) }, _spyTextWriter.Object);
+        WordsBuilderHelper.WriteWords(new List<WordInfo> { WordInfo.CreateInstance("aaa", 1, Frequency.CreateInstance(100)) }, _spyTextWriter.Object);
 
         // Assert
         _spyTextWriter.Verify(t => t.WriteLine(It.IsAny<string>()), Times.Once);
