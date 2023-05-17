@@ -1,12 +1,17 @@
-﻿using Task2;
+﻿using log4net;
+using log4net.Config;
+using System.Reflection;
+using Task2;
+
+var logRepository = LogManager.GetRepository(Assembly.GetEntryAssembly());
+XmlConfigurator.Configure(logRepository, new FileInfo("log4net.config"));
+var logger = LogManager.GetLogger(typeof(Program));
 
 const string commandsConfigPath = "config.json";
 const int fileNameArgumentIndex = 1;
-
 try
 {
-    Console.WriteLine("Stack calculator is running.");
-
+    logger.Info("The program is started");
     var readFromFile = Environment.GetCommandLineArgs().Length > fileNameArgumentIndex;
 
     string? fileName = null;
@@ -37,8 +42,9 @@ catch (Exception e) when(e is FileNotFoundException or
 {
     Console.WriteLine("File can not be found.");
 }
-catch (Exception)
+catch (Exception e)
 {
+    logger.Error(e);
     Console.WriteLine("An unexpected error occurred. The execution is stopped.");
 }
 finally
