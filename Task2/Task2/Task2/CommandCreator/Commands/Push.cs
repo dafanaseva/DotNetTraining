@@ -1,6 +1,4 @@
-﻿using Task2.Read;
-
-namespace Task2.Calculator.Commands;
+﻿namespace Task2.CommandCreator.Commands;
 
 internal sealed class Push : Command
 {

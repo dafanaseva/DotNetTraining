@@ -1,6 +1,6 @@
-﻿using Task2.Calculator.Exceptions;
+﻿using Task2.CommandCreator.Exceptions;
 
-namespace Task2.Calculator.Commands;
+namespace Task2.CommandCreator.Commands;
 
 internal sealed class SquareRoot : Command
 {
@@ -9,7 +9,7 @@ internal sealed class SquareRoot : Command
         var p = executionContext.Stack.Pop();
         if (p < 0)
         {
-            throw new InvalidArithmeticalArgumentException($"Can not get square root from negative value: {p}");
+            throw new ExecuteCommandException($"Can not get square root from negative value: {p}");
         }
 
         executionContext.Stack.Push((float)Math.Sqrt(p));

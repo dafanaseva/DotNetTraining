@@ -1,4 +1,4 @@
-﻿namespace Task2.Read;
+﻿namespace Task2;
 
 internal static class TextReaderHelper
 {

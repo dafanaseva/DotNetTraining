@@ -1,4 +1,4 @@
-﻿namespace Task2.Calculator.Commands;
+﻿namespace Task2.CommandCreator.Commands;
 
 internal sealed class Pop : Command
 {

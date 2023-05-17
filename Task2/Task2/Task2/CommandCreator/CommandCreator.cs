@@ -1,7 +1,9 @@
-﻿using System.Diagnostics.Contracts;
+﻿using System.Diagnostics;
+using System.Diagnostics.Contracts;
 using System.Text.Json;
+using Task2.CommandCreator.Exceptions;
 
-namespace Task2.Calculator;
+namespace Task2.CommandCreator;
 
 internal sealed class CommandCreator
 {
@@ -20,20 +22,18 @@ internal sealed class CommandCreator
     {
         if (!_commands.TryGetValue(command, out var typeName))
         {
-            throw new ArgumentException(command);
+            throw new UnknownCommandException($"Unknown command: {command}.");
         }
 
         var type = Type.GetType(typeName);
         if (type == null)
         {
-            throw new ArgumentException(typeName);
+            throw new Exception($"Wrong type {nameof(type)}");
         }
 
         var instance = Activator.CreateInstance(type);
-        if (instance == null)
-        {
-            throw new Exception("Failed to create command instance");
-        }
+
+        Debug.Assert(instance != null, $"{nameof(instance)} != null");
 
         return (Command)instance;
     }

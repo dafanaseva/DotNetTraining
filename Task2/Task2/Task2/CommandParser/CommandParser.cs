@@ -1,7 +1,6 @@
 ﻿using System.Text.RegularExpressions;
-using Task2.Read.Exceptions;
 
-namespace Task2.Read;
+namespace Task2.CommandParser;
 
 internal static class CommandParser
 {
@@ -10,18 +9,18 @@ internal static class CommandParser
     private static readonly Regex CommandNameAndArguments =
         new("^([A-Z\\*\\/\\-\\#\\+]+)\\s*(\\w+)*\\s*(\\d+[\\.\\,]?\\d*)*");
 
-    public static CommandInfo Parse(string input)
+    public static CommandData Parse(string input)
     {
         if (!CommandNameAndArguments.IsMatch(input))
         {
-            throw new ParsingCommandInfoException($"Wrong command syntax: {input}");
+            throw new ParseCommandException($"Wrong command syntax: {input}");
         }
 
         var matches = GetMatches(input, CommandNameAndArguments);
 
         var commandName = matches.First();
 
-        return new CommandInfo(commandName, matches.Skip(CaptureGroupStartIndex).Select(x => (object)x).ToArray());
+        return new CommandData(commandName, matches.Skip(CaptureGroupStartIndex).Select(x => (object)x).ToArray());
     }
 
     private static List<string> GetMatches(string input, Regex regex)

@@ -1,6 +1,6 @@
-﻿using Task2.Calculator.Exceptions;
+﻿using Task2.CommandCreator.Exceptions;
 
-namespace Task2.Calculator.Commands;
+namespace Task2.CommandCreator.Commands;
 
 internal sealed class Division : Command
 {
@@ -10,7 +10,7 @@ internal sealed class Division : Command
         var p2 = executionContext.Stack.Pop();
         if (p2 == 0)
         {
-            throw new InvalidArithmeticalArgumentException("Can not divide on zero");
+            throw new ExecuteCommandException("Can not divide on zero");
         }
 
         executionContext.Stack.Push(p2 / p1);

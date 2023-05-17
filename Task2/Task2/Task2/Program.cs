@@ -1,41 +1,48 @@
-﻿using Task2.Calculator;
-using Task2.Read;
-using ExecutionContext = Task2.Calculator.ExecutionContext;
+﻿using Task2;
 
-const string configName = "config.json";
+const string commandsConfigPath = "config.json";
 const int fileNameArgumentIndex = 1;
 
 try
 {
-    var executionContext = new ExecutionContext(new Stack<float>(), new Dictionary<string, float>());
+    Console.WriteLine("Stack calculator is running.");
 
-    var readFromFile = Environment.GetCommandLineArgs().Length <= fileNameArgumentIndex;
+    var readFromFile = Environment.GetCommandLineArgs().Length > fileNameArgumentIndex;
 
-    var fileName = string.Empty;
+    string? fileName = null;
+
     if (readFromFile)
     {
-         fileName = Environment.GetCommandLineArgs()[fileNameArgumentIndex];
+        fileName = Environment.GetCommandLineArgs()[fileNameArgumentIndex];
     }
 
-    var commandCreator = new CommandCreator(configName);
+    Console.WriteLine(readFromFile
+        ? $"Read commands from the file: {fileName}."
+        : "Please use console to type a command.");
 
     using var streamReader = readFromFile
-        ? new StreamReader(fileName)
+        ? new StreamReader(fileName!)
         : new StreamReader(Console.OpenStandardInput());
+
+    var commandRunner = new CommandRunner(commandsConfigPath);
 
     foreach (var line in streamReader.ReadLines())
     {
-        var commandInput = CommandParser.Parse(line);
-
-        var command = commandCreator.CreateCommand(commandInput.Name);
-        command.Execute(executionContext, commandInput.Parameters);
+        commandRunner.RunCommand(line);
     }
 }
-catch (Exception exception)
+catch (Exception e) when(e is FileNotFoundException or
+                             DirectoryNotFoundException or
+                             IOException)
 {
-    Console.WriteLine(exception.ToString());
+    Console.WriteLine("File can not be found.");
+}
+catch (Exception)
+{
+    Console.WriteLine("An unexpected error occurred. The execution is stopped.");
 }
 finally
 {
+    Console.WriteLine("Press any key to exit.");
     Console.ReadLine();
 }

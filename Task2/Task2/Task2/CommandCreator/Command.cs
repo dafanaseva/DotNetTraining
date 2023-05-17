@@ -1,4 +1,4 @@
-﻿namespace Task2.Calculator;
+﻿namespace Task2.CommandCreator;
 
 internal abstract class Command
 {
