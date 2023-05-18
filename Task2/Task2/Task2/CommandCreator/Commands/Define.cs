@@ -10,6 +10,6 @@ internal sealed class Define : Command
         var argumentName = (string)arguments[ParameterNameIndex];
         var argumentValue = Convert.ToSingle(arguments[ParameterValueIndex]);
 
-        executionContext.Parameters[argumentName] = argumentValue;
+        executionContext.SaveParameter(argumentName, argumentValue);
     }
 }

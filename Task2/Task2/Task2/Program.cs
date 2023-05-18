@@ -1,13 +1,15 @@
-﻿using log4net;
+﻿using System.Diagnostics;
+using log4net;
 using log4net.Config;
 using System.Reflection;
+using System.Text.Json;
 using Task2;
 
 var logRepository = LogManager.GetRepository(Assembly.GetEntryAssembly());
 XmlConfigurator.Configure(logRepository, new FileInfo("log4net.config"));
 var logger = LogManager.GetLogger(typeof(Program));
 
-const string commandsConfigPath = "config.json";
+const string commandsConfigPath = "commandsConfig.json";
 const int fileNameArgumentIndex = 1;
 try
 {
@@ -29,18 +31,18 @@ try
         ? new StreamReader(fileName!)
         : new StreamReader(Console.OpenStandardInput());
 
-    var commandRunner = new CommandRunner(commandsConfigPath);
+    using var file = new StreamReader(commandsConfigPath);
+    var output = file.ReadToEnd();
+
+    var config = JsonSerializer.Deserialize<CommandsConfig>(output);
+    Debug.Assert(config != null, $"{nameof(config)} != null");
+
+    var commandRunner = new CommandRunner(config.ToDictionary());
 
     foreach (var line in streamReader.ReadLines())
     {
         commandRunner.RunCommand(line);
     }
-}
-catch (Exception e) when(e is FileNotFoundException or
-                             DirectoryNotFoundException or
-                             IOException)
-{
-    Console.WriteLine("File can not be found.");
 }
 catch (Exception e)
 {

@@ -1,27 +1,29 @@
-﻿namespace Task2.CommandCreator.Commands;
+﻿using Task2.CommandCreator.Exceptions;
+
+namespace Task2.CommandCreator.Commands;
 
 internal sealed class Push : Command
 {
+    private const int ArgumentIndex = 0;
+
     public override void Execute(ExecutionContext executionContext, params object[] arguments)
     {
-        var argument = arguments[0];
+        var argument = arguments[ArgumentIndex];
 
-        if (argument is string parameterName)
+        switch (argument)
         {
-            if (executionContext.Parameters.TryGetValue(parameterName, out var value))
+            case string argumentName:
             {
-                executionContext.Stack.Push(value);
+                var value = executionContext.GetParameterValueByName(argumentName);
+
+                executionContext.SaveValue(value);
                 return;
             }
-        }
-
-        if (argument is float parameterValue)
-        {
-            executionContext.Stack.Push(parameterValue);
-        }
-        else
-        {
-            throw new Exception("Wrong parameter");
+            case float argumentValue:
+                executionContext.SaveValue(argumentValue);
+                break;
+            default:
+                throw new InvalidCommandArgumentException($"Wrong argument type {argument}");
         }
     }
 }

@@ -1,7 +1,44 @@
-﻿namespace Task2.CommandCreator;
+﻿using Task2.CommandCreator.Exceptions;
+
+namespace Task2.CommandCreator;
 
 internal sealed class ExecutionContext
 {
-    public Stack<float> Stack { get; } = new();
-    public Dictionary<string, float> Parameters { get; } = new();
+    private Stack<float> Stack { get; } = new();
+    private Dictionary<string, float> Parameters { get; } = new();
+
+    public float GetLastValue(bool shouldDelete = true)
+    {
+        try
+        {
+            return shouldDelete? Stack.Pop(): Stack.Peek();
+        }
+        catch (InvalidOperationException)
+        {
+            throw new InvalidCommandArgumentException("No available parameter");
+        }
+    }
+
+    public void SaveValue(float value)
+    {
+        Stack.Push(value);
+    }
+
+    public void SaveParameter(string parameterName, float parameterValue)
+    {
+        if (!Parameters.TryAdd(parameterName, parameterValue))
+        {
+            throw new InvalidCommandArgumentException($"The parameter {parameterName} already exists");
+        }
+    }
+
+    public float GetParameterValueByName(string parameterName)
+    {
+        if (!Parameters.TryGetValue(parameterName, out var parameterValue))
+        {
+            throw new InvalidCommandArgumentException($"Unknown parameter name: {parameterName}");
+        }
+
+        return parameterValue;
+    }
 }

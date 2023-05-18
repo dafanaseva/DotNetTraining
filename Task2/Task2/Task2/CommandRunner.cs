@@ -9,9 +9,9 @@ internal sealed class CommandRunner
     private readonly CommandCreator.CommandCreator _commandCreator;
     private readonly ExecutionContext _executionContext;
 
-    public CommandRunner(string commandsConfigPath)
+    public CommandRunner(Dictionary<string, Type?> commandTypes)
     {
-        _commandCreator = new CommandCreator.CommandCreator(commandsConfigPath);
+        _commandCreator = new CommandCreator.CommandCreator(commandTypes);
         _executionContext = new ExecutionContext();
     }
 
@@ -24,12 +24,13 @@ internal sealed class CommandRunner
             var command = _commandCreator.CreateCommand(commandData.Name);
             command.Execute(_executionContext, commandData.Parameters);
         }
-        catch (Exception e) when (e is ExecuteCommandException or
-                                      ParseCommandException or
-                                      UnknownCommandException)
+        catch (Exception e) when (e is ParseCommandException or UnknownCommandException)
         {
-            Console.WriteLine($"Entered command is invalid: {e.Message}.");
-            Console.WriteLine("Please correct the command and try again.");
+            Console.WriteLine($"Entered command is invalid: {e.Message}. Please correct the command and try again.");
+        }
+        catch (Exception e) when (e is InvalidCommandArgumentException or DivideByZeroException)
+        {
+            Console.WriteLine($"Argument is invalid: {e.Message}");
         }
     }
 }

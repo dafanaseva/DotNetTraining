@@ -1,37 +1,32 @@
 ﻿using System.Diagnostics;
 using System.Diagnostics.Contracts;
-using System.Text.Json;
 using Task2.CommandCreator.Exceptions;
 
 namespace Task2.CommandCreator;
 
 internal sealed class CommandCreator
 {
-    private readonly Dictionary<string, string> _commands;
+    private readonly Dictionary<string, Type?> _commands;
 
-    public CommandCreator(string config)
+    public CommandCreator(Dictionary<string, Type?> commandTypes)
     {
-        using var file = new StreamReader(config);
-        var output = file.ReadToEnd();
-
-        _commands = JsonSerializer.Deserialize<Dictionary<string, string>>(output) ?? new Dictionary<string, string>();
+        _commands = commandTypes;
     }
 
     [Pure]
-    public Command CreateCommand(string command)
+    public Command CreateCommand(string commandName)
     {
-        if (!_commands.TryGetValue(command, out var typeName))
+        if (!_commands.TryGetValue(commandName, out var typeName))
         {
-            throw new UnknownCommandException($"Unknown command: {command}.");
+            throw new UnknownCommandException($"Unknown command: {commandName}.");
         }
 
-        var type = Type.GetType(typeName);
-        if (type == null)
+        if (typeName == null)
         {
-            throw new Exception($"Wrong type {nameof(type)}");
+            throw new UnknownCommandException("Command type is invalid");
         }
 
-        var instance = Activator.CreateInstance(type);
+        var instance = Activator.CreateInstance(typeName);
 
         Debug.Assert(instance != null, $"{nameof(instance)} != null");
 

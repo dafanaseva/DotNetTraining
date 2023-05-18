@@ -1,12 +1,8 @@
 ﻿namespace Task2.CommandCreator.Commands;
 
-internal sealed class Subtraction : Command
+internal sealed class Subtraction : ArithmeticalCommand
 {
-    public override void Execute(ExecutionContext executionContext, params object[] arguments)
+    public Subtraction() : base(ArithmeticalOperation.Subtraction)
     {
-        var p1 = executionContext.Stack.Pop();
-        var p2 = executionContext.Stack.Pop();
-
-        executionContext.Stack.Push(p2 - p1);
     }
 }
