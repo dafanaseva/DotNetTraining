@@ -7,7 +7,7 @@ internal sealed class ExecutionContext
     private Stack<float> Stack { get; } = new();
     private Dictionary<string, float> Parameters { get; } = new();
 
-    public float GetLastValue(bool shouldDelete = true)
+    public float GetValue(bool shouldDelete = true)
     {
         try
         {
@@ -15,7 +15,7 @@ internal sealed class ExecutionContext
         }
         catch (InvalidOperationException)
         {
-            throw new InvalidCommandArgumentException("No available parameter");
+            throw new InvalidCommandArgumentException("Need at least one additional value to be saved");
         }
     }
 
@@ -32,7 +32,7 @@ internal sealed class ExecutionContext
         }
     }
 
-    public float GetParameterValueByName(string parameterName)
+    public float GetParameterValue(string parameterName)
     {
         if (!Parameters.TryGetValue(parameterName, out var parameterValue))
         {

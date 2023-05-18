@@ -14,7 +14,7 @@ internal sealed class Push : Command
         {
             case string argumentName:
             {
-                var value = executionContext.GetParameterValueByName(argumentName);
+                var value = executionContext.GetParameterValue(argumentName);
 
                 executionContext.SaveValue(value);
                 return;

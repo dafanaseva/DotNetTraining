@@ -2,7 +2,7 @@
 
 internal sealed class Subtraction : ArithmeticalCommand
 {
-    public Subtraction() : base(ArithmeticalOperation.Subtraction)
+    public Subtraction() : base(ArithmeticalOperations.Subtraction)
     {
     }
 }

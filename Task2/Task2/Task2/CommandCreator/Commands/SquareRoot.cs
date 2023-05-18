@@ -4,8 +4,8 @@ internal sealed class SquareRoot : Command
 {
     public override void Execute(ExecutionContext executionContext, params object[] arguments)
     {
-        var p = executionContext.GetLastValue();
+        var p = executionContext.GetValue();
 
-        executionContext.SaveValue(ArithmeticalOperation.SquareRoot(p));
+        executionContext.SaveValue(ArithmeticalOperations.SquareRoot(p));
     }
 }

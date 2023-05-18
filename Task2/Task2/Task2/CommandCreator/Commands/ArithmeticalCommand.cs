@@ -11,8 +11,8 @@ internal class ArithmeticalCommand : Command
 
     public override void Execute(ExecutionContext executionContext, params object[] arguments)
     {
-        var p1 = executionContext.GetLastValue();
-        var p2 = executionContext.GetLastValue();
+        var p1 = executionContext.GetValue();
+        var p2 = executionContext.GetValue();
 
         executionContext.SaveValue(_operation(p1, p2));
     }

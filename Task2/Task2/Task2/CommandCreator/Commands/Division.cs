@@ -2,7 +2,7 @@
 
 internal sealed class Division : ArithmeticalCommand
 {
-    public Division() : base(ArithmeticalOperation.Division)
+    public Division() : base(ArithmeticalOperations.Division)
     {
     }
 }
