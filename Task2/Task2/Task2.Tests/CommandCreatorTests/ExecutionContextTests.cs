@@ -5,27 +5,30 @@ namespace Task2.Tests.CommandCreatorTests;
 [TestFixture, FixtureLifeCycle(LifeCycle.InstancePerTestCase)]
 internal sealed class ExecutionContextTests
 {
+    private const int ParameterValue = 100;
+    private const string ParameterName = "a";
+
     private readonly ExecutionContext _systemUnderTest = new();
 
-    [TestCase(1)]
-    public void TestSaveValue_Any_ShouldNotThrowException(float value)
+    [Test]
+    public void TestSaveValue_Any_ShouldNotThrowException()
     {
-        _systemUnderTest.SaveValue(value);
+        _systemUnderTest.SaveValue(ParameterValue);
     }
 
-    [TestCase("a", 100)]
-    public void TestSaveValue_UniqueParameterName_ShouldNotThrowException(string parameterName, float parameterValue)
+    [Test]
+    public void TestSaveValue_UniqueParameterName_ShouldNotThrowException()
     {
-        _systemUnderTest.SaveParameter(parameterName, parameterValue);
+        _systemUnderTest.SaveParameter(ParameterName, ParameterValue);
     }
 
-    [TestCase("a", 100)]
-    public void TestSaveValue_ExistingParameterName_ShouldThrowException(string parameterName, float parameterValue)
+    [Test]
+    public void TestSaveValue_ExistingParameterName_ShouldThrowException()
     {
-        _systemUnderTest.SaveParameter(parameterName, parameterValue);
+        _systemUnderTest.SaveParameter(ParameterName, ParameterValue);
 
         Assert.Throws<InvalidCommandArgumentException>(() =>
-            _systemUnderTest.SaveParameter(parameterName, parameterValue)
+            _systemUnderTest.SaveParameter(ParameterName, ParameterValue)
         );
     }
 
@@ -40,9 +43,9 @@ internal sealed class ExecutionContextTests
     [Test]
     public void TestGetValue_AtLeastOneValueOnStack_ShouldNotThrowException()
     {
-        _systemUnderTest.SaveValue(1);
+        _systemUnderTest.SaveValue(ParameterValue);
 
        var value = _systemUnderTest.GetValue();
-       Assert.AreEqual(1, value);
+       Assert.That(value, Is.EqualTo(ParameterValue));
     }
 }

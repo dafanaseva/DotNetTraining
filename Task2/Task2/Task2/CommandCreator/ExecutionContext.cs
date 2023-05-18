@@ -15,7 +15,7 @@ internal sealed class ExecutionContext
         }
         catch (InvalidOperationException)
         {
-            throw new InvalidCommandArgumentException("Need at least one additional value to be saved");
+            throw new InvalidCommandArgumentException("Need at least one more value");
         }
     }
 
