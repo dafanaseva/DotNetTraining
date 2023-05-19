@@ -1,6 +1,6 @@
-﻿using Task2.CommandCreator.Exceptions;
+﻿using Task2.Create.Exceptions;
 
-namespace Task2.CommandCreator.Commands;
+namespace Task2.Create.Commands;
 
 internal sealed class Push : Command
 {
@@ -12,6 +12,9 @@ internal sealed class Push : Command
 
         switch (argument)
         {
+            case float argumentValue:
+                executionContext.SaveValue(argumentValue);
+                break;
             case string argumentName:
             {
                 var value = executionContext.GetParameterValue(argumentName);
@@ -19,9 +22,6 @@ internal sealed class Push : Command
                 executionContext.SaveValue(value);
                 return;
             }
-            case float argumentValue:
-                executionContext.SaveValue(argumentValue);
-                break;
             default:
                 throw new InvalidCommandArgumentException($"Wrong argument type {argument}");
         }

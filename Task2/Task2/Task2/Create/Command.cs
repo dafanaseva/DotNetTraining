@@ -1,4 +1,4 @@
-﻿namespace Task2.CommandCreator;
+﻿namespace Task2.Create;
 
 internal abstract class Command
 {

@@ -1,4 +1,4 @@
-﻿namespace Task2.CommandCreator.Exceptions;
+﻿namespace Task2.Create.Exceptions;
 
 internal sealed class InvalidCommandArgumentException : Exception
 {

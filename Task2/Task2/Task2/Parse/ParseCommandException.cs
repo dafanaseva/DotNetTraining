@@ -1,4 +1,4 @@
-﻿namespace Task2.CommandParser;
+﻿namespace Task2.Parse;
 
 internal sealed class ParseCommandException : Exception
 {

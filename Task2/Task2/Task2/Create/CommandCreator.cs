@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics;
 using System.Diagnostics.Contracts;
-using Task2.CommandCreator.Exceptions;
+using Task2.Create.Exceptions;
 
-namespace Task2.CommandCreator;
+namespace Task2.Create;
 
 internal sealed class CommandCreator
 {

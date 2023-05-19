@@ -1,48 +1,86 @@
-﻿using System.Diagnostics;
-using log4net;
+﻿using log4net;
 using log4net.Config;
 using System.Reflection;
-using System.Text.Json;
-using Task2;
+using Microsoft.Extensions.Configuration;
+using Task2.Configuration;
+using Task2.Create;
+using Task2.Create.Exceptions;
+using Task2.Parse;
+using Task2.Run;
 
 var logRepository = LogManager.GetRepository(Assembly.GetEntryAssembly());
 XmlConfigurator.Configure(logRepository, new FileInfo("log4net.config"));
 var logger = LogManager.GetLogger(typeof(Program));
 
-const string commandsConfigPath = "commandsConfig.json";
 const int fileNameArgumentIndex = 1;
+
 try
 {
-    logger.Info("The program is started");
     var readFromFile = Environment.GetCommandLineArgs().Length > fileNameArgumentIndex;
 
-    string? fileName = null;
-
-    if (readFromFile)
-    {
-        fileName = Environment.GetCommandLineArgs()[fileNameArgumentIndex];
-    }
-
     Console.WriteLine(readFromFile
-        ? $"Read commands from the file: {fileName}."
+        ? "Read commands from the file."
         : "Please use console to type a command.");
 
+    var config = new ConfigurationBuilder()
+        .SetBasePath(Directory.GetCurrentDirectory())
+        .AddJsonFile("appsettings.json", optional: true)
+        .AddCommandLine(args)
+        .Build();
+
+    var appConfig = config.Get<AppConfig>() ?? throw new ConfigurationNotFoundException(nameof(AppConfig));
+
+    if (!readFromFile)
+    {
+        Console.WriteLine($"Type '{appConfig.ExitConsoleText}' to exit.");
+    }
+
     using var streamReader = readFromFile
-        ? new StreamReader(fileName!)
+        ? new StreamReader(Environment.GetCommandLineArgs()[fileNameArgumentIndex])
         : new StreamReader(Console.OpenStandardInput());
 
-    using var file = new StreamReader(commandsConfigPath);
-    var output = file.ReadToEnd();
+    var commandParser = new CommandParser(appConfig.CommandPattern ??
+                                          throw new ConfigurationNotFoundException(nameof(appConfig.CommandPattern)));
 
-    var config = JsonSerializer.Deserialize<CommandsConfig>(output);
-    Debug.Assert(config != null, $"{nameof(config)} != null");
+    var commandCreator = new CommandCreator(appConfig.Commands?.ToDictionary() ??
+                                            throw new ConfigurationNotFoundException(nameof(appConfig.Commands)));
 
-    var commandRunner = new CommandRunner(config.ToDictionary());
+    var commandRunner = new CommandRunner();
 
-    foreach (var line in streamReader.ReadLines())
+    while (!streamReader.EndOfStream)
     {
-        commandRunner.RunCommand(line);
+        var line = streamReader.ReadLine();
+
+        if (string.IsNullOrEmpty(line))
+        {
+            continue;
+        }
+
+        if (line.Equals(appConfig.ExitConsoleText ??
+                        throw new ConfigurationNotFoundException(nameof(appConfig.ExitConsoleText))))
+        {
+            break;
+        }
+
+        try
+        {
+            commandParser.Parse(line).Deconstruct(out var name, out var parameters);
+            var command = commandCreator.CreateCommand(name);
+            commandRunner.RunCommand(command, parameters);
+        }
+        catch (Exception e) when (e is ParseCommandException or UnknownCommandException)
+        {
+            Console.WriteLine($"Entered command is invalid: {e.Message}. Please correct the command and try again.");
+        }
+        catch (Exception e) when (e is InvalidCommandArgumentException)
+        {
+            Console.WriteLine($"Argument is invalid: {e.Message}");
+        }
     }
+}
+catch (ConfigurationNotFoundException e)
+{
+    Console.WriteLine(e.Message);
 }
 catch (Exception e)
 {

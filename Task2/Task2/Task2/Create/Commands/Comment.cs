@@ -1,4 +1,4 @@
-﻿namespace Task2.CommandCreator.Commands;
+﻿namespace Task2.Create.Commands;
 
 internal sealed class Comment : Command
 {
