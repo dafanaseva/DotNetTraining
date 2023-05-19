@@ -22,8 +22,4 @@
       <ProjectReference Include="..\Task2\Task2.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="ConfigurationTests\" />
-    </ItemGroup>
-
 </Project>

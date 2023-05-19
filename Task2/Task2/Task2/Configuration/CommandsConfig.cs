@@ -2,9 +2,9 @@
 
 namespace Task2.Configuration;
 
-internal sealed class Commands
+internal sealed class CommandsConfig
 {
-    public string? Namespace => null;
+    public string? Namespace { get; set; }
 
     private ReadOnlyDictionary<string, string>? CommandNameClassName { get; } = new(new Dictionary<string, string>());
 
