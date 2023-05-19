@@ -1,6 +1,6 @@
-using Task2.CommandCreator;
-using Task2.CommandCreator.Commands;
-using Task2.CommandCreator.Exceptions;
+using Task2.Create;
+using Task2.Create.Commands;
+using Task2.Create.Exceptions;
 
 namespace Task2.Tests.CommandCreatorTests;
 
@@ -21,7 +21,7 @@ internal sealed class CommandCreatorTests
 
     private Command? _command;
 
-    private readonly CommandCreator.CommandCreator _sut = new(Types);
+    private readonly CommandCreator _sut = new(Types);
 
     [Test]
     public void TestCreateCommand_ExistingCommandName_ShouldReturnCommand()
