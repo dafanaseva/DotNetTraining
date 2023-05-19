@@ -8,9 +8,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <None Update="commandsConfig.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
       <None Update="commands.txt">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>

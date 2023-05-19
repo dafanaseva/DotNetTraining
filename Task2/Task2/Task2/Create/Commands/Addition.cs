@@ -2,7 +2,7 @@
 
 internal sealed class Addition : ArithmeticalCommand
 {
-    public Addition() : base(ArithmeticalOperations.Addition)
+    public Addition() : base(ArithmeticalOperations.Add)
     {
     }
 }

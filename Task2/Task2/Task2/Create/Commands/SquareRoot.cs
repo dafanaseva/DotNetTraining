@@ -6,6 +6,6 @@ internal sealed class SquareRoot : Command
     {
         var p = executionContext.GetValue();
 
-        executionContext.SaveValue(ArithmeticalOperations.SquareRoot(p));
+        executionContext.SaveValue(ArithmeticalOperations.GetSquareRoot(p));
     }
 }

@@ -2,7 +2,7 @@
 
 internal sealed class Multiplication : ArithmeticalCommand
 {
-    public Multiplication() : base(ArithmeticalOperations.Multiplication)
+    public Multiplication() : base(ArithmeticalOperations.Multiply)
     {
     }
 }

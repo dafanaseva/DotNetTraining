@@ -11,7 +11,7 @@ internal sealed class ExecutionContext
     {
         try
         {
-            return shouldDelete? Stack.Pop(): Stack.Peek();
+            return shouldDelete ? Stack.Pop() : Stack.Peek();
         }
         catch (InvalidOperationException)
         {
