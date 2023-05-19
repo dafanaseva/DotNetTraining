@@ -1,6 +1,6 @@
 ﻿using Moq;
 using Task2.CreateCommands;
-using Task2.Run;
+using Task2.Execute;
 
 namespace Task2.Tests.RunTests;
 
@@ -9,7 +9,7 @@ internal sealed class CommandRunnerTests
 {
     private readonly Mock<Command> _command = new();
 
-    private readonly CommandRunner _systemUnderTest = new();
+    private readonly CommandExecutor _systemUnderTest = new();
 
     [Test]
     public void TestRun_NoErrors_ShouldNotThrow()

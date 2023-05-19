@@ -1,13 +1,13 @@
 ﻿using Task2.CreateCommands;
 using ExecutionContext = Task2.CreateCommands.ExecutionContext;
 
-namespace Task2.Run;
+namespace Task2.Execute;
 
-internal sealed class CommandRunner
+internal sealed class CommandExecutor
 {
     private readonly ExecutionContext _executionContext;
 
-    public CommandRunner()
+    public CommandExecutor()
     {
         _executionContext = new ExecutionContext();
     }

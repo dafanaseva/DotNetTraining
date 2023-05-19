@@ -1,13 +1,13 @@
 ﻿using Task2.CreateCommands;
 using Task2.Parse;
 
-namespace Task2.Run;
+namespace Task2.Execute;
 
 internal sealed class Calculator
 {
     private readonly CommandCreator _creator;
     private readonly CommandParser _parser;
-    private readonly CommandRunner _runner;
+    private readonly CommandExecutor _executor;
 
     private readonly string _exitCalculatorText;
 
@@ -16,7 +16,7 @@ internal sealed class Calculator
         _parser = commandParser;
         _creator = commandCreator;
 
-        _runner = new CommandRunner();
+        _executor = new CommandExecutor();
 
         _exitCalculatorText = exitCalculatorText;
     }
@@ -43,9 +43,9 @@ internal sealed class Calculator
 
                 var command = _creator.CreateCommand(name);
 
-                _runner.RunCommand(command, parameters);
+                _executor.RunCommand(command, parameters);
             }
-            catch (Exception e) when (e is UserException)
+            catch (UserException e)
             {
                 Console.WriteLine(e.Message);
             }

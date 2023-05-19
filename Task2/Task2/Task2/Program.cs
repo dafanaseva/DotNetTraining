@@ -4,8 +4,8 @@ using System.Reflection;
 using Microsoft.Extensions.Configuration;
 using Task2.Configuration;
 using Task2.CreateCommands;
+using Task2.Execute;
 using Task2.Parse;
-using Task2.Run;
 
 var logRepository = LogManager.GetRepository(Assembly.GetEntryAssembly());
 XmlConfigurator.Configure(logRepository, new FileInfo("log4net.config"));
