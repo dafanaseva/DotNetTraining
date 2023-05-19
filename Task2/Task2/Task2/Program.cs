@@ -3,8 +3,7 @@ using log4net.Config;
 using System.Reflection;
 using Microsoft.Extensions.Configuration;
 using Task2.Configuration;
-using Task2.Create;
-using Task2.Create.Exceptions;
+using Task2.CreateCommands;
 using Task2.Parse;
 using Task2.Run;
 
@@ -25,7 +24,6 @@ try
     var config = new ConfigurationBuilder()
         .SetBasePath(Directory.GetCurrentDirectory())
         .AddJsonFile("appsettings.json", optional: true)
-        .AddCommandLine(args)
         .Build();
 
     var appConfig = config.Get<AppConfig>() ?? throw new ConfigurationNotFoundException(nameof(AppConfig));
@@ -35,48 +33,22 @@ try
         Console.WriteLine($"Type '{appConfig.ExitConsoleText}' to exit.");
     }
 
+    var parser = new CommandParser(appConfig.CommandPattern ??
+                                   throw new ConfigurationNotFoundException(nameof(appConfig.CommandPattern)));
+
+    var creator = new CommandCreator(appConfig.Commands?.ToDictionary() ??
+                                     throw new ConfigurationNotFoundException(nameof(appConfig.Commands)));
+
+    var exitCalculatorText = appConfig.ExitConsoleText ??
+                             throw new ConfigurationNotFoundException(nameof(appConfig.ExitConsoleText));
+
+    var calculator = new Calculator(parser, creator, exitCalculatorText);
+
     using var streamReader = readFromFile
         ? new StreamReader(Environment.GetCommandLineArgs()[fileNameArgumentIndex])
         : new StreamReader(Console.OpenStandardInput());
 
-    var commandParser = new CommandParser(appConfig.CommandPattern ??
-                                          throw new ConfigurationNotFoundException(nameof(appConfig.CommandPattern)));
-
-    var commandCreator = new CommandCreator(appConfig.Commands?.ToDictionary() ??
-                                            throw new ConfigurationNotFoundException(nameof(appConfig.Commands)));
-
-    var commandRunner = new CommandRunner();
-
-    while (!streamReader.EndOfStream)
-    {
-        var line = streamReader.ReadLine();
-
-        if (string.IsNullOrEmpty(line))
-        {
-            continue;
-        }
-
-        if (line.Equals(appConfig.ExitConsoleText ??
-                        throw new ConfigurationNotFoundException(nameof(appConfig.ExitConsoleText))))
-        {
-            break;
-        }
-
-        try
-        {
-            commandParser.Parse(line).Deconstruct(out var name, out var parameters);
-            var command = commandCreator.CreateCommand(name);
-            commandRunner.RunCommand(command, parameters);
-        }
-        catch (Exception e) when (e is ParseCommandException or UnknownCommandException)
-        {
-            Console.WriteLine($"Entered command is invalid: {e.Message}. Please correct the command and try again.");
-        }
-        catch (Exception e) when (e is InvalidCommandArgumentException)
-        {
-            Console.WriteLine($"Argument is invalid: {e.Message}");
-        }
-    }
+    calculator.RunCommands(streamReader);
 }
 catch (ConfigurationNotFoundException e)
 {
@@ -89,6 +61,6 @@ catch (Exception e)
 }
 finally
 {
-    Console.WriteLine("Press any key to exit.");
+    Console.WriteLine("Press enter to close program.");
     Console.ReadLine();
 }

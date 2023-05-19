@@ -1,11 +1,12 @@
-﻿namespace Task2.Configuration;
+﻿using System.Collections.ObjectModel;
 
-// ReSharper disable once ClassNeverInstantiated.Global
+namespace Task2.Configuration;
+
 internal sealed class Commands
 {
-    public string? Namespace { get; set; }
-    // ReSharper disable once CollectionNeverUpdated.Local
-    private Dictionary<string, string>? CommandNameClassName { get; } = new();
+    public string? Namespace => null;
+
+    private ReadOnlyDictionary<string, string>? CommandNameClassName { get; } = new(new Dictionary<string, string>());
 
     public Dictionary<string, Type?> ToDictionary()
     {
