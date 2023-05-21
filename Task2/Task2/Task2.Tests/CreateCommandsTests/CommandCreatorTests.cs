@@ -21,7 +21,7 @@ internal sealed class CommandCreatorTests
 
     private Command? _command;
 
-    private readonly CommandCreator _sut = new(Types, string.Empty);
+    private readonly CommandCreator _sut = new(Types, typeof(Addition).Namespace!);
 
     [Test]
     public void TestCreateCommand_ExistingCommandName_ShouldReturnCommand()

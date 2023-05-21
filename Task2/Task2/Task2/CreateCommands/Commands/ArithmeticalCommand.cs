@@ -9,10 +9,10 @@ internal class ArithmeticalCommand : Command
         _operation = operation;
     }
 
-    public override void Execute(ExecutionContext executionContext, params object[] arguments)
+    public override void Execute(IExecutionContext executionContext, params object[] arguments)
     {
-        var p1 = executionContext.GetValue();
-        var p2 = executionContext.GetValue();
+        var p1 = executionContext.PopValue();
+        var p2 = executionContext.PopValue();
 
         executionContext.SaveValue(_operation(p1, p2));
     }

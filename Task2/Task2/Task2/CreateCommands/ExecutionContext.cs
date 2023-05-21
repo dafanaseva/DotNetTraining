@@ -2,12 +2,12 @@
 
 namespace Task2.CreateCommands;
 
-internal sealed class ExecutionContext
+internal sealed class ExecutionContext : IExecutionContext
 {
     private Stack<float> Stack { get; } = new();
     private Dictionary<string, float> Parameters { get; } = new();
 
-    public float GetValue(bool shouldDelete = true)
+    public float PopValue(bool shouldDelete = true)
     {
         try
         {

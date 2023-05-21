@@ -5,12 +5,15 @@ namespace Task2.Tests.ConfigurationTests;
 [TestFixture]
 internal sealed class AppConfigTests
 {
-    [Test]
-    public void CreateCommandsConfigTests_EmptyProperties_ShouldBeOk()
+    [TestCase(null, null)]
+    [TestCase("", "")]
+    [TestCase("([A-z])", "Task2")]
+    public void CreateCommandsConfigTests_AnyProperties_ShouldBeOk(string? commandPattern, string? @nameSpace)
     {
         var commandsConfig = new AppConfig
         {
-            CommandPattern = string.Empty
+            CommandPattern = commandPattern,
+            Namespace = nameSpace
         };
 
         Assert.That(commandsConfig, Is.Not.Null);

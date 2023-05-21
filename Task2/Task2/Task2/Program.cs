@@ -41,7 +41,7 @@ try
         ? new StreamReader(filename!)
         : new StreamReader(Console.OpenStandardInput());
 
-    commandExecutor.ExecuteCommandsFromStream(streamReader);
+    commandExecutor.ExecuteCommands(streamReader);
 }
 catch (ConfigurationNotFoundException e)
 {

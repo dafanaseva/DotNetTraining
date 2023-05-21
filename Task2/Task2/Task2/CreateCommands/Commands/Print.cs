@@ -2,8 +2,8 @@
 
 internal sealed class Print : Command
 {
-    public override void Execute(ExecutionContext executionContext, params object[] arguments)
+    public override void Execute(IExecutionContext executionContext, params object[] arguments)
     {
-        Console.WriteLine(executionContext.GetValue(shouldDelete: false));
+        Console.WriteLine(executionContext.PopValue(shouldDelete: false));
     }
 }

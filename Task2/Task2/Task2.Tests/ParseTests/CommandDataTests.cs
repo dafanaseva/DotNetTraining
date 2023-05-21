@@ -17,12 +17,16 @@ internal sealed class CommandDataTests
 
     [TestCase("")]
     [TestCase(null)]
-    public void TestCreateCommandData_EmptyParameters_ShouldBeOk(string commandName)
+    public void TestCreateCommandData_EmptyParameters_ShouldThrow(string commandName)
     {
+        CommandData? data = null;
+
         Assert.Throws<ArgumentNullException>(() =>
         {
-            // ReSharper disable once ObjectCreationAsStatement
-            new CommandData(commandName, Array.Empty<object>());
+
+            data = new CommandData(commandName, Array.Empty<object>());
         });
+
+        Assert.That(data, Is.Null);
     }
 }

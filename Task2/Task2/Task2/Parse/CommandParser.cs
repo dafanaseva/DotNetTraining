@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 
 namespace Task2.Parse;
 
-internal sealed class CommandParser
+internal sealed class CommandParser : ICommandParser
 {
     private const int ParametersStartFromIndex = 1;
     private const int GroupMatchStartIndex = 1;
@@ -42,7 +42,7 @@ internal sealed class CommandParser
         return value;
     }
 
-    private List<string> GetMatchedGroupValues(string input)
+    public List<string> GetMatchedGroupValues(string input)
     {
         var firstMatch = _commandPattern.Matches(input).First();
         var matchingGroups = firstMatch.Groups;

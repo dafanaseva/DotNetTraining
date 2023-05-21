@@ -6,8 +6,13 @@ internal sealed class Push : Command
 {
     private const int ArgumentIndex = 0;
 
-    public override void Execute(ExecutionContext executionContext, params object[] arguments)
+    public override void Execute(IExecutionContext executionContext, params object[] arguments)
     {
+        if (arguments == null || !arguments.Any())
+        {
+            throw new InvalidCommandArgumentException("Need at least one argument");
+        }
+
         var argument = arguments[ArgumentIndex];
 
         switch (argument)

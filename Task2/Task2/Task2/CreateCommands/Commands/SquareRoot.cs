@@ -2,9 +2,9 @@
 
 internal sealed class SquareRoot : Command
 {
-    public override void Execute(ExecutionContext executionContext, params object[] arguments)
+    public override void Execute(IExecutionContext executionContext, params object[] arguments)
     {
-        var p = executionContext.GetValue();
+        var p = executionContext.PopValue();
 
         executionContext.SaveValue(ArithmeticalOperations.GetSquareRoot(p));
     }

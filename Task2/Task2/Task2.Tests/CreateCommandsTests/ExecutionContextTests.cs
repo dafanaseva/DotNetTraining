@@ -36,7 +36,7 @@ internal sealed class ExecutionContextTests
     public void TestGetValue_EmptyStack_ShouldThrowException()
     {
         Assert.Throws<InvalidCommandArgumentException>(() =>
-            _systemUnderTest.GetValue()
+            _systemUnderTest.PopValue()
         );
     }
 
@@ -45,7 +45,7 @@ internal sealed class ExecutionContextTests
     {
         _systemUnderTest.SaveValue(ParameterValue);
 
-       var value = _systemUnderTest.GetValue();
+       var value = _systemUnderTest.PopValue();
        Assert.That(value, Is.EqualTo(ParameterValue));
     }
 }

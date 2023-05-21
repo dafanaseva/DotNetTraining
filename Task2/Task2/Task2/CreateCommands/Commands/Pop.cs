@@ -2,8 +2,8 @@
 
 internal sealed class Pop : Command
 {
-    public override void Execute(ExecutionContext executionContext, params object[] arguments)
+    public override void Execute(IExecutionContext executionContext, params object[] arguments)
     {
-        executionContext.GetValue(shouldDelete: false);
+        executionContext.PopValue();
     }
 }

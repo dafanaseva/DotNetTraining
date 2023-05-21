@@ -1,6 +1,10 @@
-﻿namespace Task2.CreateCommands;
+﻿using log4net;
+
+namespace Task2.CreateCommands;
 
 internal abstract class Command
 {
-    public abstract void Execute(ExecutionContext executionContext, params object[] arguments);
+    protected static ILog Log => typeof(Command).GetLogger();
+
+    public abstract void Execute(IExecutionContext executionContext, params object[] arguments);
 }

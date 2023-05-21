@@ -9,28 +9,32 @@ internal sealed class CommandExecutor
 {
     private readonly ILog _log;
 
-    private readonly CommandCreator _commandCreator;
-    private readonly CommandParser _commandParser;
-    private readonly ExecutionContext _executionContext;
+    private readonly ICommandCreator _commandCreator;
+    private readonly ICommandParser _commandParser;
 
-    public CommandExecutor(CommandParser commandCommandParser, CommandCreator commandCommandCreator)
+    private readonly IExecutionContext _executionContext;
+
+    private const int EndOfStream = -1;
+
+    public CommandExecutor(ICommandParser commandCommandParser, ICommandCreator commandCommandCreator)
     {
         _log = typeof(CommandExecutor).GetLogger();
 
         _commandParser = commandCommandParser;
         _commandCreator = commandCommandCreator;
+
         _executionContext = new ExecutionContext();
     }
 
-    public void ExecuteCommandsFromStream(StreamReader streamReader)
+    public void ExecuteCommands(TextReader textReader)
     {
-        while (!streamReader.EndOfStream)
+        while (textReader.Peek() != EndOfStream)
         {
-            var line = streamReader.ReadLine();
+            var line = textReader.ReadLine();
 
             if (string.IsNullOrEmpty(line))
             {
-                _log.Info("Nothing entered");
+                _log.Info("Nothing has been entered");
 
                 continue;
             }
@@ -47,7 +51,8 @@ internal sealed class CommandExecutor
             }
             catch (UserException e)
             {
-                _log.Error($"Na exception occured{e}");
+                _log.Exception(e);
+
                 Console.WriteLine(e.Message);
             }
         }

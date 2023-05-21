@@ -12,6 +12,6 @@ internal sealed class ParseCommandExceptionTests
     {
         var systemUnderTests = new ParseCommandException(Message);
 
-        Assert.That(systemUnderTests.Message, Is.EqualTo(Message));
+        Assert.That(systemUnderTests.Message, Is.EqualTo($"Can not recognise command: {Message}."));
     }
 }

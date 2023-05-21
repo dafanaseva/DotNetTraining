@@ -4,7 +4,7 @@ using Task2.CreateCommands.Exceptions;
 
 namespace Task2.CreateCommands;
 
-internal sealed class CommandCreator
+internal sealed class CommandCreator : ICommandCreator
 {
     private readonly Dictionary<string, string> _commands;
     private readonly string _namespace;
@@ -37,7 +37,7 @@ internal sealed class CommandCreator
         return (Command)instance;
     }
 
-    private Type? GetType(string className)
+    public Type? GetType(string className)
     {
         return Type.GetType($"{_namespace}.{className}");
     }
