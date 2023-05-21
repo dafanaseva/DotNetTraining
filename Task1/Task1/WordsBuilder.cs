@@ -1,3 +1,4 @@
+using System.Diagnostics.Contracts;
 using System.Text;
 
 namespace Task1;
@@ -34,6 +35,7 @@ internal sealed class WordsBuilder
         }
     }
 
+    [Pure]
     public IEnumerable<WordInfo> GetWords()
     {
         if (_stringBuilder.Length > 0)

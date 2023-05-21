@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.Contracts;
-
-namespace Task1;
+﻿namespace Task1;
 
 internal sealed record Frequency
 {

@@ -1,7 +1,10 @@
+using System.Diagnostics.Contracts;
+
 namespace Task1;
 
 internal static class WordsBuilderHelper
 {
+    [Pure]
     public static IEnumerable<WordInfo> ReadWords(TextReader reader)
     {
         var wordsBuilder = new WordsBuilder();
