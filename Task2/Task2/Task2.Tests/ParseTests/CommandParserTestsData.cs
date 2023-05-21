@@ -29,8 +29,9 @@ internal static class CommandParserTestsData
         new($"{Comment} {ParameterComment}", new CommandData(Comment, new[] { (object)ParameterComment })),
     };
 
-    public static readonly string[] InvalidCommands =
+    public static readonly string?[] InvalidCommands =
     {
+        null,
         "a + b",
         string.Empty,
         "12 minus 10",

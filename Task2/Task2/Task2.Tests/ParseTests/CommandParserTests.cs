@@ -11,16 +11,16 @@ internal sealed class CommandParserTests
     [TestCaseSource(typeof(CommandParserTestsData ), nameof(CommandParserTestsData.ValidCommands))]
     public void TestParse_ValidCommands_ShouldBeAsExpected((string commandText, CommandData expectedCommandData) data)
     {
-        var commandData = _systemUnderTest.Parse(data.commandText);
+        var actualResult = _systemUnderTest.Parse(data.commandText);
 
         Assert.Multiple(() =>
         {
-            Assert.That(commandData.Name, Is.EqualTo(data.expectedCommandData.Name));
-            Assert.That(commandData.Parameters, Is.EqualTo(data.expectedCommandData.Parameters));
+            Assert.That(actualResult.Name, Is.EqualTo(data.expectedCommandData.Name));
+            Assert.That(actualResult.Parameters, Is.EqualTo(data.expectedCommandData.Parameters));
         });
     }
 
-    [TestCaseSource(typeof(CommandParserTestsData ), nameof(CommandParserTestsData.InvalidCommands))]
+    [TestCaseSource(typeof(CommandParserTestsData), nameof(CommandParserTestsData.InvalidCommands))]
     public void TestParse_InvalidCommand_ShouldThrow(string command)
     {
         Assert.Throws<ParseCommandException>(() => _systemUnderTest.Parse(command));

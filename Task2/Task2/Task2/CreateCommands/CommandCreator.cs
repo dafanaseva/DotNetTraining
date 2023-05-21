@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Diagnostics.Contracts;
+using log4net;
 using Task2.CreateCommands.Exceptions;
 
 namespace Task2.CreateCommands;
@@ -9,26 +10,34 @@ internal sealed class CommandCreator : ICommandCreator
     private readonly Dictionary<string, string> _commands;
     private readonly string _namespace;
 
+    private readonly ILog _log;
+
     public CommandCreator(Dictionary<string, string> commandTypes, string @namespace)
     {
         _commands = commandTypes;
         _namespace = @namespace;
+
+        _log = typeof(CommandCreator).GetLogger();
     }
 
     [Pure]
     public Command CreateCommand(string commandName)
     {
+        _log.Info($"Start creating command with name '{commandName}'.");
+
         if (!_commands.TryGetValue(commandName, out var typeName))
         {
-            throw new UnknownCommandException($"Unknown command: {commandName}.");
+            throw new UnknownCommandException($"Unknown command: '{commandName}'.");
         }
 
         var type = GetType(typeName);
 
         if (type == null)
         {
-            throw new UnknownCommandException($"Unknown command type: {nameof(type)}");
+            throw new UnknownCommandException($"Unknown command type: {type}.");
         }
+
+        _log.Info($"Creating command of type: '{type}'.");
 
         var instance = Activator.CreateInstance(type);
 
@@ -37,7 +46,7 @@ internal sealed class CommandCreator : ICommandCreator
         return (Command)instance;
     }
 
-    public Type? GetType(string className)
+    private Type? GetType(string className)
     {
         return Type.GetType($"{_namespace}.{className}");
     }

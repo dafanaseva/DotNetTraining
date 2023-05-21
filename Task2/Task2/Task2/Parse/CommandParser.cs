@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Text.RegularExpressions;
+using log4net;
 
 namespace Task2.Parse;
 
@@ -10,21 +11,32 @@ internal sealed class CommandParser : ICommandParser
 
     private readonly Regex _commandPattern;
 
+    private readonly ILog _log;
+
     public CommandParser(string commandPattern)
     {
         _commandPattern = new Regex(commandPattern);
+
+        _log = typeof(CommandParser).GetLogger();
     }
 
     public CommandData Parse(string input)
     {
+        _log.Info($"Start parsing entered text '{input}'.");
+
+        if (string.IsNullOrEmpty(input))
+        {
+            throw new ParseCommandException("Command can not be empty.");
+        }
+
         if (!_commandPattern.IsMatch(input))
         {
-            throw new ParseCommandException($"Wrong command syntax: {input}");
+            throw new ParseCommandException($"Wrong command syntax: '{input}'.");
         }
 
         var matches = GetMatchedGroupValues(input);
 
-        Debug.Assert(matches.Any(), "No matched groups found");
+        Debug.Assert(matches.Any(), "No matched groups found.");
 
         var commandName = matches.First();
         var parameters = matches.Skip(ParametersStartFromIndex).Select(ConvertToObject).ToArray();
@@ -32,18 +44,10 @@ internal sealed class CommandParser : ICommandParser
         return new CommandData(commandName, parameters);
     }
 
-    private static object ConvertToObject(string value)
+    private List<string> GetMatchedGroupValues(string input)
     {
-        if (float.TryParse(value, out var result))
-        {
-            return result;
-        }
+        Debug.Assert(input != null, "input != null");
 
-        return value;
-    }
-
-    public List<string> GetMatchedGroupValues(string input)
-    {
         var firstMatch = _commandPattern.Matches(input).First();
         var matchingGroups = firstMatch.Groups;
 
@@ -59,5 +63,15 @@ internal sealed class CommandParser : ICommandParser
         }
 
         return matches.ToList();
+    }
+
+    private static object ConvertToObject(string value)
+    {
+        if (float.TryParse(value, out var result))
+        {
+            return result;
+        }
+
+        return value;
     }
 }

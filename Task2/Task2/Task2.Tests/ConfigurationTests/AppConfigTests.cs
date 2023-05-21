@@ -13,7 +13,8 @@ internal sealed class AppConfigTests
         var commandsConfig = new AppConfig
         {
             CommandPattern = commandPattern,
-            Namespace = nameSpace
+            Namespace = nameSpace,
+            CommandNameClassName = new Dictionary<string, string>()
         };
 
         Assert.That(commandsConfig, Is.Not.Null);

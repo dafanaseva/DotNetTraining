@@ -1,42 +1,61 @@
-﻿using Task2.CreateCommands.Exceptions;
+﻿using log4net;
+using Task2.CreateCommands.Exceptions;
 
 namespace Task2.CreateCommands;
 
 internal sealed class ExecutionContext : IExecutionContext
 {
-    private Stack<float> Stack { get; } = new();
-    private Dictionary<string, float> Parameters { get; } = new();
+    private Stack<float> Stack { get; }
+    private Dictionary<string, float> Parameters { get; }
+
+    private readonly ILog _log = typeof(ExecutionContext).GetLogger();
+
+    public ExecutionContext()
+    {
+        Stack = new Stack<float>();
+        Parameters = new Dictionary<string, float>();
+    }
 
     public float PopValue(bool shouldDelete = true)
     {
+        _log.Info($"Getting value from the stack, shouldDelete: {shouldDelete}.");
+
         try
         {
-            return shouldDelete ? Stack.Pop() : Stack.Peek();
+            var value = shouldDelete ? Stack.Pop() : Stack.Peek();
+            _log.Info(shouldDelete ? $"Pop value '{value}'" : $"Peek value '{value}'.");
+            return value;
         }
         catch (InvalidOperationException)
         {
-            throw new InvalidCommandArgumentException("Need at least one more value");
+            throw new InvalidCommandArgumentException("Need at least one more value.");
         }
     }
 
     public void SaveValue(float value)
     {
+        _log.Info($"Saving value '{value}' to the stack.");
+
         Stack.Push(value);
     }
 
     public void SaveParameter(string parameterName, float parameterValue)
     {
+        _log.Info($"Saving parameter '{parameterName}' '{parameterValue}'.");
+
         if (!Parameters.TryAdd(parameterName, parameterValue))
         {
-            throw new InvalidCommandArgumentException($"The parameter {parameterName} already exists");
+            throw new InvalidCommandArgumentException($"The parameter '{parameterName}' already exists.");
         }
     }
 
     public float GetParameterValue(string parameterName)
     {
+        _log.Info($"Getting parameter '{parameterName}'.");
+
         if (!Parameters.TryGetValue(parameterName, out var parameterValue))
         {
-            throw new InvalidCommandArgumentException($"Unknown parameter name: {parameterName}");
+            throw new InvalidCommandArgumentException($"Unknown parameter name: {parameterName}.");
         }
 
         return parameterValue;

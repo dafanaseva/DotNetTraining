@@ -25,7 +25,9 @@ try
     var filename = config[fileNameArg];
     var readFromFile = filename != null;
 
-    Console.WriteLine(readFromFile ? $"Read commands from the file: {filename}." : "Read commands from the console.");
+    Console.WriteLine(readFromFile
+        ? $"Reading commands from the file: {filename}."
+        : "Reading commands from the console.");
 
     var pattern = appConfig.CommandPattern ??
                   throw new ConfigurationNotFoundException(nameof(appConfig.CommandPattern));
@@ -41,15 +43,19 @@ try
         ? new StreamReader(filename!)
         : new StreamReader(Console.OpenStandardInput());
 
-    commandExecutor.ExecuteCommands(streamReader);
+    while (!streamReader.EndOfStream)
+    {
+        commandExecutor.ExecuteCommand(streamReader.ReadLine());
+    }
 }
 catch (ConfigurationNotFoundException e)
 {
+    logger.Exception(e);
     Console.WriteLine(e.Message);
 }
 catch (Exception e)
 {
-    logger.Error(e);
+    logger.Exception(e);
     Console.WriteLine("An unexpected error occurred. The execution is stopped.");
 }
 finally

@@ -14,8 +14,6 @@ internal sealed class CommandExecutor
 
     private readonly IExecutionContext _executionContext;
 
-    private const int EndOfStream = -1;
-
     public CommandExecutor(ICommandParser commandCommandParser, ICommandCreator commandCommandCreator)
     {
         _log = typeof(CommandExecutor).GetLogger();
@@ -26,35 +24,30 @@ internal sealed class CommandExecutor
         _executionContext = new ExecutionContext();
     }
 
-    public void ExecuteCommands(TextReader textReader)
+    public void ExecuteCommand(string? commandText)
     {
-        while (textReader.Peek() != EndOfStream)
+        _log.Info($"Start executing command: {commandText}");
+
+        if (string.IsNullOrEmpty(commandText) || string.IsNullOrWhiteSpace(commandText))
         {
-            var line = textReader.ReadLine();
+            _log.Info("Command is empty. Skipping.");
 
-            if (string.IsNullOrEmpty(line))
-            {
-                _log.Info("Nothing has been entered");
+            return;
+        }
 
-                continue;
-            }
+        try
+        {
+            _commandParser.Parse(commandText).Deconstruct(out var name, out var parameters);
 
-            try
-            {
-                _log.Info($"Command: {line} is entered");
+            var command = _commandCreator.CreateCommand(name);
 
-                _commandParser.Parse(line).Deconstruct(out var name, out var parameters);
+            command.Execute(_executionContext, parameters);
+        }
+        catch (UserException e)
+        {
+            _log.Exception(e);
 
-                var command = _commandCreator.CreateCommand(name);
-
-                command.Execute(_executionContext, parameters);
-            }
-            catch (UserException e)
-            {
-                _log.Exception(e);
-
-                Console.WriteLine(e.Message);
-            }
+            Console.WriteLine(e.Message);
         }
     }
 }

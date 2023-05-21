@@ -4,16 +4,16 @@ namespace Task2.CreateCommands.Commands;
 
 internal sealed class Push : Command
 {
-    private const int ArgumentIndex = 0;
-
     public override void Execute(IExecutionContext executionContext, params object[] arguments)
     {
+        Log.Info($"Starting {nameof(Push)} operation.");
+
         if (arguments == null || !arguments.Any())
         {
             throw new InvalidCommandArgumentException("Need at least one argument");
         }
 
-        var argument = arguments[ArgumentIndex];
+        var argument = arguments.First();
 
         switch (argument)
         {

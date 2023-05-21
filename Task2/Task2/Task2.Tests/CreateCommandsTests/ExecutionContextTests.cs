@@ -28,16 +28,13 @@ internal sealed class ExecutionContextTests
         _systemUnderTest.SaveParameter(ParameterName, ParameterValue);
 
         Assert.Throws<InvalidCommandArgumentException>(() =>
-            _systemUnderTest.SaveParameter(ParameterName, ParameterValue)
-        );
+            _systemUnderTest.SaveParameter(ParameterName, ParameterValue));
     }
 
     [Test]
     public void TestGetValue_EmptyStack_ShouldThrowException()
     {
-        Assert.Throws<InvalidCommandArgumentException>(() =>
-            _systemUnderTest.PopValue()
-        );
+        Assert.Throws<InvalidCommandArgumentException>(() => _systemUnderTest.PopValue());
     }
 
     [Test]
@@ -46,6 +43,7 @@ internal sealed class ExecutionContextTests
         _systemUnderTest.SaveValue(ParameterValue);
 
        var value = _systemUnderTest.PopValue();
+
        Assert.That(value, Is.EqualTo(ParameterValue));
     }
 }

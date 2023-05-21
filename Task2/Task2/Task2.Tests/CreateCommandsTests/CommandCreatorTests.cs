@@ -7,6 +7,8 @@ namespace Task2.Tests.CreateCommandsTests;
 [TestFixture, FixtureLifeCycle(LifeCycle.InstancePerTestCase)]
 internal sealed class CommandCreatorTests
 {
+    private readonly CommandCreator _systemUnderTest = new(Types, typeof(Addition).Namespace!);
+
     private const string ExistingCommandName = "+";
     private const string NotFoundTypeCommandName = "SUM";
     private const string NotExistingTypeName = "AVG";
@@ -21,14 +23,12 @@ internal sealed class CommandCreatorTests
 
     private Command? _command;
 
-    private readonly CommandCreator _sut = new(Types, typeof(Addition).Namespace!);
-
     [Test]
     public void TestCreateCommand_ExistingCommandName_ShouldReturnCommand()
     {
         Assert.DoesNotThrow(() =>
         {
-             _command = _sut.CreateCommand(ExistingCommandName);
+             _command = _systemUnderTest.CreateCommand(ExistingCommandName);
         });
 
         Assert.That(_command, Is.Not.Null);
@@ -42,7 +42,7 @@ internal sealed class CommandCreatorTests
     {
         Assert.Throws<UnknownCommandException>(() =>
         {
-            _command = _sut.CreateCommand(NotFoundTypeCommandName);
+            _command = _systemUnderTest.CreateCommand(NotFoundTypeCommandName);
         });
 
         Assert.That(_command, Is.Null);
