@@ -9,7 +9,7 @@ internal sealed class WordInfoTests
     private const string TestValidValue = "aaa";
     private const int TestValidCount = 100;
 
-    private readonly Frequency _frequency = Frequency.CreateInstance(100);
+    private readonly Frequency _frequency = new(100);
 
     private static readonly string[] InvalidValues =
     {
@@ -26,7 +26,7 @@ internal sealed class WordInfoTests
     {
         Assert.DoesNotThrow(() =>
         {
-            _systemUnderTest = WordInfo.CreateInstance(value, count, _frequency);
+            _systemUnderTest = new WordInfo(value, count, _frequency);
         });
 
         Assert.IsNotNull(_systemUnderTest);
@@ -42,7 +42,7 @@ internal sealed class WordInfoTests
     {
         Assert.Throws<ArgumentException>(() =>
         {
-            _systemUnderTest = WordInfo.CreateInstance(TestValidValue, count, _frequency);
+            _systemUnderTest = new WordInfo(TestValidValue, count, _frequency);
         });
     }
 
@@ -51,7 +51,7 @@ internal sealed class WordInfoTests
     {
         Assert.Throws<ArgumentException>(() =>
         {
-            _systemUnderTest = WordInfo.CreateInstance(value, TestValidCount, _frequency);
+            _systemUnderTest = new WordInfo(value, TestValidCount, _frequency);
         });
     }
 }

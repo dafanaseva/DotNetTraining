@@ -15,7 +15,7 @@ internal sealed class FrequencyTests
         // Act & Assert
         Assert.DoesNotThrow(() =>
         {
-            _systemUnderTest = Frequency.CreateInstance(percentage);
+            _systemUnderTest = new Frequency(percentage);
         });
 
         Assert.IsNotNull(_systemUnderTest);
@@ -31,7 +31,7 @@ internal sealed class FrequencyTests
         // Act & Assert
         Assert.Throws<ArgumentException>(() =>
         {
-            _systemUnderTest = Frequency.CreateInstance(percentage);
+            _systemUnderTest = new Frequency(percentage);
         });
     }
 
@@ -43,7 +43,7 @@ internal sealed class FrequencyTests
         // Act & Assert
         Assert.DoesNotThrow(() =>
         {
-            _systemUnderTest = Frequency.CreateInstance(count, totalCount);
+            _systemUnderTest = new Frequency(count, totalCount);
         });
 
         Assert.IsNotNull(_systemUnderTest);
@@ -59,7 +59,7 @@ internal sealed class FrequencyTests
         // Act & Assert
         Assert.Throws<ArgumentException>(() =>
         {
-            _systemUnderTest = Frequency.CreateInstance(count, totalCount);
+            _systemUnderTest = new Frequency(count, totalCount);
         });
     }
 }

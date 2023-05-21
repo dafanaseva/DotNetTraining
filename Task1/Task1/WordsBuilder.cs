@@ -42,7 +42,7 @@ internal sealed class WordsBuilder
         }
 
         return _result.OrderByDescending(t => t.Value)
-            .Select(t => WordInfo.CreateInstance(t.Key, t.Value, Frequency.CreateInstance(t.Value, _totalWordsCount)))
+            .Select(t => new WordInfo(t.Key, t.Value, new Frequency(t.Value, _totalWordsCount)))
             .ToList();
     }
 

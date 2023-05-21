@@ -13,30 +13,20 @@ internal sealed record Frequency
     private const int MinCount = 0;
     public double Percentage { get; }
 
-    private Frequency(double percentage)
+    public Frequency(int count, int totalCount)
+    {
+        Percentage = CalculatePercentage(count, totalCount);
+    }
+
+    public Frequency(double percentage)
     {
         Percentage = percentage;
-    }
-
-    [Pure]
-    public static Frequency CreateInstance(int count, int totalCount)
-    {
-        var percentage = CalculatePercentage(count, totalCount);
-
-        return CreateInstance(percentage);
-    }
-
-    [Pure]
-    public static Frequency CreateInstance(double percentage)
-    {
         if (!IsValidPercentage(percentage))
         {
             throw new ArgumentException(
                 $"Percentage should be in range from {MinPercentage} to {MaxPercentage}",
                 nameof(percentage));
         }
-
-        return new Frequency(percentage);
     }
 
     public override string ToString()
