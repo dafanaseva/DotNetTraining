@@ -60,6 +60,6 @@ catch (Exception e)
 }
 finally
 {
-    Console.WriteLine("Press enter to close program.");
+    Console.WriteLine("Press enter to close the program.");
     Console.ReadLine();
 }
