@@ -1,6 +1,6 @@
 ﻿using Task2.CreateCommands;
 
-namespace Task2.Tests.CreadeCommandsTests.CommandsTests;
+namespace Task2.Tests.CreateCommandsTests.CommandsTests;
 
 [TestFixture, FixtureLifeCycle(LifeCycle.InstancePerTestCase)]
 internal abstract class CommandBaseTest<T> where T: Command, new()

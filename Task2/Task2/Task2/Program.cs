@@ -1,54 +1,47 @@
-﻿using log4net;
-using log4net.Config;
-using System.Reflection;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
+using Task2;
 using Task2.Configuration;
 using Task2.CreateCommands;
 using Task2.Execute;
 using Task2.Parse;
 
-var logRepository = LogManager.GetRepository(Assembly.GetEntryAssembly());
-XmlConfigurator.Configure(logRepository, new FileInfo("log4net.config"));
-var logger = LogManager.GetLogger(typeof(Program));
+const string fileNameArg = "filename";
+const string appSettingsFileName = "appsettings.json";
 
-const int fileNameArgumentIndex = 1;
+var logger = typeof(Program).GetLogger();
 
 try
 {
-    var readFromFile = Environment.GetCommandLineArgs().Length > fileNameArgumentIndex;
-
-    Console.WriteLine(readFromFile
-        ? "Read commands from the file."
-        : "Please use console to type a command.");
+    CancelKeyPressedObserver.WaitCancelKeyPressed();
 
     var config = new ConfigurationBuilder()
         .SetBasePath(Directory.GetCurrentDirectory())
-        .AddJsonFile("appsettings.json", optional: true)
+        .AddJsonFile(appSettingsFileName, optional: true)
+        .AddCommandLine(args)
         .Build();
 
     var appConfig = config.Get<AppConfig>() ?? throw new ConfigurationNotFoundException(nameof(AppConfig));
 
-    if (!readFromFile)
-    {
-        Console.WriteLine($"Type '{appConfig.ExitConsoleText}' to exit.");
-    }
+    var filename = config[fileNameArg];
+    var readFromFile = filename != null;
 
-    var parser = new CommandParser(appConfig.CommandPattern ??
-                                   throw new ConfigurationNotFoundException(nameof(appConfig.CommandPattern)));
+    Console.WriteLine(readFromFile ? $"Read commands from the file: {filename}." : "Read commands from the console.");
 
-    var creator = new CommandCreator(appConfig.Commands?.ToDictionary() ??
-                                     throw new ConfigurationNotFoundException(nameof(appConfig.Commands)));
+    var pattern = appConfig.CommandPattern ??
+                  throw new ConfigurationNotFoundException(nameof(appConfig.CommandPattern));
 
-    var exitCalculatorText = appConfig.ExitConsoleText ??
-                             throw new ConfigurationNotFoundException(nameof(appConfig.ExitConsoleText));
+    var commands = appConfig.CommandNameClassName ??
+                   throw new ConfigurationNotFoundException(nameof(appConfig.CommandNameClassName));
 
-    var calculator = new Calculator(parser, creator, exitCalculatorText);
+    var @namespace = appConfig.Namespace ?? throw new ConfigurationNotFoundException(nameof(appConfig.Namespace));
+
+    var commandExecutor = new CommandExecutor(new CommandParser(pattern), new CommandCreator(commands, @namespace));
 
     using var streamReader = readFromFile
-        ? new StreamReader(Environment.GetCommandLineArgs()[fileNameArgumentIndex])
+        ? new StreamReader(filename!)
         : new StreamReader(Console.OpenStandardInput());
 
-    calculator.RunCommands(streamReader);
+    commandExecutor.ExecuteCommandsFromStream(streamReader);
 }
 catch (ConfigurationNotFoundException e)
 {

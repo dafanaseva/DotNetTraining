@@ -2,7 +2,7 @@ using Task2.CreateCommands;
 using Task2.CreateCommands.Commands;
 using Task2.CreateCommands.Exceptions;
 
-namespace Task2.Tests.CreadeCommandsTests;
+namespace Task2.Tests.CreateCommandsTests;
 
 [TestFixture, FixtureLifeCycle(LifeCycle.InstancePerTestCase)]
 internal sealed class CommandCreatorTests
@@ -11,17 +11,17 @@ internal sealed class CommandCreatorTests
     private const string NotFoundTypeCommandName = "SUM";
     private const string NotExistingTypeName = "AVG";
 
-    private static readonly Type AdditionType = typeof(Addition);
+    private const string AdditionType = nameof(Addition);
 
-    private static readonly Dictionary<string, Type?> Types = new()
+    private static readonly Dictionary<string, string> Types = new()
     {
         {ExistingCommandName, AdditionType},
-        {NotFoundTypeCommandName, null}
+        {NotFoundTypeCommandName, string.Empty}
     };
 
     private Command? _command;
 
-    private readonly CommandCreator _sut = new(Types);
+    private readonly CommandCreator _sut = new(Types, string.Empty);
 
     [Test]
     public void TestCreateCommand_ExistingCommandName_ShouldReturnCommand()

@@ -1,6 +1,6 @@
 ﻿using Task2.CreateCommands.Exceptions;
 
-namespace Task2.Tests.CreadeCommandsTests;
+namespace Task2.Tests.CreateCommandsTests;
 
 [TestFixture, FixtureLifeCycle(LifeCycle.InstancePerTestCase)]
 internal sealed class ExecutionContextTests

@@ -2,7 +2,7 @@
 
 internal sealed class AppConfig
 {
-    public string? ExitConsoleText { get; set; }
     public string? CommandPattern { get; set; }
-    public CommandsConfig? Commands { get; set; }
+    public string? Namespace { get; set; }
+    public Dictionary<string, string>? CommandNameClassName { get; set; }
 }

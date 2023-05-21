@@ -10,9 +10,7 @@ internal sealed class AppConfigTests
     {
         var commandsConfig = new AppConfig
         {
-            CommandPattern = string.Empty,
-            ExitConsoleText = string.Empty,
-            Commands = new CommandsConfig()
+            CommandPattern = string.Empty
         };
 
         Assert.That(commandsConfig, Is.Not.Null);

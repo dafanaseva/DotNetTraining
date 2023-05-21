@@ -6,11 +6,13 @@ namespace Task2.CreateCommands;
 
 internal sealed class CommandCreator
 {
-    private readonly Dictionary<string, Type?> _commands;
+    private readonly Dictionary<string, string> _commands;
+    private readonly string _namespace;
 
-    public CommandCreator(Dictionary<string, Type?> commandTypes)
+    public CommandCreator(Dictionary<string, string> commandTypes, string @namespace)
     {
         _commands = commandTypes;
+        _namespace = @namespace;
     }
 
     [Pure]
@@ -21,15 +23,22 @@ internal sealed class CommandCreator
             throw new UnknownCommandException($"Unknown command: {commandName}.");
         }
 
-        if (typeName == null)
+        var type = GetType(typeName);
+
+        if (type == null)
         {
-            throw new UnknownCommandException("Command type is invalid");
+            throw new UnknownCommandException($"Unknown command type: {nameof(type)}");
         }
 
-        var instance = Activator.CreateInstance(typeName);
+        var instance = Activator.CreateInstance(type);
 
         Debug.Assert(instance != null, $"{nameof(instance)} != null");
 
         return (Command)instance;
+    }
+
+    private Type? GetType(string className)
+    {
+        return Type.GetType($"{_namespace}.{className}");
     }
 }

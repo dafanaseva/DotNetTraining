@@ -1,7 +1,7 @@
 ﻿using Task2.CreateCommands;
 using Task2.CreateCommands.Exceptions;
 
-namespace Task2.Tests.CreadeCommandsTests;
+namespace Task2.Tests.CreateCommandsTests;
 
 [TestFixture]
 internal sealed class ArithmeticalOperationsTests
