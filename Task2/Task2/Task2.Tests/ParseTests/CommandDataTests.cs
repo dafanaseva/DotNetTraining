@@ -23,7 +23,6 @@ internal sealed class CommandDataTests
 
         Assert.Throws<ArgumentNullException>(() =>
         {
-
             data = new CommandData(commandName, Array.Empty<object>());
         });
 

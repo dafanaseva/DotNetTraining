@@ -16,21 +16,16 @@ internal sealed class ExecutionContext : IExecutionContext
         Parameters = new Dictionary<string, float>();
     }
 
-    public float PopValue(bool shouldDelete = true)
+    public float PeekValue()
     {
-        _log.Info($"Getting value from the stack, shouldDelete: {shouldDelete}.");
-
-        try
-        {
-            var value = shouldDelete ? Stack.Pop() : Stack.Peek();
-            _log.Info(shouldDelete ? $"Pop value '{value}'" : $"Peek value '{value}'.");
-            return value;
-        }
-        catch (InvalidOperationException)
-        {
-            throw new InvalidCommandArgumentException("Need at least one more value.");
-        }
+        return PopValue(shouldDelete: false);
     }
+
+    public float PopValue()
+    {
+        return PopValue(shouldDelete: true);
+    }
+
 
     public void SaveValue(float value)
     {
@@ -59,5 +54,21 @@ internal sealed class ExecutionContext : IExecutionContext
         }
 
         return parameterValue;
+    }
+
+    private float PopValue(bool shouldDelete)
+    {
+        _log.Info($"Getting value from the stack, deleting: {shouldDelete}.");
+
+        try
+        {
+            var value = shouldDelete ? Stack.Pop() : Stack.Peek();
+            _log.Info(shouldDelete ? $"Pop value '{value}'" : $"Peek value '{value}'.");
+            return value;
+        }
+        catch (InvalidOperationException)
+        {
+            throw new InvalidCommandArgumentException("Need at least one more value.");
+        }
     }
 }

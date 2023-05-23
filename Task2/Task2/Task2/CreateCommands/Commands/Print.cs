@@ -6,6 +6,6 @@ internal sealed class Print : Command
     {
         Log.Info($"Starting {nameof(Print)} operation.");
 
-        Console.WriteLine(executionContext.PopValue(shouldDelete: false));
+        Console.WriteLine(executionContext.PeekValue());
     }
 }

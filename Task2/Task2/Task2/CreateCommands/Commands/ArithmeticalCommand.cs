@@ -13,9 +13,9 @@ internal class ArithmeticalCommand : Command
     {
         Log.Info($"Start operation of {_operation.Method.Name}.");
 
-        var p1 = executionContext.PopValue();
-        var p2 = executionContext.PopValue();
+        var left = executionContext.PopValue();
+        var right = executionContext.PopValue();
 
-        executionContext.SaveValue(_operation(p1, p2));
+        executionContext.SaveValue(_operation(left, right));
     }
 }

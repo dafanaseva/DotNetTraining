@@ -6,8 +6,8 @@ internal sealed class SquareRoot : Command
     {
         Log.Info($"Starting {nameof(SquareRoot)} operation.");
 
-        var p = executionContext.PopValue();
+        var argument = executionContext.PopValue();
 
-        executionContext.SaveValue(ArithmeticalOperations.GetSquareRoot(p));
+        executionContext.SaveValue(ArithmeticalOperations.GetSquareRoot(argument));
     }
 }

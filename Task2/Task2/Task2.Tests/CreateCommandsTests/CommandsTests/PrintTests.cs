@@ -15,7 +15,7 @@ internal sealed class PrintTests
     {
         _systemUnderTest.Execute(_executionContextSpy.Object);
 
-        _executionContextSpy.Verify(t => t.PopValue(false), Times.Once);
-        _executionContextSpy.Verify(t => t.PopValue(true), Times.Never);
+        _executionContextSpy.Verify(t => t.PeekValue(), Times.Once);
+        _executionContextSpy.Verify(t => t.PopValue(), Times.Never);
     }
 }

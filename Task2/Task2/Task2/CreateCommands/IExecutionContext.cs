@@ -2,7 +2,9 @@
 
 internal interface IExecutionContext
 {
-    public float PopValue(bool shouldDelete = true);
+    public float PopValue();
+
+    public float PeekValue();
 
     public void SaveValue(float value);
 

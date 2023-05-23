@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using log4net;
 using Task2.CreateCommands.Exceptions;
@@ -7,14 +8,14 @@ namespace Task2.CreateCommands;
 
 internal sealed class CommandCreator : ICommandCreator
 {
-    private readonly Dictionary<string, string> _commands;
+    private readonly ReadOnlyDictionary<string, string> _commands;
     private readonly string _namespace;
 
     private readonly ILog _log;
 
-    public CommandCreator(Dictionary<string, string> commandTypes, string @namespace)
+    public CommandCreator(IDictionary<string, string> commandTypes, string @namespace)
     {
-        _commands = commandTypes;
+        _commands = new ReadOnlyDictionary<string, string>(commandTypes);
         _namespace = @namespace;
 
         _log = typeof(CommandCreator).GetLogger();

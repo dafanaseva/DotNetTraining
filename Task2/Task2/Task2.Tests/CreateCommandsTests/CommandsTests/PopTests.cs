@@ -15,7 +15,7 @@ internal sealed class PopTests
     {
         _systemUnderTest.Execute(_executionContextSpy.Object);
 
-        _executionContextSpy.Verify(t => t.PopValue(true), Times.Once);
-        _executionContextSpy.Verify(t => t.PopValue(false), Times.Never);
+        _executionContextSpy.Verify(t => t.PopValue(), Times.Once);
+        _executionContextSpy.Verify(t => t.PeekValue(), Times.Never);
     }
 }

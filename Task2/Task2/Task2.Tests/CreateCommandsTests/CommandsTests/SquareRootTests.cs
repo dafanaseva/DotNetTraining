@@ -13,11 +13,11 @@ internal sealed class SquareRootTests
     [Test]
     public void TestExecute_ValidArguments_ShouldSaveExpectedResult()
     {
-        _executionContext.Setup(t => t.PopValue(It.IsAny<bool>())).Returns(It.IsAny<float>());
+        _executionContext.Setup(t => t.PopValue()).Returns(It.IsAny<float>());
 
         _systemUnderTest.Execute(_executionContext.Object);
 
-        _executionContext.Verify(t => t.PopValue(It.IsAny<bool>()), Times.Once);
+        _executionContext.Verify(t => t.PopValue(), Times.Once);
         _executionContext.Verify(t => t.SaveValue(It.IsAny<float>()), Times.Once);
     }
 }

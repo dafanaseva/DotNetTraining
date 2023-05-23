@@ -14,12 +14,12 @@ internal sealed class CommandExecutor
 
     private readonly IExecutionContext _executionContext;
 
-    public CommandExecutor(ICommandParser commandCommandParser, ICommandCreator commandCommandCreator)
+    public CommandExecutor(ICommandParser commandParser, ICommandCreator commandCreator)
     {
         _log = typeof(CommandExecutor).GetLogger();
 
-        _commandParser = commandCommandParser;
-        _commandCreator = commandCommandCreator;
+        _commandParser = commandParser;
+        _commandCreator = commandCreator;
 
         _executionContext = new ExecutionContext();
     }
