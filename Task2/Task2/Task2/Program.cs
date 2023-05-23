@@ -10,9 +10,11 @@ const string appSettingsFileName = "appsettings.json";
 
 var logger = typeof(Program).GetLogger();
 
+var isReadingCancelled = false;
+
 try
 {
-    CancelKeyPressedObserver.WaitCancelKeyPressed();
+    Console.CancelKeyPress += HandleCancelKeyPressed;
 
     var config = new ConfigurationBuilder()
         .SetBasePath(Directory.GetCurrentDirectory())
@@ -43,7 +45,7 @@ try
         ? new StreamReader(filename!)
         : new StreamReader(Console.OpenStandardInput());
 
-    while (!streamReader.EndOfStream)
+    while (!streamReader.EndOfStream && !isReadingCancelled)
     {
         commandExecutor.ExecuteCommand(streamReader.ReadLine());
     }
@@ -62,4 +64,9 @@ finally
 {
     Console.WriteLine("Press enter to close the program.");
     Console.ReadLine();
+}
+
+void HandleCancelKeyPressed(object? sender, EventArgs eventArgs)
+{
+    isReadingCancelled = true;
 }
