@@ -17,10 +17,9 @@
 
                         <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                        <Button Content="{Binding Path=Sign}"
+                                        <Button Content="{Binding Path=NumberOfMines}"
                                                 IsEnabled="{Binding Path=CanSelect}"
                                                 Command="{Binding ClickOnCellCommand}"/>
-                                                <!--Click="CellClick"/>-->
                                 </DataTemplate>
                         </ItemsControl.ItemTemplate>
                 </ItemsControl>

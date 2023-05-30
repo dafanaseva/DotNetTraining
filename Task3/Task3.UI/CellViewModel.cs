@@ -9,29 +9,28 @@ internal sealed class CellViewModel : INotifyPropertyChanged
     private readonly Cell _cell;
     private ClickOnCellCommand? _clickOnCellCommand;
 
-    private string _sign;
+    private string _numberOfMines;
     private bool _canSelect = true;
 
-    private readonly int _x;
-    private readonly int _y;
+    private readonly Point _coordinate;
 
-    public delegate void CellHandler(int x, int y);
+    public delegate void CellHandler(Point coordinate);
 
-    public event CellHandler? Notify;
+    public event CellHandler? NotifyCellIsClicked;
 
     // ReSharper disable once UnusedMember.Global
     public ClickOnCellCommand ClickOnCellCommand
     {
-        get { return _clickOnCellCommand ??= new ClickOnCellCommand(() => Notify?.Invoke(_x, _y), () => _canSelect); }
+        get { return _clickOnCellCommand ??= new ClickOnCellCommand(() => NotifyCellIsClicked?.Invoke(_coordinate), () => _canSelect); }
     }
 
-    public string Sign
+    public string NumberOfMines
     {
         // ReSharper disable once UnusedMember.Global
-        get => _sign;
+        get => _numberOfMines;
         set
         {
-            _sign = value;
+            _numberOfMines = value;
             CanSelect = false;
             OnPropertyChanged();
         }
@@ -51,16 +50,16 @@ internal sealed class CellViewModel : INotifyPropertyChanged
     public CellViewModel(Cell cell, int x, int y)
     {
         _cell = cell;
-        _sign = cell.GetValue();
-        _y = y;
-        _x = x;
+        _numberOfMines = cell.GetValue();
+
+        _coordinate = new Point(x, y);
     }
 
     public void Update()
     {
         if (_cell.IsOpen)
         {
-            Sign = _cell.GetValue();
+            NumberOfMines = _cell.GetValue();
         }
     }
 

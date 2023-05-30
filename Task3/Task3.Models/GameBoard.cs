@@ -5,7 +5,11 @@ internal sealed class GameBoard
     private readonly int _width;
     private readonly int _height;
     private readonly int _totalNumberOfMines;
-    private bool _firstClick;
+
+    private bool _isOpenedFirstly;
+
+    private const int MaxNeighbourIndex = 2;
+    private const int MinNeighbourIndex = -1;
 
     public Cell[,] Cells { get; }
 
@@ -14,9 +18,11 @@ internal sealed class GameBoard
         _width = width;
         _height = height;
         _totalNumberOfMines = totalNumberOfMines;
-        _firstClick = true;
+
+        _isOpenedFirstly = true;
 
         Cells = new Cell[width, height];
+
         for (var i = 0; i < width; i++)
         {
             for (var j = 0; j < height; j++)
@@ -28,12 +34,12 @@ internal sealed class GameBoard
 
     public void OpenCell(int x, int y)
     {
-        if (_firstClick)
+        if (_isOpenedFirstly)
         {
             InitField(x, y);
             InitCountValuesOfNeighbors(x, y);
 
-            _firstClick = false;
+            _isOpenedFirstly = false;
         }
 
         OpenNotMinedNeighbours(x, y);
@@ -47,6 +53,7 @@ internal sealed class GameBoard
 
         var possibleCoordinates = Enumerable.Range(0, totalElements).ToList();
         possibleCoordinates.RemoveAt(exceptNumber);
+
         totalElements--;
 
         Cells[exceptX, exceptY].IsMined = false;
@@ -84,9 +91,9 @@ internal sealed class GameBoard
 
         var numberOfMines = 0;
 
-        for (var i = -1; i < 2; i++)
+        for (var i = MinNeighbourIndex; i < MaxNeighbourIndex; i++)
         {
-            for (var j = -1; j < 2; j++)
+            for (var j = MinNeighbourIndex; j < MaxNeighbourIndex; j++)
             {
                 var neighborX = x + i;
                 if (neighborX < 0 || neighborX >= _width)
@@ -154,9 +161,9 @@ internal sealed class GameBoard
     private List<Point> GetNeighbours(int x, int y)
     {
         var result = new List<Point>();
-        for (var i = -1; i < 2; i++)
+        for (var i = MinNeighbourIndex; i < MaxNeighbourIndex; i++)
         {
-            for (var j = -1; j < 2; j++)
+            for (var j = MinNeighbourIndex; j < MaxNeighbourIndex; j++)
             {
                 var neighborX = x + i;
                 if (neighborX < 0 || neighborX >= _width)
@@ -177,10 +184,11 @@ internal sealed class GameBoard
         return result;
     }
 
-    private (int, int) GetCoordinate(int numberOfCell)
+    private Point GetCoordinate(int numberOfCell)
     {
         var x = numberOfCell / _width;
         var y = numberOfCell % _width;
-        return (x, y);
+
+        return new Point(x, y);
     }
 }

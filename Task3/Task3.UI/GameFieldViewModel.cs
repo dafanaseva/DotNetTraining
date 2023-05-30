@@ -23,16 +23,16 @@ internal sealed class GameFieldViewModel
             for (var j = 0; j < Columns; j++)
             {
                 var cellViewModel = new CellViewModel(_gameBoard.Cells[i, j], i, j);
-                cellViewModel.Notify += ClickOnCell;
+                cellViewModel.NotifyCellIsClicked += ClickOnCell;
 
                Cells.Add(cellViewModel);
             }
         }
     }
 
-    private void ClickOnCell(int x, int y)
+    private void ClickOnCell(Point coordinate)
     {
-        _gameBoard.OpenCell(x, y);
+        _gameBoard.OpenCell(coordinate.X, coordinate.Y);
 
         foreach (var cell in Cells)
         {
