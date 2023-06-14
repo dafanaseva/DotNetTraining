@@ -9,8 +9,8 @@
         {
             InitializeComponent();
 
-            //todo: move constants to config
-            var gameFieldViewModel = new GameFieldViewModel(9, 9, 10);
+            //todo: move constants to config or settings
+            var gameFieldViewModel = new GameBoardViewModel(9, 9, 10);
 
             GameFieldViewModel.ItemsSource = gameFieldViewModel.Cells;
         }

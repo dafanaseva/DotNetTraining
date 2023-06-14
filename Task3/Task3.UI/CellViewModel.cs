@@ -7,38 +7,56 @@ namespace Task3.UI;
 internal sealed class CellViewModel : INotifyPropertyChanged
 {
     private readonly Cell _cell;
-    private ClickOnCellCommand? _clickOnCellCommand;
 
-    private string _numberOfMines;
+    private ClickOnCellCommand? _clickOnCellCommand;
+    private ClickOnCellCommand? _rightClickOnCellCommand;
+
+    private string _state;
     private bool _canSelect = true;
 
     private readonly Point _coordinate;
 
     public delegate void CellHandler(Point coordinate);
+    public delegate void CellFlagHandler(Point coordinate);
 
     public event CellHandler? NotifyCellIsClicked;
+    public event CellFlagHandler? NotifyCellIsRightClicked;
 
-    // ReSharper disable once UnusedMember.Global
     public ClickOnCellCommand ClickOnCellCommand
     {
-        get { return _clickOnCellCommand ??= new ClickOnCellCommand(() => NotifyCellIsClicked?.Invoke(_coordinate), () => _canSelect); }
+        get
+        {
+            return _clickOnCellCommand ??=
+                new ClickOnCellCommand(() => NotifyCellIsClicked?.Invoke(_coordinate), CanExecute);
+        }
     }
 
-    public string NumberOfMines
+    public ClickOnCellCommand RightClickOnCellCommand
     {
-        // ReSharper disable once UnusedMember.Global
-        get => _numberOfMines;
+        get
+        {
+            return _rightClickOnCellCommand ??= new ClickOnCellCommand(() =>
+                {
+                    NotifyCellIsRightClicked?.Invoke(_coordinate);
+
+                    State = _cell.GetValue();
+                },
+                CanExecute);
+        }
+    }
+
+    public string State
+    {
+        get => _state;
         set
         {
-            _numberOfMines = value;
-            CanSelect = false;
+            _state = value;
             OnPropertyChanged();
         }
     }
 
     public bool CanSelect
     {
-        // ReSharper disable once UnusedMember.Global
         get => _canSelect;
         set
         {
@@ -50,17 +68,14 @@ internal sealed class CellViewModel : INotifyPropertyChanged
     public CellViewModel(Cell cell, int x, int y)
     {
         _cell = cell;
-        _numberOfMines = cell.GetValue();
+        _state = cell.GetValue();
 
         _coordinate = new Point(x, y);
     }
 
     public void Update()
     {
-        if (_cell.IsOpen)
-        {
-            NumberOfMines = _cell.GetValue();
-        }
+        State = _cell.GetValue();
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;
@@ -68,5 +83,10 @@ internal sealed class CellViewModel : INotifyPropertyChanged
     private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+
+    private bool CanExecute()
+    {
+        return !_cell.IsOpen;
     }
 }

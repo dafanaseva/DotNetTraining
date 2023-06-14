@@ -5,23 +5,24 @@ const int width = 9;
 const int height = 9;
 const int numberOfMines = 10;
 
-var board = new GameBoard(width, height, numberOfMines);
+var board = new GameBoard(height, width);
+var game = new OpenCellStep(board);
 
 ShowCell(5, 5);
 
 void ShowCell(int x, int y)
 {
-    board.OpenCell(x, y);
+    game.OpenCells(x, y);
 
-    Print(board.Cells);
+    Print(board);
 
     Console.ReadLine();
 }
 
-void Print(Cell[,] gameBoard)
+void Print(GameBoard gameBoard)
 {
-    var rows = gameBoard.GetUpperBound(0) + 1;
-    var columns = gameBoard.Length / rows;
+    var rows = gameBoard.Height;
+    var columns = gameBoard.Width;
 
     for (var i = 0; i < rows; i++)
     {

@@ -17,9 +17,14 @@
 
                         <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                        <Button Content="{Binding Path=NumberOfMines}"
+                                        <Button
+                                                Content="{Binding Path=State}"
                                                 IsEnabled="{Binding Path=CanSelect}"
-                                                Command="{Binding ClickOnCellCommand}"/>
+                                                Command="{Binding ClickOnCellCommand}">
+                                                <Button.InputBindings>
+                                                        <MouseBinding Gesture="RightClick" Command="{Binding RightClickOnCellCommand}"/>
+                                                </Button.InputBindings>
+                                        </Button>
                                 </DataTemplate>
                         </ItemsControl.ItemTemplate>
                 </ItemsControl>
