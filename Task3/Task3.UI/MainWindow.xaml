@@ -3,30 +3,33 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Task3.UI"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow">
 
-        <Grid>
-                <ItemsControl x:Name="GameFieldViewModel" ItemsSource="{Binding Path=Cells}">
-                        <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate >
-                                        <UniformGrid Rows="{Binding Path=Rows}" Columns="{Binding Path=Columns}"/>
-                                </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
+        <Viewbox Stretch="Uniform">
+                <Grid>
+                        <ItemsControl x:Name="GameFieldViewModel" ItemsSource="{Binding Path=Cells}">
+                                <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate >
+                                                <UniformGrid Rows="{Binding Path=Rows}" Columns="{Binding Path=Columns}"/>
+                                        </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
 
-                        <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                        <Button
-                                                Content="{Binding Path=State}"
-                                                IsEnabled="{Binding Path=CanSelect}"
-                                                Command="{Binding ClickOnCellCommand}">
-                                                <Button.InputBindings>
-                                                        <MouseBinding Gesture="RightClick" Command="{Binding RightClickOnCellCommand}"/>
-                                                </Button.InputBindings>
-                                        </Button>
-                                </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                </ItemsControl>
-        </Grid>
+                                <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                                <Button
+                                                        Height="50"
+                                                        Width="50"
+                                                        Content="{Binding Path=State}"
+                                                        IsEnabled="{Binding Path=CanSelect}"
+                                                        Command="{Binding ClickOnCellCommand}">
+                                                        <Button.InputBindings>
+                                                                <MouseBinding Gesture="RightClick" Command="{Binding RightClickOnCellCommand}"/>
+                                                        </Button.InputBindings>
+                                                </Button>
+                                        </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                </Grid>
+        </Viewbox>
 </Window>
