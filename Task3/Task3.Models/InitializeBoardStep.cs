@@ -47,6 +47,11 @@ internal sealed class InitializeBoardStep
 
         totalElements--;
 
+        if (totalElements == 0)
+        {
+            return;
+        }
+
         _gameBoard[exceptX, exceptY].IsMined = false;
 
         var random = new Random();
@@ -83,7 +88,7 @@ internal sealed class InitializeBoardStep
 
                 var numberOfMines = neighbours.Count(neighbour => _gameBoard[neighbour.X, neighbour.Y].IsMined);
 
-                _gameBoard[i, j].NumberOfMines = numberOfMines;
+                _gameBoard[i, j].SetNumberOfMines(numberOfMines);
             }
         }
     }
