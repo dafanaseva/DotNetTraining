@@ -2,6 +2,9 @@
 
 internal sealed record Cell
 {
+    private const string FlagSymbol = "?";
+    private const string MineSymbol = "X";
+
     public int? NumberOfMines { get; set; }
     public bool IsMined { get; set; }
     public bool IsOpen { get; private set; }
@@ -22,21 +25,15 @@ internal sealed record Cell
         return NumberOfMines > 0;
     }
 
-    public string GetValue()
+    public string GetState()
     {
         if (!IsOpen)
         {
-            return IsFlagged ? "#" : string.Empty;
+            return IsFlagged ? FlagSymbol : string.Empty;
         }
 
-        if (IsFlagged)
-        {
-            //todo: move to consts
-            return "#";
-        }
+        var numberOfMines = !HasMinedNeighbours() ? string.Empty : NumberOfMines?.ToString() ?? string.Empty;
 
-        var numberOfMines = NumberOfMines == 0 ? string.Empty : NumberOfMines?.ToString() ?? string.Empty;
-
-        return IsMined ? "X" : NumberOfMines?.ToString() ?? numberOfMines;
+        return IsMined ? MineSymbol : numberOfMines;
     }
 }

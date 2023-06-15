@@ -1,13 +1,10 @@
 ﻿namespace Task3.Models;
 
-internal sealed class OpenCellStep
+internal sealed class OpenCellsStep
 {
-    private const int MaxNeighbourIndex = 2;
-    private const int MinNeighbourIndex = -1;
-
     private readonly GameBoard _gameBoard;
 
-    public OpenCellStep(GameBoard gameBoard)
+    public OpenCellsStep(GameBoard gameBoard)
     {
         _gameBoard = gameBoard;
     }
@@ -24,7 +21,7 @@ internal sealed class OpenCellStep
         {
             var node = nextCells.Dequeue();
 
-            foreach (var neighbour in GetNeighbours(node.X, node.Y))
+            foreach (var neighbour in _gameBoard.GetNeighbours(node.X, node.Y))
             {
                 if (seenCells.Any(t => t == neighbour))
                 {
@@ -49,31 +46,5 @@ internal sealed class OpenCellStep
         }
 
         _gameBoard[x, y].Open();
-    }
-
-    private List<Point> GetNeighbours(int x, int y)
-    {
-        var result = new List<Point>();
-        for (var i = MinNeighbourIndex; i < MaxNeighbourIndex; i++)
-        {
-            for (var j = MinNeighbourIndex; j < MaxNeighbourIndex; j++)
-            {
-                var neighborX = x + i;
-                if (neighborX < 0 || neighborX >= _gameBoard.Width)
-                {
-                    continue;
-                }
-
-                var neighborY = y + j;
-                if (neighborY < 0 || neighborY >= _gameBoard.Height)
-                {
-                    continue;
-                }
-
-                result.Add(new Point(neighborX, neighborY));
-            }
-        }
-
-        return result;
     }
 }

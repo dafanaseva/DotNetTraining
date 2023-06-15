@@ -6,7 +6,7 @@ const int height = 9;
 const int numberOfMines = 10;
 
 var board = new GameBoard(height, width);
-var game = new OpenCellStep(board);
+var game = new OpenCellsStep(board);
 
 ShowCell(5, 5);
 
@@ -29,7 +29,7 @@ void Print(GameBoard gameBoard)
         for (var j = 0; j < columns; j++)
         {
             var cell = gameBoard[i, j];
-            Console.Write($"|{cell.GetValue()}| ");
+            Console.Write($"|{cell.GetState()}| ");
         }
 
         Console.WriteLine();

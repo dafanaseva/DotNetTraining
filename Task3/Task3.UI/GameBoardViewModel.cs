@@ -10,8 +10,8 @@ internal sealed class GameBoardViewModel
 
     private readonly GameBoard _gameBoard;
 
-    private readonly InitializeCellsStep _initializeCellsStep;
-    private readonly OpenCellStep _openCellStep;
+    private readonly InitializeBoardStep _initializeBoardStep;
+    private readonly OpenCellsStep _openCellsStep;
     private readonly FlagCellStep _flagCellStep;
 
     public ObservableCollection<CellViewModel> Cells { get; }
@@ -23,8 +23,8 @@ internal sealed class GameBoardViewModel
 
         _gameBoard = new GameBoard(height, width);
 
-        _initializeCellsStep = new InitializeCellsStep(_gameBoard, totalNumberOfMines);
-        _openCellStep = new OpenCellStep(_gameBoard);
+        _initializeBoardStep = new InitializeBoardStep(_gameBoard, totalNumberOfMines);
+        _openCellsStep = new OpenCellsStep(_gameBoard);
         _flagCellStep = new FlagCellStep(_gameBoard);
 
         Cells = new ObservableCollection<CellViewModel>();
@@ -50,8 +50,8 @@ internal sealed class GameBoardViewModel
             return;
         }
 
-        _initializeCellsStep.TryInitializeCells(coordinate.X, coordinate.Y);
-        _openCellStep.OpenCells(coordinate.X, coordinate.Y);
+        _initializeBoardStep.TryInitializeCells(coordinate.X, coordinate.Y);
+        _openCellsStep.OpenCells(coordinate.X, coordinate.Y);
 
         UpdateCells();
     }
@@ -65,7 +65,7 @@ internal sealed class GameBoardViewModel
     {
         foreach (var cell in Cells)
         {
-            cell.Update();
+            cell.UpdateState();
         }
     }
 }
