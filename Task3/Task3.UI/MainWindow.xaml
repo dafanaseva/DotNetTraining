@@ -20,11 +20,11 @@
                                                 <Button
                                                         Height="50"
                                                         Width="50"
-                                                        Content="{Binding Path=State}"
+                                                        Content="{Binding Path=Value}"
                                                         IsEnabled="{Binding Path=CanSelect}"
-                                                        Command="{Binding ClickOnCellCommand}">
+                                                        Command="{Binding ClickOnCell}">
                                                         <Button.InputBindings>
-                                                                <MouseBinding Gesture="RightClick" Command="{Binding RightClickOnCellCommand}"/>
+                                                                <MouseBinding Gesture="RightClick" Command="{Binding RightClickOnCell}"/>
                                                         </Button.InputBindings>
                                                 </Button>
                                         </DataTemplate>

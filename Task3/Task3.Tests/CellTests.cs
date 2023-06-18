@@ -40,7 +40,7 @@ internal sealed class CellTests
     {
         _systemUnderTest.SetNumberOfMines(0);
 
-        _systemUnderTest.HasMinedNeighbours();
+        _systemUnderTest.IsAnyNeighbourMined();
 
         Assert.That(_systemUnderTest.IsFlagged, Is.False);
     }
@@ -50,9 +50,9 @@ internal sealed class CellTests
     {
         _systemUnderTest.SetNumberOfMines(NumberOfMines);
 
-        _systemUnderTest.HasMinedNeighbours();
+        _systemUnderTest.IsAnyNeighbourMined();
 
-        Assert.That(_systemUnderTest.HasMinedNeighbours, Is.True);
+        Assert.That(_systemUnderTest.IsAnyNeighbourMined, Is.True);
     }
 
     [Test]
@@ -60,7 +60,7 @@ internal sealed class CellTests
     {
         _systemUnderTest.SetNumberOfMines(NumberOfMines);
 
-        Assert.That(_systemUnderTest.NumberOfMines, Is.EqualTo(NumberOfMines));
+        Assert.That(_systemUnderTest.NumberOfMinedNeighbours, Is.EqualTo(NumberOfMines));
     }
 
     [Test]

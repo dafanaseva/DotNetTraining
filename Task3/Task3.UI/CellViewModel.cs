@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Task3.Models;
 
@@ -9,15 +10,15 @@ internal sealed class CellViewModel : INotifyPropertyChanged
     private readonly Cell _cell;
     private readonly Point _point;
 
-    private string _state;
+    private string _value;
     private bool _canSelect;
 
-    public string State
+    public string Value
     {
-        get => _state;
+        get => _value;
         set
         {
-            _state = value;
+            _value = value;
             OnPropertyChanged();
         }
     }
@@ -43,7 +44,7 @@ internal sealed class CellViewModel : INotifyPropertyChanged
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
-    public ClickOnCellCommand ClickOnCellCommand
+    public ClickOnCellCommand ClickOnCell
     {
         get
         {
@@ -52,7 +53,7 @@ internal sealed class CellViewModel : INotifyPropertyChanged
         }
     }
 
-    public ClickOnCellCommand RightClickOnCellCommand
+    public ClickOnCellCommand RightClickOnCell
     {
         get
         {
@@ -60,7 +61,7 @@ internal sealed class CellViewModel : INotifyPropertyChanged
                 {
                     NotifyCellIsRightClicked?.Invoke(_point);
 
-                    State = _cell.GetState();
+                    Value = GetValue();
                 },
                 CanExecuteCommand);
         }
@@ -72,12 +73,12 @@ internal sealed class CellViewModel : INotifyPropertyChanged
         _point = new Point(x, y);
 
         _canSelect = true;
-        _state = cell.GetState();
+        _value = GetValue();
     }
 
     public void UpdateState()
     {
-        State = _cell.GetState();
+        Value = GetValue();
     }
 
     private bool CanExecuteCommand()
@@ -88,5 +89,20 @@ internal sealed class CellViewModel : INotifyPropertyChanged
     private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+
+    private string GetValue()
+    {
+        var cellState = _cell.GetState();
+
+        var numberOfMinesSymbol = _cell.NumberOfMinedNeighbours == 0 ? string.Empty : _cell.NumberOfMinedNeighbours.ToString();
+
+        return cellState switch
+        {
+            CellState.Safe => _cell.IsOpen ? numberOfMinesSymbol : string.Empty,
+            CellState.Mine => _cell.IsOpen ? "X" : string.Empty,
+            CellState.Flag => "?",
+            _ => throw new ArgumentOutOfRangeException(nameof(cellState), cellState, null)
+        };
     }
 }

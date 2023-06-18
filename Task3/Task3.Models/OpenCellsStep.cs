@@ -36,7 +36,7 @@ internal sealed class OpenCellsStep
                 _gameBoard[neighbour.X, neighbour.Y].Open();
                 seenCells.Add(neighbour);
 
-                if(_gameBoard[neighbour.X, neighbour.Y].HasMinedNeighbours())
+                if(_gameBoard[neighbour.X, neighbour.Y].IsAnyNeighbourMined())
                 {
                     continue;
                 }

@@ -2,13 +2,10 @@
 
 internal sealed record Cell
 {
-    private const string FlagSymbol = "?";
-    private const string MineSymbol = "X";
-
-    public int? NumberOfMines { get; private set; }
     public bool IsMined { get; set; }
     public bool IsOpen { get; private set; }
     public bool IsFlagged { get; private set; }
+    public int NumberOfMinedNeighbours { get; private set; }
 
     public void Open()
     {
@@ -24,23 +21,21 @@ internal sealed record Cell
     {
         NegativeArgumentException.ThrowIfLessThenNull(number);
 
-        NumberOfMines = number;
+        NumberOfMinedNeighbours = number;
     }
 
-    public bool HasMinedNeighbours()
+    public bool IsAnyNeighbourMined()
     {
-        return NumberOfMines > 0;
+        return NumberOfMinedNeighbours > 0;
     }
 
-    public string GetState()
+    public CellState GetState()
     {
-        if (!IsOpen)
+        if (IsFlagged)
         {
-            return IsFlagged ? FlagSymbol : string.Empty;
+            return CellState.Flag;
         }
 
-        var numberOfMines = !HasMinedNeighbours() ? string.Empty : NumberOfMines?.ToString() ?? string.Empty;
-
-        return IsMined ? MineSymbol : numberOfMines;
+        return IsMined ? CellState.Mine : CellState.Safe;
     }
 }
