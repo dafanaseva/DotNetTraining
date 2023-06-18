@@ -23,7 +23,7 @@ internal sealed class InitializeBoardStep
         _isInitialized = false;
     }
 
-    public void TryInitializeCells(int x, int y)
+    public void InitializeCells(int x, int y)
     {
         if (_isInitialized)
         {
@@ -38,16 +38,12 @@ internal sealed class InitializeBoardStep
 
     private void PutMinedCells(int exceptX, int exceptY)
     {
-        var totalElements = _width * _height;
-
         var exceptNumber = exceptX * _width + exceptY;
 
-        var possibleCoordinates = Enumerable.Range(0, totalElements).ToList();
+        var possibleCoordinates = Enumerable.Range(0, _width * _height).ToList();
         possibleCoordinates.RemoveAt(exceptNumber);
 
-        totalElements--;
-
-        if (totalElements == 0)
+        if (!possibleCoordinates.Any())
         {
             return;
         }
@@ -58,12 +54,11 @@ internal sealed class InitializeBoardStep
 
         for (var j = 0; j < _totalNumberOfMines; j++)
         {
-            var i = random.Next(0, totalElements);
+            var i = random.Next(0, possibleCoordinates.Count);
 
             var mineIndex = possibleCoordinates[i];
 
             possibleCoordinates.RemoveAt(i);
-            totalElements--;
 
             var (x, y) = Point.GetPoint(mineIndex, _width);
 

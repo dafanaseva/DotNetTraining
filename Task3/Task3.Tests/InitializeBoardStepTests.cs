@@ -16,7 +16,7 @@ internal sealed class InitializeBoardStepTests
     [Test]
     public void TestInit()
     {
-        _systemUnderTest.TryInitializeCells(0, 0);
+        _systemUnderTest.InitializeCells(0, 0);
 
         Assert.That(_spy[0, 0].IsMined, Is.False);
     }

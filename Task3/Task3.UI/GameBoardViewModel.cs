@@ -50,7 +50,7 @@ internal sealed class GameBoardViewModel
             return;
         }
 
-        _initializeBoardStep.TryInitializeCells(coordinate.X, coordinate.Y);
+        _initializeBoardStep.InitializeCells(coordinate.X, coordinate.Y);
         _openCellsStep.OpenCells(coordinate.X, coordinate.Y);
 
         UpdateCells();
