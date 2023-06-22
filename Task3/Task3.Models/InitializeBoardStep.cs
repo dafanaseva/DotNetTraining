@@ -15,6 +15,7 @@ internal sealed class InitializeBoardStep
     {
         _gameBoard = gameBoard;
 
+        LessThenZeroArgumentException.ThrowIfLessThenZero(totalNumberOfMines);
         _totalNumberOfMines = totalNumberOfMines;
 
         _height = _gameBoard.Height;
@@ -31,7 +32,6 @@ internal sealed class InitializeBoardStep
         }
 
         PutMinedCells(x,y);
-        CountMinedCells();
 
         _isInitialized = true;
     }
@@ -48,8 +48,6 @@ internal sealed class InitializeBoardStep
             return;
         }
 
-        _gameBoard[exceptX, exceptY].IsMined = false;
-
         var random = new Random();
 
         for (var j = 0; j < _totalNumberOfMines; j++)
@@ -62,29 +60,7 @@ internal sealed class InitializeBoardStep
 
             var (x, y) = Point.GetPoint(mineIndex, _width);
 
-            _gameBoard[x, y].IsMined = true;
-        }
-
-        foreach (var notMinedCoordinate in possibleCoordinates)
-        {
-            var (x, y) = Point.GetPoint(notMinedCoordinate, _width);
-
-            _gameBoard[x, y].IsMined = false;
-        }
-    }
-
-    private void CountMinedCells()
-    {
-        for (var i = 0; i < _width; i++)
-        {
-            for (var j = 0; j < _height; j++)
-            {
-                var neighbours = _gameBoard.GetNeighbours(i, j);
-
-                var numberOfMines = neighbours.Count(neighbour => _gameBoard[neighbour.X, neighbour.Y].IsMined);
-
-                _gameBoard[i, j].SetNumberOfMines(numberOfMines);
-            }
+            _gameBoard[x, y].SetMine();
         }
     }
 }

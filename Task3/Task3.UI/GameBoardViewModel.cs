@@ -61,6 +61,7 @@ internal sealed class GameBoardViewModel
         _flagCellStep.FlagCell(coordinate.X, coordinate.Y);
     }
 
+    // todo: update cells that are changed
     private void UpdateCells()
     {
         foreach (var cell in Cells)

@@ -5,9 +5,6 @@ namespace Task3.Tests;
 [TestFixture, FixtureLifeCycle(LifeCycle.InstancePerTestCase)]
 internal sealed class CellTests
 {
-    private const int NumberOfMines = 10;
-    private const int NegativeNumberOfMines = -1;
-
     private readonly Cell _systemUnderTest = new();
 
     [Test]
@@ -38,34 +35,8 @@ internal sealed class CellTests
     [Test]
     public void TestHasNoMinedNeighbours()
     {
-        _systemUnderTest.SetNumberOfMines(0);
-
         _systemUnderTest.IsAnyNeighbourMined();
 
         Assert.That(_systemUnderTest.IsFlagged, Is.False);
-    }
-
-    [Test]
-    public void TestHasMinedNeighbours()
-    {
-        _systemUnderTest.SetNumberOfMines(NumberOfMines);
-
-        _systemUnderTest.IsAnyNeighbourMined();
-
-        Assert.That(_systemUnderTest.IsAnyNeighbourMined, Is.True);
-    }
-
-    [Test]
-    public void TestSetNumberOfMines()
-    {
-        _systemUnderTest.SetNumberOfMines(NumberOfMines);
-
-        Assert.That(_systemUnderTest.NumberOfMinedNeighbours, Is.EqualTo(NumberOfMines));
-    }
-
-    [Test]
-    public void TestSetNumberOfMinesThrows()
-    {
-        Assert.Throws<NegativeArgumentException>(() => _systemUnderTest.SetNumberOfMines(NegativeNumberOfMines));
     }
 }

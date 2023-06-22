@@ -11,32 +11,24 @@ internal sealed class OpenCellsStep
 
     public void OpenCells(int x, int y)
     {
-        var nextCells = new Queue<Point>();
-        var seenCells = new HashSet<Point>();
+        var nextCells = new Queue<Cell>();
+        var seenCells = new HashSet<Cell>();
 
-        nextCells.Enqueue(new Point(x, y));
-        seenCells.Add(new Point(x, y));
+        nextCells.Enqueue(_gameBoard[x, y]);
+        seenCells.Add(_gameBoard[x, y]);
 
         while (nextCells.Any())
         {
             var node = nextCells.Dequeue();
 
-            foreach (var neighbour in _gameBoard.GetNeighbours(node.X, node.Y))
+            foreach (var neighbour in node.Neighbours
+                         .Where(neighbour => seenCells.All(t => t != neighbour))
+                         .Where(neighbour => !neighbour.IsMined))
             {
-                if (seenCells.Any(t => t == neighbour))
-                {
-                    continue;
-                }
-
-                if(_gameBoard[neighbour.X, neighbour.Y].IsMined)
-                {
-                    continue;
-                }
-
-                _gameBoard[neighbour.X, neighbour.Y].Open();
+                neighbour.Open();
                 seenCells.Add(neighbour);
 
-                if(_gameBoard[neighbour.X, neighbour.Y].IsAnyNeighbourMined())
+                if (neighbour.IsAnyNeighbourMined())
                 {
                     continue;
                 }

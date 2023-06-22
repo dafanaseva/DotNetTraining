@@ -2,10 +2,11 @@
 
 internal sealed record Cell
 {
-    public bool IsMined { get; set; }
+    public bool IsMined { get; private set; }
     public bool IsOpen { get; private set; }
     public bool IsFlagged { get; private set; }
-    public int NumberOfMinedNeighbours { get; private set; }
+
+    public List<Cell> Neighbours = new();
 
     public void Open()
     {
@@ -17,16 +18,9 @@ internal sealed record Cell
         IsFlagged = !IsFlagged;
     }
 
-    public void SetNumberOfMines(int number)
+    public void SetMine()
     {
-        NegativeArgumentException.ThrowIfLessThenNull(number);
-
-        NumberOfMinedNeighbours = number;
-    }
-
-    public bool IsAnyNeighbourMined()
-    {
-        return NumberOfMinedNeighbours > 0;
+        IsMined = true;
     }
 
     public CellState GetState()

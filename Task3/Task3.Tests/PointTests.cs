@@ -19,6 +19,6 @@ internal sealed class PointTests
     [TestCase(-1, 0)]
     public void TestThrows(int x, int y)
     {
-        Assert.Throws<NegativeArgumentException>(() => _systemUnderTest = new Point(x, y));
+        Assert.Throws<LessThenZeroArgumentException>(() => _systemUnderTest = new Point(x, y));
     }
 }

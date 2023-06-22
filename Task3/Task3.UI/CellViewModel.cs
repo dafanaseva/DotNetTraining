@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using Task3.Models;
 
@@ -15,6 +16,7 @@ internal sealed class CellViewModel : INotifyPropertyChanged
 
     public string Value
     {
+        // ReSharper disable once UnusedMember.Global
         get => _value;
         set
         {
@@ -23,6 +25,7 @@ internal sealed class CellViewModel : INotifyPropertyChanged
         }
     }
 
+    // ReSharper disable once UnusedMember.Global
     public bool CanSelect
     {
         get => _canSelect;
@@ -44,6 +47,7 @@ internal sealed class CellViewModel : INotifyPropertyChanged
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
+    // ReSharper disable once UnusedMember.Global
     public ClickOnCellCommand ClickOnCell
     {
         get
@@ -53,6 +57,7 @@ internal sealed class CellViewModel : INotifyPropertyChanged
         }
     }
 
+    // ReSharper disable once UnusedMember.Global
     public ClickOnCellCommand RightClickOnCell
     {
         get
@@ -69,10 +74,13 @@ internal sealed class CellViewModel : INotifyPropertyChanged
 
     public CellViewModel(Cell cell, int x, int y)
     {
+        Debug.Assert(!ReferenceEquals(cell, null), "cell != null ");
+
         _cell = cell;
         _point = new Point(x, y);
 
         _canSelect = true;
+
         _value = GetValue();
     }
 
@@ -95,7 +103,7 @@ internal sealed class CellViewModel : INotifyPropertyChanged
     {
         var cellState = _cell.GetState();
 
-        var numberOfMinesSymbol = _cell.NumberOfMinedNeighbours == 0 ? string.Empty : _cell.NumberOfMinedNeighbours.ToString();
+        var numberOfMinesSymbol = _cell.IsAnyNeighbourMined() ? _cell.GetNumberOfMines().ToString() : string.Empty;
 
         return cellState switch
         {

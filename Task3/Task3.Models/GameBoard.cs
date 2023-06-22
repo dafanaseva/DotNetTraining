@@ -1,38 +1,47 @@
-﻿using System.Diagnostics;
-
-namespace Task3.Models;
+﻿namespace Task3.Models;
 
 internal sealed class GameBoard
 {
+    private const int BoundWidth = 1;
+    private const int BoundsCount = 2;
     private Cell[,] Cells { get; }
-
     public int Width { get; }
     public int Height { get; }
 
     public GameBoard(int height, int width)
     {
-        NegativeArgumentException.ThrowIfLessThenNull(height);
-        NegativeArgumentException.ThrowIfLessThenNull(width);
+        LessThenZeroArgumentException.ThrowIfLessThenZero(height);
+        LessThenZeroArgumentException.ThrowIfLessThenZero(width);
 
         Width = width;
         Height = height;
 
-        Cells = new Cell[width, height];
+        var widthWithSentinel = width + BoundsCount * BoundWidth;
+        var heightWithSentinel = height + BoundsCount * BoundWidth;
 
-        for (var i = 0; i < width; i++)
+        Cells = new Cell[widthWithSentinel, heightWithSentinel];
+
+        for (var i = 0; i < heightWithSentinel; i++)
         {
-            for (var j = 0; j < height; j++)
+            for (var j = 0; j < widthWithSentinel; j++)
             {
-                Cells[i, j] = new Cell();
+                var cell = new Cell();
+                Cells[i, j] = cell;
+            }
+        }
+
+        for (var i = 1; i < Height+BoundWidth; i++)
+        {
+            for (var j = 1; j < Width+BoundWidth; j++)
+            {
+                Cells[i, j].Neighbours = GetNeighbours(i, j).ToList();
             }
         }
     }
 
-    public List<Point> GetNeighbours(int x, int y)
+    private IEnumerable<Cell> GetNeighbours(int x, int y)
     {
-        AssertArrayBounds(x, y);
-
-        var result = new List<Point>();
+        var result = new List<Cell>();
 
         const int maxNeighbourIndex = 2;
         const int minNeighbourIndex = -1;
@@ -42,37 +51,14 @@ internal sealed class GameBoard
             for (var j = minNeighbourIndex; j < maxNeighbourIndex; j++)
             {
                 var neighborX = x + i;
-                if (neighborX < 0 || neighborX >= Width)
-                {
-                    continue;
-                }
-
                 var neighborY = y + j;
-                if (neighborY < 0 || neighborY >= Height)
-                {
-                    continue;
-                }
 
-                result.Add(new Point(neighborX, neighborY));
+                result.Add(Cells[neighborX, neighborY]);
             }
         }
 
         return result;
     }
 
-    public Cell this[int x, int y]
-    {
-        get
-        {
-            AssertArrayBounds(x, y);
-
-            return Cells[x, y];
-        }
-    }
-
-    private void AssertArrayBounds(int x, int y)
-    {
-        Debug.Assert(x < Width, "x < Width");
-        Debug.Assert(y < Height, "x < Height");
-    }
+    public Cell this[int x, int y] => Cells[x + BoundWidth, y + BoundWidth];
 }

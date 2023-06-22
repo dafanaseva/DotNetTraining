@@ -6,8 +6,8 @@ internal sealed record Point
 {
     public Point(int x, int y)
     {
-        NegativeArgumentException.ThrowIfLessThenNull(x);
-        NegativeArgumentException.ThrowIfLessThenNull(y);
+        LessThenZeroArgumentException.ThrowIfLessThenZero(x);
+        LessThenZeroArgumentException.ThrowIfLessThenZero(y);
 
         X = x;
         Y = y;
@@ -24,7 +24,8 @@ internal sealed record Point
 
     public static Point GetPoint(int numberOfElement, int arrayWidth)
     {
-        Debug.Assert(arrayWidth > 0, "arrayWidth > 0");
+        Debug.Assert(arrayWidth > 0, $"{nameof(arrayWidth)} > 0");
+        Debug.Assert(numberOfElement > 0, $"{nameof(numberOfElement)} > 0");
 
         return new Point(numberOfElement / arrayWidth, numberOfElement % arrayWidth);
     }
