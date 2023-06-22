@@ -1,41 +1,29 @@
-﻿using Task3.Models;
+﻿using Task3.ConsoleUI;
+using Task3.Models;
 
-//todo: move constants to config
+//todo: move constants to a config
 const int width = 9;
 const int height = 9;
 const int numberOfMines = 10;
 
-var board = new GameBoard(height, width);
-var game = new OpenCellsStep(board);
-
-ShowCell(5, 5);
-
-void ShowCell(int x, int y)
+var game = Game.StartNewGame(new GameConfig
 {
-    game.OpenCells(x, y);
+    BoardWidth = width,
+    BoardHeight = height,
+    NumberOfMines = numberOfMines
+});
 
-    Print(board);
+var consoleUi = new ConsoleUi(Console.Out, game);
 
-    Console.ReadLine();
-}
-
-void Print(GameBoard gameBoard)
+while (true)
 {
-    var rows = gameBoard.Height;
-    var columns = gameBoard.Width;
-
-    for (var i = 0; i < rows; i++)
+    var command = Console.ReadLine();
+    if (command == "exit")
     {
-        for (var j = 0; j < columns; j++)
-        {
-            var cell = gameBoard[i, j];
-            Console.Write($"|{cell.GetState()}| ");
-        }
-
-        Console.WriteLine();
+        return;
     }
+
+    game.OpenCells(new Point(1, 1));
+
+    consoleUi.ShowGameBoard();
 }
-
-
-
-

@@ -8,11 +8,7 @@ internal sealed class GameBoardViewModel
     private int Rows { get; }
     private int Columns { get; }
 
-    private readonly GameBoard _gameBoard;
-
-    private readonly InitializeBoardStep _initializeBoardStep;
-    private readonly OpenCellsStep _openCellsStep;
-    private readonly FlagCellStep _flagCellStep;
+    private readonly Game _game;
 
     public ObservableCollection<CellViewModel> Cells { get; }
 
@@ -21,11 +17,12 @@ internal sealed class GameBoardViewModel
         Rows = height;
         Columns = width;
 
-        _gameBoard = new GameBoard(height, width);
-
-        _initializeBoardStep = new InitializeBoardStep(_gameBoard, totalNumberOfMines);
-        _openCellsStep = new OpenCellsStep(_gameBoard);
-        _flagCellStep = new FlagCellStep(_gameBoard);
+        _game = Game.StartNewGame(new GameConfig
+        {
+            BoardHeight = width,
+            BoardWidth = height,
+            NumberOfMines = totalNumberOfMines
+        });
 
         Cells = new ObservableCollection<CellViewModel>();
 
@@ -33,10 +30,9 @@ internal sealed class GameBoardViewModel
         {
             for (var j = 0; j < Columns; j++)
             {
-                var cellViewModel = new CellViewModel(_gameBoard[i, j], i, j);
+                var cellViewModel = new CellViewModel(_game.Board[i, j], i, j);
 
                 cellViewModel.NotifyCellIsClicked += ClickOnCell;
-                cellViewModel.NotifyCellIsRightClicked += RightClickOnCell;
 
                Cells.Add(cellViewModel);
             }
@@ -45,28 +41,11 @@ internal sealed class GameBoardViewModel
 
     private void ClickOnCell(Point coordinate)
     {
-        if (_gameBoard[coordinate.X, coordinate.Y].IsFlagged)
+        if (_game.Board[coordinate.X, coordinate.Y].IsFlagged)
         {
             return;
         }
 
-        _initializeBoardStep.InitializeCells(coordinate.X, coordinate.Y);
-        _openCellsStep.OpenCells(coordinate.X, coordinate.Y);
-
-        UpdateCells();
-    }
-
-    private void RightClickOnCell(Point coordinate)
-    {
-        _flagCellStep.FlagCell(coordinate.X, coordinate.Y);
-    }
-
-    // todo: update cells that are changed
-    private void UpdateCells()
-    {
-        foreach (var cell in Cells)
-        {
-            cell.UpdateState();
-        }
+        _game.OpenCells(coordinate);
     }
 }

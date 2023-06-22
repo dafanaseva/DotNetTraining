@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using Task3.Models;
@@ -9,14 +8,16 @@ namespace Task3.UI;
 internal sealed class CellViewModel : INotifyPropertyChanged
 {
     private readonly Cell _cell;
-    private readonly Point _point;
+    private readonly Point _position;
+
+    private ClickOnCellCommand? _clickOnCellCommand;
+    private ClickOnCellCommand? _rightClickOnCellCommand;
 
     private string _value;
-    private bool _canSelect;
+    private bool _canSelect = true;
 
     public string Value
     {
-        // ReSharper disable once UnusedMember.Global
         get => _value;
         set
         {
@@ -36,14 +37,9 @@ internal sealed class CellViewModel : INotifyPropertyChanged
         }
     }
 
-    private ClickOnCellCommand? _clickOnCellCommand;
-    private ClickOnCellCommand? _rightClickOnCellCommand;
-
     public delegate void ClickHandler(Point point);
-    public delegate void RightClickHandler(Point point);
 
     public event ClickHandler? NotifyCellIsClicked;
-    public event RightClickHandler? NotifyCellIsRightClicked;
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -52,8 +48,11 @@ internal sealed class CellViewModel : INotifyPropertyChanged
     {
         get
         {
-            return _clickOnCellCommand ??=
-                new ClickOnCellCommand(() => NotifyCellIsClicked?.Invoke(_point), CanExecuteCommand);
+            return _clickOnCellCommand ??= new ClickOnCellCommand(() =>
+                {
+                    NotifyCellIsClicked?.Invoke(_position);
+                },
+                CanExecuteCommand);
         }
     }
 
@@ -64,9 +63,7 @@ internal sealed class CellViewModel : INotifyPropertyChanged
         {
             return _rightClickOnCellCommand ??= new ClickOnCellCommand(() =>
                 {
-                    NotifyCellIsRightClicked?.Invoke(_point);
-
-                    Value = GetValue();
+                    _cell.SwitchFlag();
                 },
                 CanExecuteCommand);
         }
@@ -77,16 +74,10 @@ internal sealed class CellViewModel : INotifyPropertyChanged
         Debug.Assert(!ReferenceEquals(cell, null), "cell != null ");
 
         _cell = cell;
-        _point = new Point(x, y);
+        _cell.NotifyStateHasChanged += UpdateValue;
 
-        _canSelect = true;
-
-        _value = GetValue();
-    }
-
-    public void UpdateState()
-    {
-        Value = GetValue();
+        _value = _cell.GetValue();
+        _position = new Point(x, y);
     }
 
     private bool CanExecuteCommand()
@@ -99,18 +90,8 @@ internal sealed class CellViewModel : INotifyPropertyChanged
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 
-    private string GetValue()
+    private void UpdateValue()
     {
-        var cellState = _cell.GetState();
-
-        var numberOfMinesSymbol = _cell.IsAnyNeighbourMined() ? _cell.GetNumberOfMines().ToString() : string.Empty;
-
-        return cellState switch
-        {
-            CellState.Safe => _cell.IsOpen ? numberOfMinesSymbol : string.Empty,
-            CellState.Mine => _cell.IsOpen ? "X" : string.Empty,
-            CellState.Flag => "?",
-            _ => throw new ArgumentOutOfRangeException(nameof(cellState), cellState, null)
-        };
+        Value = _cell.GetValue();
     }
 }
