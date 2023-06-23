@@ -1,4 +1,4 @@
-﻿namespace Task3.Models;
+﻿namespace Task3.Models.Game;
 
 internal sealed class GameConfig
 {

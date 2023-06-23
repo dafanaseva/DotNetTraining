@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using Task3.Models;
+using Task3.Models.Cells;
 
 namespace Task3.UI;
 
@@ -10,14 +10,15 @@ internal sealed class CellViewModel : INotifyPropertyChanged
     private readonly Cell _cell;
     private readonly Point _position;
 
-    private ClickOnCellCommand? _clickOnCellCommand;
-    private ClickOnCellCommand? _rightClickOnCellCommand;
+    private ClickOnButtonCommand? _clickOnCellCommand;
+    private ClickOnButtonCommand? _rightClickOnCellCommand;
 
     private string _value;
     private bool _canSelect = true;
 
     public string Value
     {
+        // ReSharper disable once UnusedMember.Global
         get => _value;
         set
         {
@@ -44,11 +45,11 @@ internal sealed class CellViewModel : INotifyPropertyChanged
     public event PropertyChangedEventHandler? PropertyChanged;
 
     // ReSharper disable once UnusedMember.Global
-    public ClickOnCellCommand ClickOnCell
+    public ClickOnButtonCommand ClickOnButton
     {
         get
         {
-            return _clickOnCellCommand ??= new ClickOnCellCommand(() =>
+            return _clickOnCellCommand ??= new ClickOnButtonCommand(() =>
                 {
                     NotifyCellIsClicked?.Invoke(_position);
                 },
@@ -57,11 +58,11 @@ internal sealed class CellViewModel : INotifyPropertyChanged
     }
 
     // ReSharper disable once UnusedMember.Global
-    public ClickOnCellCommand RightClickOnCell
+    public ClickOnButtonCommand RightClickOnButton
     {
         get
         {
-            return _rightClickOnCellCommand ??= new ClickOnCellCommand(() =>
+            return _rightClickOnCellCommand ??= new ClickOnButtonCommand(() =>
                 {
                     _cell.SwitchFlag();
                 },
@@ -74,7 +75,7 @@ internal sealed class CellViewModel : INotifyPropertyChanged
         Debug.Assert(!ReferenceEquals(cell, null), "cell != null ");
 
         _cell = cell;
-        _cell.NotifyStateHasChanged += UpdateValue;
+        _cell.NotifyCellStateChanged += UpdateValue;
 
         _value = _cell.GetValue();
         _position = new Point(x, y);

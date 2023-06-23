@@ -1,5 +1,5 @@
 ﻿using System;
-using Task3.Models;
+using Task3.Models.Cells;
 
 namespace Task3.UI;
 
@@ -11,6 +11,7 @@ internal static class CellHelper
 
         var numberOfMinesSymbol = cell.IsAnyNeighbourMined() ? cell.GetNumberOfMines().ToString() : string.Empty;
 
+        //to do: use image instead of string
         return cellState switch
         {
             CellState.Safe => cell.IsOpen ? numberOfMinesSymbol : string.Empty,

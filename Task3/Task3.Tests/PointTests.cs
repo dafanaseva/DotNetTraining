@@ -1,4 +1,5 @@
-﻿using Task3.Models;
+﻿using Task3.Models.Cells;
+using Task3.Models.Exceptions;
 
 namespace Task3.Tests;
 

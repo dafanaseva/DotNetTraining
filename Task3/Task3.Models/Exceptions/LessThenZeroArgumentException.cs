@@ -1,4 +1,4 @@
-﻿namespace Task3.Models;
+﻿namespace Task3.Models.Exceptions;
 
 internal sealed class LessThenZeroArgumentException : Exception
 {

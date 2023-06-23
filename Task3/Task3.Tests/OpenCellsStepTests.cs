@@ -1,4 +1,6 @@
 using Task3.Models;
+using Task3.Models.Cells;
+using Task3.Models.Game;
 
 namespace Task3.Tests;
 
@@ -16,7 +18,7 @@ internal sealed class GameBoardTests
     [Test]
     public void TestOpenCell()
     {
-        _systemUnderTest.OpenCells(0, 0);
+        _systemUnderTest.OpenNotMinedCells(new Point(0, 0));
 
         Assert.That(_spy[0, 0].IsOpen, Is.True);
     }

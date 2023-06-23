@@ -1,4 +1,4 @@
-﻿namespace Task3.Models;
+﻿namespace Task3.Models.Cells;
 
 internal static class CellsHelper
 {

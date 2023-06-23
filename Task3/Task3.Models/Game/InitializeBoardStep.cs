@@ -1,44 +1,51 @@
-﻿namespace Task3.Models;
+﻿using Task3.Models.Cells;
+using Task3.Models.Exceptions;
+
+namespace Task3.Models.Game;
 
 internal sealed class InitializeBoardStep
 {
-    private readonly int _totalNumberOfMines;
-
     private readonly int _width;
     private readonly int _height;
+    private readonly int _seed;
 
     private readonly GameBoard _gameBoard;
 
+    public int TotalNumberOfMines { get; }
+
     private bool _isInitialized;
 
-    public InitializeBoardStep(GameBoard gameBoard, int totalNumberOfMines)
+    public InitializeBoardStep(GameBoard gameBoard, int totalNumberOfMines, int seed)
     {
         _gameBoard = gameBoard;
 
         LessThenZeroArgumentException.ThrowIfLessThenZero(totalNumberOfMines);
-        _totalNumberOfMines = totalNumberOfMines;
+
+        TotalNumberOfMines = totalNumberOfMines;
 
         _height = _gameBoard.Height;
         _width = _gameBoard.Width;
+        _seed = seed;
 
         _isInitialized = false;
     }
 
-    public void InitializeCells(int x, int y)
+    public void InitializeCells(Point point)
     {
         if (_isInitialized)
         {
             return;
         }
 
-        PutMinedCells(x,y);
+        PutMinedCells(point, _seed);
 
         _isInitialized = true;
     }
 
-    private void PutMinedCells(int exceptX, int exceptY)
+    private void PutMinedCells(Point exceptPoint, int seed)
     {
-        var exceptNumber = exceptX * _width + exceptY;
+        // todo: maybe move to point?
+        var exceptNumber = exceptPoint.X * _width + exceptPoint.Y;
 
         var possibleCoordinates = Enumerable.Range(0, _width * _height).ToList();
         possibleCoordinates.RemoveAt(exceptNumber);
@@ -48,9 +55,9 @@ internal sealed class InitializeBoardStep
             return;
         }
 
-        var random = new Random();
+        var random = new Random(seed);
 
-        for (var j = 0; j < _totalNumberOfMines; j++)
+        for (var j = 0; j < TotalNumberOfMines; j++)
         {
             var i = random.Next(0, possibleCoordinates.Count);
 

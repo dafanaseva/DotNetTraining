@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
+using Task3.Models.Exceptions;
 
-namespace Task3.Models;
+namespace Task3.Models.Cells;
 
 internal sealed record Point
 {

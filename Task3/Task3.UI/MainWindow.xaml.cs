@@ -1,4 +1,6 @@
-﻿namespace Task3.UI
+﻿using Task3.Models.Game;
+
+namespace Task3.UI
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -10,9 +12,23 @@
             InitializeComponent();
 
             //todo: move constants to config or settings
-            var gameFieldViewModel = new GameBoardViewModel(9, 9, 10);
+            var config = new GameConfig
+            {
+                BoardWidth = 9,
+                BoardHeight = 9,
+                NumberOfMines = 10
+            };
 
-            GameFieldViewModel.ItemsSource = gameFieldViewModel.Cells;
+            var game = Game.CreateGame(config);
+
+            var gameButtonsViewModel = new GameButtonsViewModel(game);
+            GameButtonsViewModel.DataContext = gameButtonsViewModel;
+
+            var gameBoardViewModel = new GameBoardViewModel(game.Board, game.OpenCell);
+            GameBoardViewModel.ItemsSource = gameBoardViewModel.Cells;
+
+            var gameDetailsViewModel = new GameDetailsViewModel(game);
+            GameDetailsViewModel.DataContext = gameDetailsViewModel;
         }
     }
 }

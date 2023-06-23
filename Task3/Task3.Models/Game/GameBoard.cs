@@ -1,4 +1,7 @@
-﻿namespace Task3.Models;
+﻿using Task3.Models.Exceptions;
+using Task3.Models.Cells;
+
+namespace Task3.Models.Game;
 
 internal sealed class GameBoard
 {
@@ -30,9 +33,10 @@ internal sealed class GameBoard
             }
         }
 
-        for (var i = 1; i < Height+BoundWidth; i++)
+        //todo: get rid of duplication
+        for (var i = 1; i < Height + BoundWidth; i++)
         {
-            for (var j = 1; j < Width+BoundWidth; j++)
+            for (var j = 1; j < Width + BoundWidth; j++)
             {
                 Cells[i, j].Neighbours = GetNeighbours(i, j).ToList();
             }

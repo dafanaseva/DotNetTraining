@@ -1,5 +1,5 @@
 ﻿using System.Collections.ObjectModel;
-using Task3.Models;
+using Task3.Models.Game;
 
 namespace Task3.UI;
 
@@ -8,21 +8,12 @@ internal sealed class GameBoardViewModel
     private int Rows { get; }
     private int Columns { get; }
 
-    private readonly Game _game;
-
     public ObservableCollection<CellViewModel> Cells { get; }
 
-    public GameBoardViewModel(int width, int height, int totalNumberOfMines)
+    public GameBoardViewModel(GameBoard gameBoard, CellViewModel.ClickHandler handler)
     {
-        Rows = height;
-        Columns = width;
-
-        _game = Game.StartNewGame(new GameConfig
-        {
-            BoardHeight = width,
-            BoardWidth = height,
-            NumberOfMines = totalNumberOfMines
-        });
+        Rows = gameBoard.Height;
+        Columns = gameBoard.Width;
 
         Cells = new ObservableCollection<CellViewModel>();
 
@@ -30,22 +21,12 @@ internal sealed class GameBoardViewModel
         {
             for (var j = 0; j < Columns; j++)
             {
-                var cellViewModel = new CellViewModel(_game.Board[i, j], i, j);
+                var cellViewModel = new CellViewModel(gameBoard[i, j], i, j);
 
-                cellViewModel.NotifyCellIsClicked += ClickOnCell;
+                cellViewModel.NotifyCellIsClicked += handler;
 
                Cells.Add(cellViewModel);
             }
         }
-    }
-
-    private void ClickOnCell(Point coordinate)
-    {
-        if (_game.Board[coordinate.X, coordinate.Y].IsFlagged)
-        {
-            return;
-        }
-
-        _game.OpenCells(coordinate);
     }
 }

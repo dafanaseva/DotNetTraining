@@ -8,7 +8,32 @@
 
         <Viewbox Stretch="Uniform">
                 <Grid>
-                        <ItemsControl x:Name="GameFieldViewModel" ItemsSource="{Binding Path=Cells}">
+                        <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <ItemsControl x:Name="GameButtonsViewModel" ItemsSource="{Binding Path=Buttons}" Grid.Row="0" Grid.ColumnSpan="2">
+                                <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                                <Button
+                                                        Content="{Binding Path=Text}"
+                                                        Command="{Binding Command}"
+                                                        HorizontalAlignment="Center" Margin="8">
+                                                </Button>
+                                        </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+                        <ItemsControl x:Name="GameBoardViewModel" ItemsSource="{Binding Path=Cells}" Grid.Row="1" Grid.Column= "0" Grid.ColumnSpan="5">
                                 <ItemsControl.ItemsPanel>
                                         <ItemsPanelTemplate >
                                                 <UniformGrid Rows="{Binding Path=Rows}" Columns="{Binding Path=Columns}"/>
@@ -22,11 +47,25 @@
                                                         Width="50"
                                                         Content="{Binding Path=Value}"
                                                         IsEnabled="{Binding Path=CanSelect}"
-                                                        Command="{Binding ClickOnCell}">
+                                                        Command="{Binding ClickOnButton}">
                                                         <Button.InputBindings>
-                                                                <MouseBinding Gesture="RightClick" Command="{Binding RightClickOnCell}"/>
+                                                                <MouseBinding Gesture="RightClick" Command="{Binding RightClickOnButton}"/>
                                                         </Button.InputBindings>
                                                 </Button>
+                                        </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+                        <ItemsControl x:Name="GameDetailsViewModel" ItemsSource="{Binding Path=Details}" Grid.Row="2" Grid.Column="1">
+                                <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                                <ContentControl
+                                                        Name="Detail"
+                                                        Content="{Binding}"
+                                                        HorizontalAlignment="Center"
+                                                        Margin="9,0,0,0"
+                                                        IsTabStop="False">
+                                                </ContentControl>
                                         </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                         </ItemsControl>

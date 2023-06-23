@@ -1,4 +1,4 @@
-﻿using Task3.Models;
+﻿using Task3.Models.Cells;
 
 namespace Task3.Tests;
 

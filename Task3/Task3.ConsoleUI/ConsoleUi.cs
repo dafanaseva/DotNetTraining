@@ -1,4 +1,4 @@
-﻿using Task3.Models;
+﻿using Task3.Models.Game;
 
 namespace Task3.ConsoleUI;
 
@@ -13,7 +13,7 @@ internal sealed class ConsoleUi
         _writer = writer;
     }
 
-    public void ShowGameBoard()
+    public void PrintGameBoard()
     {
         for (var i = 0; i < _game.Board.Height; i++)
         {
@@ -23,7 +23,12 @@ internal sealed class ConsoleUi
                 _writer.Write($"|{cell.GetState()}| ");
             }
 
-            Console.WriteLine();
+            _writer.WriteLine();
         }
+    }
+
+    public void PrintMessage(string message)
+    {
+        _writer.WriteLine(message);
     }
 }
