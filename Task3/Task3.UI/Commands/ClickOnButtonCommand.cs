@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace Task3.UI;
+namespace Task3.UI.Commands;
 
 internal sealed class ClickOnButtonCommand : ICommand
 {

@@ -76,7 +76,7 @@ internal sealed class Game
 
     public string HighScore()
     {
-        return _scoreList.First().ToString();
+        return _scoreList.FirstOrDefault().ToString();
     }
 
     private GameState OpenCells(Point point)

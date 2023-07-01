@@ -1,4 +1,6 @@
 ﻿using Task3.Models.Game;
+using Task3.UI.ViewModels;
+using Task3.UI.ViewModels.Buttons;
 
 namespace Task3.UI
 {

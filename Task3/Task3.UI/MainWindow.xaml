@@ -47,9 +47,9 @@
                                                         Width="50"
                                                         Content="{Binding Path=Value}"
                                                         IsEnabled="{Binding Path=CanSelect}"
-                                                        Command="{Binding ClickOnButton}">
+                                                        Command="{Binding Button.ClickOnButton}">
                                                         <Button.InputBindings>
-                                                                <MouseBinding Gesture="RightClick" Command="{Binding RightClickOnButton}"/>
+                                                                <MouseBinding Gesture="RightClick" Command="{Binding Button.RightClickOnButton}"/>
                                                         </Button.InputBindings>
                                                 </Button>
                                         </DataTemplate>

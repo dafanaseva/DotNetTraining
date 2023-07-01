@@ -1,7 +1,8 @@
 ﻿using System.Collections.ObjectModel;
+using Task3.Models.Cells;
 using Task3.Models.Game.GameBoard;
 
-namespace Task3.UI;
+namespace Task3.UI.ViewModels;
 
 internal sealed class GameBoardViewModel
 {
@@ -21,7 +22,7 @@ internal sealed class GameBoardViewModel
         {
             for (var j = 0; j < Columns; j++)
             {
-                var cellViewModel = new CellViewModel(board[i, j], i, j);
+                var cellViewModel = new CellViewModel(board[i, j], new Point(i, j));
 
                 cellViewModel.NotifyCellIsClicked += handler;
 

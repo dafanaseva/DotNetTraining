@@ -1,13 +1,10 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
+using Task3.UI.Commands;
 
-namespace Task3.UI;
+namespace Task3.UI.ViewModels.Buttons;
 
-//todo: reuse button in other places
-internal sealed class GameButtonViewModel : INotifyPropertyChanged
+internal sealed class GameButtonViewModel
 {
-
     private readonly Action _action;
     private ClickOnButtonCommand? _clickOnCellCommand;
 
@@ -17,20 +14,16 @@ internal sealed class GameButtonViewModel : INotifyPropertyChanged
         _action = action;
     }
 
+    // ReSharper disable once UnusedAutoPropertyAccessor.Global
+    // ReSharper disable once MemberCanBePrivate.Global
     public string Text { get; }
 
+    // ReSharper disable once UnusedMember.Global
     public ClickOnButtonCommand Command
     {
         get
         {
             return _clickOnCellCommand ??= new ClickOnButtonCommand(() => _action(), () => true);
         }
-    }
-
-    public event PropertyChangedEventHandler? PropertyChanged;
-
-    private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }
