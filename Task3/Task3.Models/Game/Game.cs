@@ -1,14 +1,11 @@
 ﻿using System.Diagnostics;
 using Task3.Models.Cells;
+using Task3.Models.Game.GameBoard;
 
 namespace Task3.Models.Game;
 
 internal sealed class Game
 {
-
-    private readonly InitializeBoardStep _initializeBoardStep;
-    private readonly OpenCellsStep _openCellsStep;
-
     private readonly Stopwatch _timer;
 
     private readonly List<TimeSpan> _scoreList;
@@ -16,15 +13,13 @@ internal sealed class Game
     public delegate void GameStateHandler();
     public event GameStateHandler? NotifyGameEnded;
 
-    public readonly GameBoard Board;
+    public readonly Board Board;
 
     public GameState GameState { get; private set; }
 
-    private Game(GameBoard gameBoard, InitializeBoardStep initializeBoardStep, OpenCellsStep openCellsStep)
+    private Game(Board board)
     {
-        Board = gameBoard;
-        _initializeBoardStep = initializeBoardStep;
-        _openCellsStep = openCellsStep;
+        Board = board;
 
         _timer = new Stopwatch();
         _timer.Start();
@@ -34,17 +29,18 @@ internal sealed class Game
 
     public static Game CreateGame(GameConfig gameConfig)
     {
-        var board = new GameBoard(gameConfig.BoardHeight, gameConfig.BoardWidth);
+        var board = new Board(
+            gameConfig.BoardHeight,
+            gameConfig.BoardWidth,
+            gameConfig.NumberOfMines,
+            Environment.TickCount);
 
-        return new Game(
-            board,
-            new InitializeBoardStep(board, gameConfig.NumberOfMines, Environment.TickCount),
-            new OpenCellsStep(board));
+        return new Game(board);
     }
 
     public void OpenCell(Point coordinate)
     {
-        var state = TryOpenCells(coordinate);
+        var state = OpenCells(coordinate);
         GameState = state;
 
         switch (state)
@@ -80,10 +76,10 @@ internal sealed class Game
 
     public string HighScore()
     {
-        return _scoreList.OrderDescending().FirstOrDefault().ToString();
+        return _scoreList.First().ToString();
     }
 
-    private GameState TryOpenCells(Point point)
+    private GameState OpenCells(Point point)
     {
         if (Board[point.X, point.Y].IsFlagged)
         {
@@ -94,17 +90,17 @@ internal sealed class Game
 
         if (cell.IsMined)
         {
-            _openCellsStep.OpenAllCells(point);
+            Board.OpenAllCells(point);
             return GameState.Fail;
         }
 
-        if (_openCellsStep.ClosedCellsCount == _initializeBoardStep.TotalNumberOfMines)
+        if (Board.AreAllOpened())
         {
             return GameState.Win;
         }
 
-        _initializeBoardStep.InitializeCells(point);
-        _openCellsStep.OpenNotMinedCells(point);
+        Board.InitializeCells(point);
+        Board.OpenNotMinedCells(point);
 
         return GameState.Continue;
     }
@@ -112,6 +108,7 @@ internal sealed class Game
     private void SaveScore()
     {
         _timer.Stop();
+        //todo: store as sorted list
         _scoreList.Add(_timer.Elapsed);
     }
 }

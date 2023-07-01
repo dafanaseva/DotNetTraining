@@ -19,8 +19,8 @@ internal sealed class GameDetailsViewModel : INotifyPropertyChanged
 
         Details = new ObservableCollection<string>
         {
-            $"The highest score :{game.HighScore()}",
-            $"About :{Game.About()}"
+            $"The highest score: {game.HighScore()}",
+            $"About: {Game.About()}"
         };
 
         _game.NotifyGameEnded += AddGameStatusDetail;

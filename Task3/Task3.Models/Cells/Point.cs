@@ -1,21 +1,15 @@
 ﻿using System.Diagnostics;
-using Task3.Models.Exceptions;
 
 namespace Task3.Models.Cells;
 
-internal sealed record Point
+internal sealed record Point(int X, int Y)
 {
-    public Point(int x, int y)
+    public static Point GetPoint(int numberOfElement, int arrayWidth)
     {
-        LessThenZeroArgumentException.ThrowIfLessThenZero(x);
-        LessThenZeroArgumentException.ThrowIfLessThenZero(y);
+        Debug.Assert(arrayWidth > 0);
 
-        X = x;
-        Y = y;
+        return new Point(numberOfElement / arrayWidth, numberOfElement % arrayWidth);
     }
-
-    public int X { get; }
-    public int Y { get; }
 
     public void Deconstruct(out int x, out int y)
     {
@@ -23,11 +17,11 @@ internal sealed record Point
         y = Y;
     }
 
-    public static Point GetPoint(int numberOfElement, int arrayWidth)
-    {
-        Debug.Assert(arrayWidth > 0, $"{nameof(arrayWidth)} > 0");
-        Debug.Assert(numberOfElement > 0, $"{nameof(numberOfElement)} > 0");
+    //todo: may be also other operators?
+    public static Point operator +(Point a, Point b) => new(a.X + b.X, a.Y + b.Y);
 
-        return new Point(numberOfElement / arrayWidth, numberOfElement % arrayWidth);
+    public int GetFlatCoordinate(int width)
+    {
+        return X * width + Y;
     }
 }

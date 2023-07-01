@@ -9,7 +9,7 @@ internal static class CellHelper
     {
         var cellState = cell.GetState();
 
-        var numberOfMinesSymbol = cell.IsAnyNeighbourMined() ? cell.GetNumberOfMines().ToString() : string.Empty;
+        var numberOfMinesSymbol = cell.NumberOfMinedCells > 0 ? cell.NumberOfMinedCells.ToString() : string.Empty;
 
         //to do: use image instead of string
         return cellState switch

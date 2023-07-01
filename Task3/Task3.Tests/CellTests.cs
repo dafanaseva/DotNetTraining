@@ -31,12 +31,4 @@ internal sealed class CellTests
 
         Assert.That(_systemUnderTest.IsFlagged, Is.False);
     }
-
-    [Test]
-    public void TestHasNoMinedNeighbours()
-    {
-        _systemUnderTest.IsAnyNeighbourMined();
-
-        Assert.That(_systemUnderTest.IsFlagged, Is.False);
-    }
 }

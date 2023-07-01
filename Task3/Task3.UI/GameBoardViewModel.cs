@@ -1,5 +1,5 @@
 ﻿using System.Collections.ObjectModel;
-using Task3.Models.Game;
+using Task3.Models.Game.GameBoard;
 
 namespace Task3.UI;
 
@@ -10,10 +10,10 @@ internal sealed class GameBoardViewModel
 
     public ObservableCollection<CellViewModel> Cells { get; }
 
-    public GameBoardViewModel(GameBoard gameBoard, CellViewModel.ClickHandler handler)
+    public GameBoardViewModel(Board board, CellViewModel.ClickHandler handler)
     {
-        Rows = gameBoard.Height;
-        Columns = gameBoard.Width;
+        Rows = board.Height;
+        Columns = board.Width;
 
         Cells = new ObservableCollection<CellViewModel>();
 
@@ -21,7 +21,7 @@ internal sealed class GameBoardViewModel
         {
             for (var j = 0; j < Columns; j++)
             {
-                var cellViewModel = new CellViewModel(gameBoard[i, j], i, j);
+                var cellViewModel = new CellViewModel(board[i, j], i, j);
 
                 cellViewModel.NotifyCellIsClicked += handler;
 

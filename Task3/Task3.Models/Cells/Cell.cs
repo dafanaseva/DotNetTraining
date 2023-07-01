@@ -5,9 +5,7 @@ internal sealed record Cell
     public bool IsMined { get; private set; }
     public bool IsOpen { get; private set; }
     public bool IsFlagged { get; private set; }
-
-
-    public List<Cell> Neighbours = new();
+    public int NumberOfMinedCells { get; private set; }
 
     public delegate void CellStateHandler();
     public event CellStateHandler? NotifyCellStateChanged;
@@ -39,5 +37,10 @@ internal sealed record Cell
         }
 
         return IsMined ? CellState.Mine : CellState.Safe;
+    }
+
+    internal void SetNumberOfMines(int numberOfMines)
+    {
+        NumberOfMinedCells = numberOfMines;
     }
 }
