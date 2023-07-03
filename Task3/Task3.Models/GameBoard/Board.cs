@@ -1,7 +1,8 @@
-﻿using Task3.Models.Cells;
-using Task3.Models.Exceptions;
+﻿using Task3.Models.Exceptions;
+using Task3.Models.GameCell;
+using Task3.Models.GameProcess;
 
-namespace Task3.Models.Game.GameBoard;
+namespace Task3.Models.GameBoard;
 
 internal sealed partial class Board
 {
@@ -9,15 +10,17 @@ internal sealed partial class Board
     private readonly int _seed;
 
     private bool _isInitialized;
-
     private Cell[,] Cells { get; }
 
     public int Width { get; }
     public int Height { get; }
 
-    public Board(int height, int width, int countOfMines, int seed)
+    public Board(BoardConfig boardConfig, int seed)
     {
         // todo: add more asserts
+        var height = boardConfig.Height;
+        var width = boardConfig.Width;
+        var countOfMines = boardConfig.NumberOfMines;
 
         LessThenZeroArgumentException.ThrowIfLessThenZero(height);
         LessThenZeroArgumentException.ThrowIfLessThenZero(width);

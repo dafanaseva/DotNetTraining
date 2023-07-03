@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Task3.Models", "Task3.Models\Task3.Models.csproj", "{2A76F0BC-A48F-4802-9A24-EA015B4755AF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Task3.Tests", "Task3.Tests\Task3.Tests.csproj", "{828E2D55-8636-45EF-A820-E6E240F8C427}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Task3.Models.Tests", "Task3.Models.Tests\Task3.Models.Tests.csproj", "{828E2D55-8636-45EF-A820-E6E240F8C427}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Task3.ConsoleUI", "Task3.ConsoleUI\Task3.ConsoleUI.csproj", "{C7E4606C-ACCC-4087-B81E-346C3AF7587F}"
 EndProject

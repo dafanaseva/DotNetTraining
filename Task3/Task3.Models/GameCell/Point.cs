@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace Task3.Models.Cells;
+namespace Task3.Models.GameCell;
 
 internal sealed record Point(int X, int Y)
 {
@@ -17,7 +17,6 @@ internal sealed record Point(int X, int Y)
         y = Y;
     }
 
-    //todo: may be also other operators?
     public static Point operator +(Point a, Point b) => new(a.X + b.X, a.Y + b.Y);
 
     public int GetFlatCoordinate(int width)

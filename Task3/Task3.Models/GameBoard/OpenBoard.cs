@@ -1,6 +1,6 @@
-﻿using Task3.Models.Cells;
+﻿using Task3.Models.GameCell;
 
-namespace Task3.Models.Game.GameBoard;
+namespace Task3.Models.GameBoard;
 
 internal sealed partial class Board
 {
@@ -16,7 +16,7 @@ internal sealed partial class Board
         OpenCells(
             point: point,
             exceptCondition: neighbour => !Cells[neighbour.X, neighbour.Y].IsMined,
-            shouldOpenCondition: neighbour => Cells[neighbour.X, neighbour.Y].NumberOfMinedCells == 0);
+            shouldOpenCondition: neighbour => Cells[neighbour.X, neighbour.Y].NumberOfMinesAround == 0);
     }
 
     public void OpenAllCells(Point point)

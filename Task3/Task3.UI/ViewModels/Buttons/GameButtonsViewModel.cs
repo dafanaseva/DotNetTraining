@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
-using Task3.Models.Game;
+using System.Collections.Immutable;
+using Task3.Models.GameProcess;
 
 namespace Task3.UI.ViewModels.Buttons;
 
@@ -7,11 +8,11 @@ internal sealed class GameButtonsViewModel
 {
     // ReSharper disable once UnusedAutoPropertyAccessor.Global
     // ReSharper disable once MemberCanBePrivate.Global
-    public List<GameButtonViewModel> Buttons { get; }
+    public ImmutableArray<GameButtonViewModel> Buttons { get; }
 
     public GameButtonsViewModel(Game game)
     {
-        Buttons = new List<GameButtonViewModel>
+        Buttons = new ImmutableArray<GameButtonViewModel>
         {
             new("New game", game.NewGame),
             new("High score", () => game.HighScore()),

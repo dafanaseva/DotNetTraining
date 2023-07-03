@@ -1,4 +1,4 @@
-﻿namespace Task3.Models.Game;
+﻿namespace Task3.Models.GameProcess;
 
 public enum GameState
 {

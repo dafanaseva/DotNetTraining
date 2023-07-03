@@ -1,4 +1,4 @@
-﻿using Task3.Models.Game;
+﻿using Task3.Models.GameProcess;
 
 namespace Task3.ConsoleUI.Commands;
 

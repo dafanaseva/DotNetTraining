@@ -1,6 +1,6 @@
 ﻿namespace Task3.Models.Exceptions;
 
-internal sealed class LessThenZeroArgumentException : Exception
+internal sealed class LessThenZeroArgumentException : OutOfBoundsArgumentException
 {
     private LessThenZeroArgumentException(int argument) : base($"The value can not be less then zero: {argument}")
     {

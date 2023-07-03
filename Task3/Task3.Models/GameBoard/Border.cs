@@ -1,4 +1,4 @@
-﻿namespace Task3.Models.Game.GameBoard;
+﻿namespace Task3.Models.GameBoard;
 
 internal static class Border
 {

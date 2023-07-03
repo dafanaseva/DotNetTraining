@@ -1,4 +1,4 @@
-﻿using Task3.Models.Cells;
+﻿using Task3.Models.GameCell;
 
 namespace Task3.Tests;
 

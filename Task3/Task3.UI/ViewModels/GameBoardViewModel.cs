@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
-using Task3.Models.Cells;
-using Task3.Models.Game.GameBoard;
+using Task3.Models.GameBoard;
+using Task3.Models.GameCell;
 
 namespace Task3.UI.ViewModels;
 

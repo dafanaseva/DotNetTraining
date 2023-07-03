@@ -1,13 +1,14 @@
-﻿namespace Task3.Models.Cells;
+﻿namespace Task3.Models.GameCell;
 
 internal sealed record Cell
 {
-    public bool IsMined { get; private set; }
+    public bool IsMined { get; init; }
     public bool IsOpen { get; private set; }
     public bool IsFlagged { get; private set; }
-    public int NumberOfMinedCells { get; private set; }
+    public int NumberOfMinesAround { get; init; }
 
     public delegate void CellStateHandler();
+
     public event CellStateHandler? NotifyCellStateChanged;
 
     public void Open()
@@ -24,11 +25,6 @@ internal sealed record Cell
         NotifyCellStateChanged?.Invoke();
     }
 
-    public void SetMine()
-    {
-        IsMined = true;
-    }
-
     public CellState GetState()
     {
         if (IsFlagged)
@@ -37,10 +33,5 @@ internal sealed record Cell
         }
 
         return IsMined ? CellState.Mine : CellState.Safe;
-    }
-
-    internal void SetNumberOfMines(int numberOfMines)
-    {
-        NumberOfMinedCells = numberOfMines;
     }
 }

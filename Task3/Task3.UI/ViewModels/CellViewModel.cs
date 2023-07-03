@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using Task3.Models.Cells;
+using Task3.Models.GameCell;
 using Task3.UI.Commands;
 using Task3.UI.ViewModels.Buttons;
 

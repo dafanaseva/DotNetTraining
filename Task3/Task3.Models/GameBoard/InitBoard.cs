@@ -1,6 +1,6 @@
-﻿using Task3.Models.Cells;
+﻿using Task3.Models.GameCell;
 
-namespace Task3.Models.Game.GameBoard;
+namespace Task3.Models.GameBoard;
 
 internal sealed partial class Board
 {
@@ -41,7 +41,7 @@ internal sealed partial class Board
 
             var point = Point.GetPoint(mineIndex, Width);
 
-            Cells[point.X, point.Y].SetMine();
+            Cells[point.X, point.Y] = Cells[point.X, point.Y] with { IsMined = true };
         }
     }
 
@@ -53,7 +53,7 @@ internal sealed partial class Board
             {
                 var numberOfMines = GetNeighbours(new Point(i, j)).Count(t => Cells[t.X, t.Y].IsMined);
 
-                Cells[i, j].SetNumberOfMines(numberOfMines);
+                Cells[i, j] = Cells[i, j] with { NumberOfMinesAround = numberOfMines };
             }
         }
     }

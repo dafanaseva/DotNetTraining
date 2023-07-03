@@ -1,5 +1,5 @@
-﻿using Task3.Models.Cells;
-using Task3.Models.Exceptions;
+﻿using Task3.Models.Exceptions;
+using Task3.Models.GameCell;
 
 namespace Task3.Tests;
 
@@ -11,7 +11,7 @@ internal sealed class PointTests
     [Test]
     public void TestInit()
     {
-        _systemUnderTest = new Point(1,1);
+        _systemUnderTest = new Point(1, 1);
 
         Assert.That(_systemUnderTest, Is.Not.Null);
     }

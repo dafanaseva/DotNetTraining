@@ -1,4 +1,4 @@
-﻿namespace Task3.Models.Cells;
+﻿namespace Task3.Models.GameCell;
 
 internal enum CellState
 {

@@ -1,4 +1,6 @@
-﻿using Task3.Models.Game;
+﻿using System;
+using Task3.Models.GameBoard;
+using Task3.Models.GameProcess;
 using Task3.UI.ViewModels;
 using Task3.UI.ViewModels.Buttons;
 
@@ -14,19 +16,16 @@ namespace Task3.UI
             InitializeComponent();
 
             //todo: move constants to config or settings
-            var config = new GameConfig
-            {
-                BoardWidth = 9,
-                BoardHeight = 9,
-                NumberOfMines = 10
-            };
+            var config = new BoardConfig(9, 9, 10);
 
-            var game = Game.CreateGame(config);
+            var board = new Board(config, Environment.TickCount);
+
+            var game = new Game(board);
 
             var gameButtonsViewModel = new GameButtonsViewModel(game);
             GameButtonsViewModel.DataContext = gameButtonsViewModel;
 
-            var gameBoardViewModel = new GameBoardViewModel(game.Board, game.OpenCell);
+            var gameBoardViewModel = new GameBoardViewModel(board, game.OpenCell);
             GameBoardViewModel.ItemsSource = gameBoardViewModel.Cells;
 
             var gameDetailsViewModel = new GameDetailsViewModel(game);

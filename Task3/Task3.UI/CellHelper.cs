@@ -1,5 +1,5 @@
 ﻿using System;
-using Task3.Models.Cells;
+using Task3.Models.GameCell;
 
 namespace Task3.UI;
 
@@ -9,7 +9,7 @@ internal static class CellHelper
     {
         var cellState = cell.GetState();
 
-        var numberOfMinesSymbol = cell.NumberOfMinedCells > 0 ? cell.NumberOfMinedCells.ToString() : string.Empty;
+        var numberOfMinesSymbol = cell.NumberOfMinesAround > 0 ? cell.NumberOfMinesAround.ToString() : string.Empty;
 
         //to do: use image instead of string
         return cellState switch

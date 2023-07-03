@@ -7,7 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <InternalsVisibleTo Include="Task3.Tests" />
+        <InternalsVisibleTo Include="Task3.Models.Tests" />
         <InternalsVisibleTo Include="Task3.ConsoleUI" />
         <InternalsVisibleTo Include="Task3.UI" />
         <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />

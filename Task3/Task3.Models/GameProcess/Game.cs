@@ -1,41 +1,26 @@
 ﻿using System.Diagnostics;
-using Task3.Models.Cells;
-using Task3.Models.Game.GameBoard;
+using Task3.Models.GameBoard;
+using Task3.Models.GameCell;
 
-namespace Task3.Models.Game;
+namespace Task3.Models.GameProcess;
 
 internal sealed class Game
 {
+    private readonly Board _board;
     private readonly Stopwatch _timer;
-
-    private readonly List<TimeSpan> _scoreList;
-
+    private readonly ScoreList _scoreList;
     public delegate void GameStateHandler();
     public event GameStateHandler? NotifyGameEnded;
-
-    public readonly Board Board;
-
     public GameState GameState { get; private set; }
 
-    private Game(Board board)
+    public Game(Board board)
     {
-        Board = board;
+        _board = board;
 
         _timer = new Stopwatch();
         _timer.Start();
 
-        _scoreList = new List<TimeSpan>();
-    }
-
-    public static Game CreateGame(GameConfig gameConfig)
-    {
-        var board = new Board(
-            gameConfig.BoardHeight,
-            gameConfig.BoardWidth,
-            gameConfig.NumberOfMines,
-            Environment.TickCount);
-
-        return new Game(board);
+        _scoreList = new ScoreList();
     }
 
     public void OpenCell(Point coordinate)
@@ -55,7 +40,8 @@ internal sealed class Game
                 SaveScore();
                 break;
             default:
-                throw new ArgumentOutOfRangeException();
+                //todo: should be a method arg
+                throw new ArgumentOutOfRangeException(nameof(state), state, $"Unknown {nameof(state)}: {state}");
         }
     }
 
@@ -74,33 +60,33 @@ internal sealed class Game
         return "This is a minesweeper game";
     }
 
-    public string HighScore()
+    public TimeSpan HighScore()
     {
-        return _scoreList.FirstOrDefault().ToString();
+        return _scoreList.GetHighScore();
     }
 
     private GameState OpenCells(Point point)
     {
-        if (Board[point.X, point.Y].IsFlagged)
+        if (_board[point.X, point.Y].IsFlagged)
         {
             return GameState.Continue;
         }
 
-        var cell = Board[point.X, point.Y];
+        var cell = _board[point.X, point.Y];
 
         if (cell.IsMined)
         {
-            Board.OpenAllCells(point);
+            _board.OpenAllCells(point);
             return GameState.Fail;
         }
 
-        if (Board.AreAllOpened())
+        if (_board.AreAllOpened())
         {
             return GameState.Win;
         }
 
-        Board.InitializeCells(point);
-        Board.OpenNotMinedCells(point);
+        _board.InitializeCells(point);
+        _board.OpenNotMinedCells(point);
 
         return GameState.Continue;
     }
@@ -108,7 +94,7 @@ internal sealed class Game
     private void SaveScore()
     {
         _timer.Stop();
-        //todo: store as sorted list
+
         _scoreList.Add(_timer.Elapsed);
     }
 }
