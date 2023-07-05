@@ -1,39 +1,37 @@
-﻿using Task3.Models.Exceptions;
+﻿using System.Diagnostics;
 using Task3.Models.GameCell;
-using Task3.Models.GameProcess;
 
 namespace Task3.Models.GameBoard;
 
 internal sealed partial class Board
 {
-    private readonly int _countOfMines;
     private readonly int _seed;
 
     private bool _isInitialized;
-    private Cell[,] Cells { get; }
 
+    private Cell[,] Cells { get; }
     public int Width { get; }
     public int Height { get; }
+    public int ClosedCellsCount { get; private set; }
+    public int NumberOfMines { get; }
 
     public Board(BoardConfig boardConfig, int seed)
     {
-        // todo: add more asserts
         var height = boardConfig.Height;
         var width = boardConfig.Width;
         var countOfMines = boardConfig.NumberOfMines;
 
-        LessThenZeroArgumentException.ThrowIfLessThenZero(height);
-        LessThenZeroArgumentException.ThrowIfLessThenZero(width);
+        Debug.Assert(height > 0);
+        Debug.Assert(width > 0);
+        Debug.Assert(countOfMines > 0);
 
         Width = width;
         Height = height;
 
-        var fullWidth = Border.GetFullLength(width);
-        var fullHeight = Border.GetFullLength(height);
+        var fullWidth = GetFullLength(width);
+        var fullHeight = GetFullLength(height);
 
-        LessThenZeroArgumentException.ThrowIfLessThenZero(countOfMines);
-
-        _countOfMines = countOfMines;
+        NumberOfMines = countOfMines;
 
         _seed = seed;
 
@@ -64,5 +62,5 @@ internal sealed partial class Board
         yield return new Point(x - 1, y - 1);
     }
 
-    public Cell this[int x, int y] => Cells[x + Border.Width, y + Border.Width];
+    public Cell this[int x, int y] => Cells[x + BorderWidth, y + BorderWidth];
 }

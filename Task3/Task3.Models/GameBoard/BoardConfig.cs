@@ -1,6 +1,6 @@
 ﻿using Task3.Models.Exceptions;
 
-namespace Task3.Models.GameProcess;
+namespace Task3.Models.GameBoard;
 
 internal sealed record BoardConfig
 {
@@ -10,9 +10,14 @@ internal sealed record BoardConfig
 
     public BoardConfig(int width, int height, int numberOfMines)
     {
+        // todo: get rid of duplicates
         LessThenZeroArgumentException.ThrowIfLessThenZero(width);
         LessThenZeroArgumentException.ThrowIfLessThenZero(height);
         LessThenZeroArgumentException.ThrowIfLessThenZero(numberOfMines);
+
+        OutOfBoundsArgumentException.ThrowIfEqualsToZero(width);
+        OutOfBoundsArgumentException.ThrowIfEqualsToZero(height);
+        OutOfBoundsArgumentException.ThrowIfEqualsToZero(numberOfMines);
 
         if (numberOfMines >= width * height)
         {

@@ -12,7 +12,15 @@ internal sealed class ScoreList
     public void Add(TimeSpan score)
     {
         var index = _scoreList.BinarySearch(score);
-        _scoreList.Insert(index, score);
+
+        if (index >= 0)
+        {
+            _scoreList.Insert(index, score);
+        }
+        else
+        {
+            _scoreList.Insert(~index, score);
+        }
     }
 
     public TimeSpan GetHighScore()

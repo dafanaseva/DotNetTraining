@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Collections.Immutable;
+﻿using System;
+using System.Collections.ObjectModel;
 using Task3.Models.GameProcess;
 
 namespace Task3.UI.ViewModels.Buttons;
@@ -8,15 +8,15 @@ internal sealed class GameButtonsViewModel
 {
     // ReSharper disable once UnusedAutoPropertyAccessor.Global
     // ReSharper disable once MemberCanBePrivate.Global
-    public ImmutableArray<GameButtonViewModel> Buttons { get; }
+    public ObservableCollection<GameButtonViewModel> Buttons { get; }
 
     public GameButtonsViewModel(Game game)
     {
-        Buttons = new ImmutableArray<GameButtonViewModel>
+        Buttons = new ObservableCollection<GameButtonViewModel>
         {
-            new("New game", game.NewGame),
+            new("New game", () => throw new NotImplementedException()),
             new("High score", () => game.HighScore()),
-            new("Exit", game.ExitGame),
+            new("Exit", () => throw new NotImplementedException()),
             new("About", () => Game.About())
         };
     }

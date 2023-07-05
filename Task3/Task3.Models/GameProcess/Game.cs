@@ -26,6 +26,7 @@ internal sealed class Game
     public void OpenCell(Point coordinate)
     {
         var state = OpenCells(coordinate);
+
         GameState = state;
 
         switch (state)
@@ -45,18 +46,9 @@ internal sealed class Game
         }
     }
 
-    public void NewGame()
-    {
-        throw new NotImplementedException();
-    }
-
-    public void ExitGame()
-    {
-        throw new NotImplementedException();
-    }
-
     public static string About()
     {
+        //todo: to const
         return "This is a minesweeper game";
     }
 
@@ -80,7 +72,7 @@ internal sealed class Game
             return GameState.Fail;
         }
 
-        if (_board.AreAllOpened())
+        if (_board.ClosedCellsCount == _board.NumberOfMines )
         {
             return GameState.Win;
         }

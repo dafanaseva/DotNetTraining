@@ -4,13 +4,6 @@ namespace Task3.Models.GameBoard;
 
 internal sealed partial class Board
 {
-    private int _openCellsCount;
-
-    public bool AreAllOpened()
-    {
-        return _openCellsCount - _countOfMines == 0;
-    }
-
     public void OpenNotMinedCells(Point point)
     {
         OpenCells(
@@ -21,10 +14,7 @@ internal sealed partial class Board
 
     public void OpenAllCells(Point point)
     {
-        OpenCells(
-            point: point,
-            exceptCondition: _ => true,
-            shouldOpenCondition: _ => true);
+        OpenCells(point: point, exceptCondition: _ => true, shouldOpenCondition: _ => true);
     }
 
     //todo: update flagged cells
@@ -56,18 +46,24 @@ internal sealed partial class Board
             }
         }
 
-        _openCellsCount++;
+        ClosedCellsCount --;
 
         Cells[point.X, point.Y].Open();
     }
 
     private bool IsBorder(Point point)
     {
-        var fullWidth = Border.GetFullLength(Width);
-        var fullHeight = Border.GetFullLength(Height);
+        var fullWidth = GetFullLength(Width);
+        var fullHeight = GetFullLength(Height);
 
         var (x, y) = point;
 
         return x <= 0 || y <= 0 || x >= fullWidth - 1 || y >= fullHeight - 1;
+    }
+
+    private int GetFullLength(int length)
+    {
+        const int sidesCount = 2;
+        return length + sidesCount * Width;
     }
 }

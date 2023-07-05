@@ -4,8 +4,11 @@ namespace Task3.Models.GameBoard;
 
 internal sealed partial class Board
 {
+    private const int BorderWidth = 1;
     public void InitializeCells(Point point)
     {
+        //todo: check point is outside of bounds
+
         if (_isInitialized)
         {
             return;
@@ -31,7 +34,7 @@ internal sealed partial class Board
 
         var random = new Random(seed);
 
-        for (var j = 0; j < _countOfMines; j++)
+        for (var j = 0; j < NumberOfMines; j++)
         {
             var i = random.Next(0, possibleCoordinates.Count);
 
@@ -41,19 +44,19 @@ internal sealed partial class Board
 
             var point = Point.GetPoint(mineIndex, Width);
 
-            Cells[point.X, point.Y] = Cells[point.X, point.Y] with { IsMined = true };
+            Cells[point.X, point.Y].IsMined = true;
         }
     }
 
     private void InitNumberOfCells()
     {
-        for (var i = Border.Width; i < Height + Border.Width; i++)
+        for (var i = BorderWidth; i < Height + BorderWidth; i++)
         {
-            for (var j = Border.Width; j < Width + Border.Width; j++)
+            for (var j = BorderWidth; j < Width + BorderWidth; j++)
             {
                 var numberOfMines = GetNeighbours(new Point(i, j)).Count(t => Cells[t.X, t.Y].IsMined);
 
-                Cells[i, j] = Cells[i, j] with { NumberOfMinesAround = numberOfMines };
+                Cells[i, j].NumberOfMinesAround = numberOfMines;
             }
         }
     }
