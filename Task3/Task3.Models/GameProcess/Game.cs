@@ -43,9 +43,11 @@ internal sealed class Game
         return _scoreList.GetHighScore();
     }
 
-    public void StartNew(Board board)
+    public void StartNew()
     {
-        _board = board;
+        var config = new BoardConfig(_board.Width, _board.Height, _board.NumberOfMines, Environment.TickCount);
+
+        _board = new Board(config);
     }
 
     private void HandleCell(Point point, GameState state)

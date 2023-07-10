@@ -25,6 +25,6 @@ internal sealed class ScoreList
 
     public TimeSpan GetHighScore()
     {
-        return _scoreList.FirstOrDefault();
+        return _scoreList.Any() ? _scoreList.First() : TimeSpan.MaxValue;
     }
 }
