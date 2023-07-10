@@ -40,9 +40,9 @@ internal sealed record Cell
 
     public CellState GetState()
     {
-        if (IsFlagged)
+        if (!IsOpen)
         {
-            return CellState.Flag;
+            return IsFlagged ? CellState.Flag : CellState.Unknown;
         }
 
         return IsMined ? CellState.Mine : CellState.Safe;

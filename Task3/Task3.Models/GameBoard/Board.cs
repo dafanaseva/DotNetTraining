@@ -74,7 +74,6 @@ internal sealed class Board
         OpenCells(point: point, exceptCondition: _ => true, shouldOpenCondition: _ => true);
     }
 
-    //todo: update flagged cells
     private void OpenCells(Point point, Func<Point, bool> exceptCondition, Func<Point, bool> shouldOpenCondition)
     {
         var nextCells = new Queue<Point>();

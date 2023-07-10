@@ -4,5 +4,6 @@ internal enum CellState
 {
     Safe,
     Mine,
-    Flag
+    Flag,
+    Unknown
 }

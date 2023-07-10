@@ -34,24 +34,15 @@ internal sealed class ConsoleUi
         _writer.WriteLine(message);
     }
 
-    //todo: get rid of duplicates
     private static string GetValue(Cell cell)
     {
-        var cellState = cell.GetState();
-
-        var numberOfMinesSymbol = cell.NumberOfMinesAround > 0 ? cell.NumberOfMinesAround.ToString() : string.Empty;
-
-        return GetValue(cellState, cell.IsOpen, numberOfMinesSymbol);
-    }
-
-    private static string GetValue(CellState state, bool isOpen, string numberOfMinesSymbol)
-    {
-        return state switch
+        return cell.GetState() switch
         {
-            CellState.Safe => isOpen ? numberOfMinesSymbol : string.Empty,
-            CellState.Mine => isOpen ? "X" : string.Empty,
-            CellState.Flag => isOpen ? numberOfMinesSymbol : "?",
-            _ => throw new ArgumentOutOfRangeException(nameof(state), state, null)
+            CellState.Unknown => string.Empty,
+            CellState.Safe => cell.NumberOfMinesAround.ToString(),
+            CellState.Mine => "X",
+            CellState.Flag => "?",
+            _ => throw new ArgumentOutOfRangeException(nameof(CellState))
         };
     }
 }
