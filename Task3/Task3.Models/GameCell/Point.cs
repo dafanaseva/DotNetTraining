@@ -38,6 +38,37 @@ internal sealed record Point
         return new Point(numberOfElement / arrayWidth, numberOfElement % arrayWidth);
     }
 
+    private static readonly int[] Diff = { -1, 0, 1 };
+
+    public IEnumerable<Point> GetNeighbours(int width, int height)
+    {
+        foreach (var dx in Diff)
+        {
+            foreach (var dy in Diff)
+            {
+                var neighbourX = X + dx;
+                var neighbourY = Y + dy;
+
+                if (!IsInBounds(neighbourX, width) || !IsInBounds(neighbourY, height))
+                {
+                    continue;
+                }
+
+                var neighbour = new Point(neighbourX, neighbourY);
+
+                if (neighbour != this)
+                {
+                    yield return neighbour;
+                }
+            }
+        }
+    }
+
+    public static bool IsInBounds(int coordinate, int length)
+    {
+        return coordinate >= 0 && coordinate < length;
+    }
+
     public static Point operator +(Point a, Point b) => new(a.X + b.X, a.Y + b.Y);
 
     private static void AssertArrayWidth(int width)

@@ -7,7 +7,7 @@ namespace Task3.Tests.GameProcess;
 [TestFixture, FixtureLifeCycle(LifeCycle.InstancePerTestCase)]
 internal sealed class GameTests
 {
-    private readonly Game _systemUnderTest = new(new Board(new BoardConfig(9, 9, 9), 1));
+    private readonly Game _systemUnderTest = new(new Board(new BoardConfig(9, 9, 9, 1)));
 
     [Test]
     public void OpenCellTest()

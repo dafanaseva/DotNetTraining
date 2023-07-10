@@ -7,17 +7,13 @@ internal sealed record BoardConfig
     public int Width { get; }
     public int Height { get; }
     public int NumberOfMines { get; }
+    public int  Seed { get; }
 
-    public BoardConfig(int width, int height, int numberOfMines)
+    public BoardConfig(int width, int height, int numberOfMines, int seed)
     {
-        // todo: get rid of duplicates
-        LessThenZeroArgumentException.ThrowIfLessThenZero(width);
-        LessThenZeroArgumentException.ThrowIfLessThenZero(height);
-        LessThenZeroArgumentException.ThrowIfLessThenZero(numberOfMines);
-
-        OutOfBoundsArgumentException.ThrowIfEqualsToZero(width);
-        OutOfBoundsArgumentException.ThrowIfEqualsToZero(height);
-        OutOfBoundsArgumentException.ThrowIfEqualsToZero(numberOfMines);
+        AssertParameter(width);
+        AssertParameter(height);
+        AssertParameter(numberOfMines);
 
         if (numberOfMines >= width * height)
         {
@@ -28,5 +24,12 @@ internal sealed record BoardConfig
         Width = width;
         Height = height;
         NumberOfMines = numberOfMines;
+        Seed = seed;
+    }
+
+    private static void AssertParameter(int value)
+    {
+        LessThenZeroArgumentException.ThrowIfLessThenZero(value);
+        OutOfBoundsArgumentException.ThrowIfEqualsToZero(value);
     }
 }

@@ -11,4 +11,21 @@
       <ProjectReference Include="..\Task3.Models\Task3.Models.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0-preview.5.23280.8" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.0-preview.4.23259.5" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="8.0.0-preview.4.23259.5" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0-preview.4.23259.5" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <InternalsVisibleTo Include="Task3.ConsoleUI.Tests" />
+        <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="appsettings.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
 </Project>

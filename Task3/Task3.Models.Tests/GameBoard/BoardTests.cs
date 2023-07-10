@@ -17,10 +17,10 @@ internal sealed class BoardTests
         const int height = 9;
         const int numberOfMines = 9;
 
-        var config = new BoardConfig(width, height, numberOfMines);
+        var config = new BoardConfig(width, height, numberOfMines, Seed);
 
         // Act
-        _systemUnderTest = new Board(config, Seed);
+        _systemUnderTest = new Board(config);
 
         // Assert
         Assert.That(_systemUnderTest, Is.Not.Null);

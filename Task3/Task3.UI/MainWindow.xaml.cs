@@ -16,9 +16,9 @@ namespace Task3.UI
             InitializeComponent();
 
             //todo: move constants to config or settings
-            var config = new BoardConfig(9, 9, 10);
+            var config = new BoardConfig(9, 9, 10, Environment.TickCount);
 
-            var board = new Board(config, Environment.TickCount);
+            var board = new Board(config);
 
             var game = new Game(board);
 

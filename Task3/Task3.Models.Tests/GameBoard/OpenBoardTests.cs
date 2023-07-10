@@ -11,7 +11,7 @@ internal sealed class OpenBoardTests
     private const int NumberOfMines = 9;
     private const int Seed = 1;
 
-    private readonly Board _systemUnderTest = new (new BoardConfig(Width, Height, NumberOfMines), Seed);
+    private readonly Board _systemUnderTest = new (new BoardConfig(Width, Height, NumberOfMines, Seed));
 
     [Test]
     public void OpenNotMinedCellsTest()

@@ -4,8 +4,8 @@ namespace Task3.ConsoleUI.Commands;
 
 internal sealed class AboutCommand : Command
 {
-    public override void Execute(ConsoleUi consoleUi, Game game)
+    public override void Execute(ConsoleUi consoleUi, Game game, params string[] parameter)
     {
-        consoleUi.PrintMessage("This is a minesweeper game");
+        consoleUi.PrintMessage(Game.About());
     }
 }

@@ -42,7 +42,7 @@ internal sealed class CellViewModel : INotifyPropertyChanged
         _cell = cell;
         _cell.NotifyCellStateChanged += UpdateValue;
 
-        _value = _cell.GetValue();
+        _value = _cell.GetImage();
 
         Button = new CellButtonViewModel(
             new ClickOnButtonCommand(() => NotifyCellIsClicked?.Invoke(point), CanExecuteCommand),
@@ -56,7 +56,7 @@ internal sealed class CellViewModel : INotifyPropertyChanged
 
     private void UpdateValue()
     {
-        Value = _cell.GetValue();
+        Value = _cell.GetImage();
     }
 
     private void OnPropertyChanged([CallerMemberName] string? propertyName = null)

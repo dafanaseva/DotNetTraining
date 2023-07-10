@@ -6,29 +6,82 @@ namespace Task3.Models.GameProcess;
 
 internal sealed class Game
 {
-    private readonly Board _board;
+    private Board _board;
     private readonly Stopwatch _timer;
     private readonly ScoreList _scoreList;
     public delegate void GameStateHandler();
     public event GameStateHandler? NotifyGameEnded;
     public GameState GameState { get; private set; }
+    public bool IsCancelled { get; set; }
 
     public Game(Board board)
     {
         _board = board;
-
         _timer = new Stopwatch();
         _timer.Start();
 
         _scoreList = new ScoreList();
     }
 
-    public void OpenCell(Point coordinate)
+    public void OpenCell(Point point)
     {
-        var state = OpenCells(coordinate);
+        GameState = GetGameState(_board[point.X, point.Y]);
 
-        GameState = state;
+        HandleCell(point, GameState);
 
+        HandleState(GameState);
+    }
+
+    public static string About()
+    {
+        const string description = "This is a minesweeper game";
+        return description;
+    }
+
+    public TimeSpan HighScore()
+    {
+        return _scoreList.GetHighScore();
+    }
+
+    public void StartNew(Board board)
+    {
+        _board = board;
+    }
+
+    private void HandleCell(Point point, GameState state)
+    {
+        switch (state)
+        {
+            case GameState.Fail or GameState.Win:
+                _board.OpenAllCells(point);
+                break;
+            case GameState.Continue:
+                _board.InitializeCells(point);
+                _board.OpenNotMinedCells(point);
+                break;
+            default:
+                Debug.Fail($"Invalid game state {state}");
+                break;
+        }
+    }
+
+    private GameState GetGameState(Cell cell)
+    {
+        if (cell.IsFlagged)
+        {
+            return GameState.Continue;
+        }
+
+        if (cell.IsMined)
+        {
+            return GameState.Fail;
+        }
+
+        return IsWin() ? GameState.Win : GameState.Continue;
+    }
+
+    private void HandleState(GameState state)
+    {
         switch (state)
         {
             case GameState.Continue:
@@ -41,46 +94,8 @@ internal sealed class Game
                 SaveScore();
                 break;
             default:
-                //todo: should be a method arg
                 throw new ArgumentOutOfRangeException(nameof(state), state, $"Unknown {nameof(state)}: {state}");
         }
-    }
-
-    public static string About()
-    {
-        //todo: to const
-        return "This is a minesweeper game";
-    }
-
-    public TimeSpan HighScore()
-    {
-        return _scoreList.GetHighScore();
-    }
-
-    private GameState OpenCells(Point point)
-    {
-        if (_board[point.X, point.Y].IsFlagged)
-        {
-            return GameState.Continue;
-        }
-
-        var cell = _board[point.X, point.Y];
-
-        if (cell.IsMined)
-        {
-            _board.OpenAllCells(point);
-            return GameState.Fail;
-        }
-
-        if (_board.ClosedCellsCount == _board.NumberOfMines )
-        {
-            return GameState.Win;
-        }
-
-        _board.InitializeCells(point);
-        _board.OpenNotMinedCells(point);
-
-        return GameState.Continue;
     }
 
     private void SaveScore()
@@ -88,5 +103,10 @@ internal sealed class Game
         _timer.Stop();
 
         _scoreList.Add(_timer.Elapsed);
+    }
+
+    private bool IsWin()
+    {
+        return _board.ClosedCellsCount == _board.NumberOfMines;
     }
 }

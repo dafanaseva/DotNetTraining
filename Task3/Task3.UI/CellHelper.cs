@@ -5,19 +5,24 @@ namespace Task3.UI;
 
 internal static class CellHelper
 {
-    public static string GetValue(this Cell cell)
+    //TODO: show image
+    public static string GetImage(this Cell cell)
     {
         var cellState = cell.GetState();
 
         var numberOfMinesSymbol = cell.NumberOfMinesAround > 0 ? cell.NumberOfMinesAround.ToString() : string.Empty;
 
-        //to do: use image instead of string
-        return cellState switch
+        return GetValue(cellState, cell.IsOpen, numberOfMinesSymbol);
+    }
+
+    private static string GetValue(CellState state, bool isOpen, string numberOfMinesSymbol)
+    {
+        return state switch
         {
-            CellState.Safe => cell.IsOpen ? numberOfMinesSymbol : string.Empty,
-            CellState.Mine => cell.IsOpen ? "X" : string.Empty,
-            CellState.Flag => "?",
-            _ => throw new ArgumentOutOfRangeException(nameof(cellState), cellState, null)
+            CellState.Safe => isOpen ? numberOfMinesSymbol : string.Empty,
+            CellState.Mine => isOpen ? "X" : string.Empty,
+            CellState.Flag => isOpen ? numberOfMinesSymbol : "?",
+            _ => throw new ArgumentOutOfRangeException(nameof(state), state, null)
         };
     }
 }

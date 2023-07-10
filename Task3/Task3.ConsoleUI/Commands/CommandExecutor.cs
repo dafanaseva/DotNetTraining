@@ -9,27 +9,22 @@ internal sealed class CommandExecutor
     private readonly ConsoleUi _consoleUi;
     private readonly Game _game;
 
-    public CommandExecutor(ConsoleUi consoleUi, Game game)
+    public CommandExecutor(ConsoleUi consoleUi, Game game, Dictionary<string, Command> commands)
     {
         _consoleUi = consoleUi;
         _game = game;
-        _commands = new Dictionary<string, Command>();
+        _commands = commands;
     }
 
-    public void RegisterCommand(string type, Command command)
+    public void ExecuteCommand((string Name, string[] Parameters) inputCommand)
     {
-        _commands[type] = command;
-    }
-
-    public void ExecuteCommand(string commandText)
-    {
-        if (_commands.TryGetValue(commandText, out var command))
+        if (_commands.TryGetValue(inputCommand.Name.ToLowerInvariant(), out var command))
         {
-            command.Execute(_consoleUi, _game);
+            command.Execute(_consoleUi, _game, inputCommand.Parameters);
         }
         else
         {
-            throw new Exception("Wrong command");
+            throw new UnknownCommandException($"Wrong command: {inputCommand.Name}");
         }
     }
 }

@@ -1,31 +1,58 @@
-﻿using Task3.ConsoleUI;
+﻿using Microsoft.Extensions.Configuration;
+using Task3.ConsoleUI;
 using Task3.ConsoleUI.Commands;
+using Task3.ConsoleUI.Configuration;
+using Task3.Models.Exceptions;
 using Task3.Models.GameBoard;
 using Task3.Models.GameProcess;
+using BoardConfig = Task3.Models.GameBoard.BoardConfig;
 
-//todo: move constants to a config
+const string appSettingsFileName = "appsettings.json";
 
-const int width = 9;
-const int height = 9;
-const int numberOfMines = 10;
-
-var board = new Board(new BoardConfig(width, height, numberOfMines), Environment.TickCount);
-
-var game = new Game(board);
-
-var consoleUi = new ConsoleUi(Console.Out, board);
-var commandExecutor = new CommandExecutor(consoleUi, game);
-
-// todo: register commands
-while (true)
+try
 {
-    var command = Console.ReadLine();
+    var config = new ConfigurationBuilder()
+        .SetBasePath(Directory.GetCurrentDirectory())
+        .AddJsonFile(appSettingsFileName, optional: true)
+        .Build();
 
-    if (command is "exit" or null)
+    var appConfig = config.Get<AppConfig>() ?? throw new Exception($"Can not parse {nameof(AppConfig)}");
+
+    var board = new Board(new BoardConfig(appConfig.Width, appConfig.Height, appConfig.NumberOfMines,
+        Environment.TickCount));
+
+    var game = new Game(board);
+    var consoleUi = new ConsoleUi(Console.Out, board);
+
+
+    var commandExecutor = new CommandExecutor(consoleUi, game, new Dictionary<string, Command>
     {
-        return;
-    }
+        { "about", new AboutCommand() },
+        { "score", new HighScoresCommand() },
+        { "exit", new ExitCommand() },
+        { "new", new NewGameCommand() },
+        { "open", new OpenCellCommand() }
+    });
 
-    // todo:
-    commandExecutor.ExecuteCommand(command);
+    while (true)
+    {
+        var command = Console.ReadLine();
+
+        if (command is null || game.IsCancelled)
+        {
+            return;
+        }
+
+        var parsedCommand = CommandParser.ParseCommand(command);
+
+        commandExecutor.ExecuteCommand(parsedCommand);
+    }
+}
+catch (OutOfBoundsArgumentException e)
+{
+    Console.WriteLine($"Wrong game parameters: {e.Message}");
+}
+catch (Exception e)
+{
+    Console.WriteLine($"Unknown error: {e.Message}");
 }

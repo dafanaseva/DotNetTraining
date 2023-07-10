@@ -4,8 +4,8 @@ namespace Task3.ConsoleUI.Commands;
 
 internal sealed class ExitCommand : Command
 {
-    public override void Execute(ConsoleUi consoleUi, Game game)
+    public override void Execute(ConsoleUi consoleUi, Game game, params string[] parameter)
     {
-        throw new NotImplementedException();
+        game.IsCancelled = true;
     }
 }

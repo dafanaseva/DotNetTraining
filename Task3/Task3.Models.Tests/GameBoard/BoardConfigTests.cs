@@ -6,6 +6,7 @@ namespace Task3.Tests.GameBoard;
 [TestFixture, FixtureLifeCycle(LifeCycle.InstancePerTestCase)]
 internal sealed class BoardConfigTests
 {
+    private const int Seed = 1;
     private BoardConfig? _systemUnderTest;
 
     [Test]
@@ -17,7 +18,7 @@ internal sealed class BoardConfigTests
         const int numberOfMines = 10;
 
         // Act
-        _systemUnderTest = new BoardConfig(width, height, numberOfMines);
+        _systemUnderTest = new BoardConfig(width, height, numberOfMines, Seed);
 
         // Assert
         Assert.Multiple(() =>
@@ -36,7 +37,7 @@ internal sealed class BoardConfigTests
     {
         Assert.Throws<LessThenZeroArgumentException>(() =>
         {
-            _systemUnderTest = new BoardConfig(width, height, numberOfMines);
+            _systemUnderTest = new BoardConfig(width, height, numberOfMines, Seed);
         });
     }
 
@@ -48,7 +49,7 @@ internal sealed class BoardConfigTests
     {
         Assert.Throws<OutOfBoundsArgumentException>(() =>
         {
-            _systemUnderTest = new BoardConfig(width, height, numberOfMines);
+            _systemUnderTest = new BoardConfig(width, height, numberOfMines, Seed);
         });
     }
 }
