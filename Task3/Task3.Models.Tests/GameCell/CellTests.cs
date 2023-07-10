@@ -75,8 +75,16 @@ internal sealed class CellTests
     }
 
     [Test]
+    public void GetStateUnknownTest()
+    {
+        Assert.That(_systemUnderTest.GetState(), Is.EqualTo(CellState.Unknown));
+    }
+
+    [Test]
     public void GetStateSafeTest()
     {
+        _systemUnderTest.Open();
+
         Assert.That(_systemUnderTest.GetState(), Is.EqualTo(CellState.Safe));
     }
 
@@ -92,6 +100,8 @@ internal sealed class CellTests
     public void GetStateMinedTest()
     {
         _systemUnderTest.IsMined = true;
+
+        _systemUnderTest.Open();
 
         Assert.That(_systemUnderTest.GetState(), Is.EqualTo(CellState.Mine));
     }
