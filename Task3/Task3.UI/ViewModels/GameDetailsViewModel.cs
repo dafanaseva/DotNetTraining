@@ -16,20 +16,23 @@ internal sealed class GameDetailsViewModel
     {
         _game = game;
 
-        var highScore = game.HighScore();
-        var highScoreValue = highScore == TimeSpan.MaxValue ? "-" : highScore.ToString();
-
-        Details = new ObservableCollection<string>
-        {
-            $"The highest score: {highScoreValue}",
-            $"About: {Game.About()}"
-        };
+        Details = new ObservableCollection<string>();
 
         _game.NotifyGameEnded += AddGameStatusDetail;
     }
 
     private void AddGameStatusDetail()
     {
+        Details.Clear();
+
         Details.Add($"Game ended: {_game.GameState}");
+        Details.Add($"The highest score: {GetHighScore()}");
+    }
+
+    private string GetHighScore()
+    {
+        var highScore = _game.HighScore();
+
+        return highScore == TimeSpan.MaxValue ? "-" : highScore.ToString("g");
     }
 }

@@ -38,13 +38,20 @@ internal sealed class Game
         if (!_isInitialized)
         {
             (_cells, _notMinedPoints) = InitializeCellsHelper.InitCells(_config, point, _cells);
+
+            _isInitialized = true;
         }
 
         GameState = GetGameState(_cells[point.X, point.Y]);
 
-        HandleCell(point, GameState);
+        OpenCells(point, GameState);
 
-        HandleState(GameState);
+        if (IsWin())
+        {
+            GameState = GameState.Win;
+        }
+
+        HandleGameState(GameState);
     }
 
     public static string About()
@@ -73,15 +80,17 @@ internal sealed class Game
         return isAllOpened;
     }
 
-    private void HandleCell(Point point, GameState state)
+    private void OpenCells(Point point, GameState state)
     {
         switch (state)
         {
-            case GameState.Fail or GameState.Win:
+            case GameState.Fail:
                 OpenCellsHelper.OpenAllCells(point, _cells);
                 break;
             case GameState.Continue:
                 OpenCellsHelper.OpenNotMinedCells(point, _cells);
+                break;
+            case GameState.Win:
                 break;
             default:
                 Debug.Fail($"Invalid game state {state}");
@@ -96,15 +105,10 @@ internal sealed class Game
             return GameState.Continue;
         }
 
-        if (cell.IsMined)
-        {
-            return GameState.Fail;
-        }
-
-        return IsWin() ? GameState.Win : GameState.Continue;
+        return cell.IsMined ? GameState.Fail : GameState.Continue;
     }
 
-    private void HandleState(GameState state)
+    private void HandleGameState(GameState state)
     {
         switch (state)
         {
@@ -114,8 +118,8 @@ internal sealed class Game
                 NotifyGameEnded?.Invoke();
                 break;
             case GameState.Win:
-                NotifyGameEnded?.Invoke();
                 SaveScore();
+                NotifyGameEnded?.Invoke();
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(state), state, $"Unknown {nameof(state)}: {state}");

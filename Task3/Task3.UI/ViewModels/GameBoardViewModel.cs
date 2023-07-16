@@ -1,7 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows.Data;
 using Task3.Models.GameCell;
-using Task3.UI.ViewModels.Buttons;
 
 namespace Task3.UI.ViewModels;
 

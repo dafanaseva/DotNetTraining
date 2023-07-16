@@ -31,6 +31,7 @@ internal static class InitializeCellsHelper
     {
         var notMinedPoints =
             PutMinedCells(config.Width, config.Height, config.NumberOfMines, config.Seed, cells, point);
+
         InitNumberOfCells(config.Width, config.Height, cells);
 
         return (cells, notMinedPoints);
