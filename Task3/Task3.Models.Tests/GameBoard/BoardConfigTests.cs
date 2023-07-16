@@ -13,12 +13,12 @@ internal sealed class BoardConfigTests
     public void CreateTest()
     {
         // Arrange
-        const int width = 9;
-        const int height = 5;
+        var width = new Width(9);
+        var height = new Height(5);
         const int numberOfMines = 10;
 
         // Act
-        _systemUnderTest = new BoardConfig(width, height, numberOfMines, Seed);
+        _systemUnderTest = new BoardConfig(width.Value, height.Value, numberOfMines, Seed);
 
         // Assert
         Assert.Multiple(() =>

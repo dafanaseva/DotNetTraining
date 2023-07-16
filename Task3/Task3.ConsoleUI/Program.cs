@@ -18,11 +18,11 @@ try
 
     var appConfig = config.Get<AppConfig>() ?? throw new Exception($"Can not parse {nameof(AppConfig)}");
 
-    var board = new Board(new BoardConfig(appConfig.Width, appConfig.Height, appConfig.NumberOfMines,
-        Environment.TickCount));
+    var boardConfig = new BoardConfig(appConfig.Width, appConfig.Height, appConfig.NumberOfMines, Environment.TickCount);
+    var cells = InitializeCellsHelper.CreateCells(boardConfig.Width, boardConfig.Height);
 
-    var game = new Game(board);
-    var consoleUi = new ConsoleUi(Console.Out, board);
+    var game = new Game(cells, boardConfig);
+    var consoleUi = new ConsoleUi(Console.Out, cells);
 
 
     var commandExecutor = new CommandExecutor(consoleUi, game, new Dictionary<string, Command>

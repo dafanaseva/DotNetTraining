@@ -1,26 +1,25 @@
-﻿using Task3.Models.GameBoard;
-using Task3.Models.GameCell;
+﻿using Task3.Models.GameCell;
 
 namespace Task3.ConsoleUI;
 
 internal sealed class ConsoleUi
 {
-    private readonly Board _board;
+    private readonly Cell[,]  _cells;
     private readonly TextWriter _writer;
 
-    public ConsoleUi(TextWriter writer, Board board)
+    public ConsoleUi(TextWriter writer, Cell[,] cells)
     {
-        _board = board;
+        _cells = cells;
         _writer = writer;
     }
 
     public void PrintBoard()
     {
-        for (var i = 0; i < _board.Height; i++)
+        for (var i = 0; i < _cells.GetHeight().Value; i++)
         {
-            for (var j = 0; j < _board.Width; j++)
+            for (var j = 0; j < _cells.GetWidth().Value; j++)
             {
-                var cell = _board[i, j];
+                var cell = _cells[i, j];
 
                 _writer.Write($"|{GetValue(cell)}| ");
             }

@@ -4,8 +4,8 @@ namespace Task3.Models.GameBoard;
 
 internal sealed record BoardConfig
 {
-    public int Width { get; }
-    public int Height { get; }
+    public Width Width { get; }
+    public Height Height { get; }
     public int NumberOfMines { get; }
     public int  Seed { get; }
 
@@ -21,8 +21,8 @@ internal sealed record BoardConfig
                 $"An argument {nameof(numberOfMines)} {numberOfMines} can not be more than height: {height} * width: {width}");
         }
 
-        Width = width;
-        Height = height;
+        Width = new Width(width);
+        Height = new Height(height);
         NumberOfMines = numberOfMines;
         Seed = seed;
     }

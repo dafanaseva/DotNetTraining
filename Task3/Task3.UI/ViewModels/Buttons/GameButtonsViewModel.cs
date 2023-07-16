@@ -13,8 +13,16 @@ internal sealed class GameButtonsViewModel
     {
         Buttons = new ObservableCollection<GameButtonViewModel>
         {
-            new("New game", game.StartNew),
-            new("Exit", () => game.IsCancelled = true)
+            new("New game", () =>
+            {
+                game.StartNew();
+
+            }),
+            new("Exit", () =>
+            {
+                game.IsCancelled = true;
+                //todo:
+            })
         };
     }
 }

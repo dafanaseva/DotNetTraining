@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Immutable;
+using System.Diagnostics;
 using Task3.Models.GameBoard;
 using Task3.Models.GameCell;
 
@@ -6,26 +7,40 @@ namespace Task3.Models.GameProcess;
 
 internal sealed class Game
 {
-    private Board _board;
     private readonly Stopwatch _timer;
     private readonly ScoreList _scoreList;
+
+    private Cell[,] _cells;
+    private ImmutableArray<Point> _notMinedPoints;
+    private bool _isInitialized;
+    private readonly BoardConfig _config;
+
     public delegate void GameStateHandler();
+
     public event GameStateHandler? NotifyGameEnded;
+
     public GameState GameState { get; private set; }
     public bool IsCancelled { get; set; }
 
-    public Game(Board board)
+    public Game(Cell[,] cells, BoardConfig config)
     {
-        _board = board;
         _timer = new Stopwatch();
         _timer.Start();
 
         _scoreList = new ScoreList();
+        _cells = cells;
+        _config = config;
+        _notMinedPoints = ImmutableArray<Point>.Empty;
     }
 
     public void OpenCell(Point point)
     {
-        GameState = GetGameState(_board[point.X, point.Y]);
+        if (!_isInitialized)
+        {
+            (_cells, _notMinedPoints) = InitializeCellsHelper.InitCells(_config, point, _cells);
+        }
+
+        GameState = GetGameState(_cells[point.X, point.Y]);
 
         HandleCell(point, GameState);
 
@@ -45,9 +60,14 @@ internal sealed class Game
 
     public void StartNew()
     {
-        var config = new BoardConfig(_board.Width, _board.Height, _board.NumberOfMines, Environment.TickCount);
+        _isInitialized = false;
+    }
 
-        _board = new Board(config);
+    public bool IsWin()
+    {
+        var isAllOpened = _notMinedPoints.All(x => _cells[x.X, x.Y].IsOpen);
+
+        return isAllOpened;
     }
 
     private void HandleCell(Point point, GameState state)
@@ -55,11 +75,10 @@ internal sealed class Game
         switch (state)
         {
             case GameState.Fail or GameState.Win:
-                _board.OpenAllCells(point);
+                OpenCellsHelper.OpenAllCells(point, _cells);
                 break;
             case GameState.Continue:
-                _board.InitializeCells(point);
-                _board.OpenNotMinedCells(point);
+                OpenCellsHelper.OpenNotMinedCells(point, _cells);
                 break;
             default:
                 Debug.Fail($"Invalid game state {state}");
@@ -105,10 +124,5 @@ internal sealed class Game
         _timer.Stop();
 
         _scoreList.Add(_timer.Elapsed);
-    }
-
-    private bool IsWin()
-    {
-        return _board.ClosedCellsCount == _board.NumberOfMines;
     }
 }

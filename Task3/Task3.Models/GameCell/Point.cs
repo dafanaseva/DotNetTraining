@@ -1,4 +1,5 @@
 ﻿using Task3.Models.Exceptions;
+using Task3.Models.GameBoard;
 
 namespace Task3.Models.GameCell;
 
@@ -40,7 +41,7 @@ internal sealed record Point
 
     private static readonly int[] Diff = { -1, 0, 1 };
 
-    public IEnumerable<Point> GetNeighbours(int width, int height)
+    public IEnumerable<Point> GetNeighbours(Width width, Height height)
     {
         foreach (var dx in Diff)
         {
@@ -49,7 +50,7 @@ internal sealed record Point
                 var neighbourX = X + dx;
                 var neighbourY = Y + dy;
 
-                if (!IsInBounds(neighbourX, width) || !IsInBounds(neighbourY, height))
+                if (!IsInBounds(neighbourX, width.Value) || !IsInBounds(neighbourY, height.Value))
                 {
                     continue;
                 }

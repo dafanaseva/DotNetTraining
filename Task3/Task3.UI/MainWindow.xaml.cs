@@ -18,14 +18,13 @@ namespace Task3.UI
             //todo: move constants to config or settings
             var config = new BoardConfig(9, 9, 10, Environment.TickCount);
 
-            var board = new Board(config);
-
-            var game = new Game(board);
+            var cells = InitializeCellsHelper.CreateCells(config.Width, config.Height);
+            var game = new Game(cells, config);
 
             var gameButtonsViewModel = new GameButtonsViewModel(game);
             GameButtonsViewModel.DataContext = gameButtonsViewModel;
 
-            var gameBoardViewModel = new GameBoardViewModel(board, game.OpenCell);
+            var gameBoardViewModel = new GameBoardViewModel(cells, game.OpenCell);
             GameBoardViewModel.ItemsSource = gameBoardViewModel.Cells;
 
             var gameDetailsViewModel = new GameDetailsViewModel(game);
