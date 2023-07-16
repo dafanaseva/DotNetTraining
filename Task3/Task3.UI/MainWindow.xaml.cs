@@ -21,11 +21,11 @@ namespace Task3.UI
             var cells = InitializeCellsHelper.CreateCells(config.Width, config.Height);
             var game = new Game(cells, config);
 
-            var gameButtonsViewModel = new GameButtonsViewModel(game);
-            GameButtonsViewModel.DataContext = gameButtonsViewModel;
-
             var gameBoardViewModel = new GameBoardViewModel(cells, game.OpenCell);
             GameBoardViewModel.ItemsSource = gameBoardViewModel.Cells;
+
+            var gameButtonsViewModel = new GameButtonsViewModel(game, gameBoardViewModel.OnRefresh);
+            GameButtonsViewModel.DataContext = gameButtonsViewModel;
 
             var gameDetailsViewModel = new GameDetailsViewModel(game);
             GameDetailsViewModel.DataContext = gameDetailsViewModel;

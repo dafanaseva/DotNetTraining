@@ -1,5 +1,7 @@
 ﻿using System.Collections.ObjectModel;
+using System.Windows.Data;
 using Task3.Models.GameCell;
+using Task3.UI.ViewModels.Buttons;
 
 namespace Task3.UI.ViewModels;
 
@@ -10,12 +12,18 @@ internal sealed class GameBoardViewModel
 
     public ObservableCollection<CellViewModel> Cells { get; }
 
-    public GameBoardViewModel(Cell[,] cells, CellViewModel.ClickHandler handler)
+    public GameBoardViewModel(Cell[,] cells, CellViewModel.ClickHandler clickHandler)
     {
-        Rows = cells.GetLength(0);
-        Columns = cells.GetLength(1);
-
+        Rows = cells.GetHeight().Value;
+        Columns = cells.GetWidth().Value;
         Cells = new ObservableCollection<CellViewModel>();
+
+        Init(cells, clickHandler);
+    }
+
+    private void Init(Cell[,] cells, CellViewModel.ClickHandler clickHandler)
+    {
+        Cells.Clear();
 
         for (var i = 0; i < Rows; i++)
         {
@@ -23,10 +31,16 @@ internal sealed class GameBoardViewModel
             {
                 var cellViewModel = new CellViewModel(cells[i, j], new Point(i, j));
 
-                cellViewModel.NotifyCellIsClicked += handler;
+                cellViewModel.NotifyCellIsClicked += clickHandler;
 
-               Cells.Add(cellViewModel);
+                Cells.Add(cellViewModel);
             }
         }
+    }
+
+    public void OnRefresh(Cell[,] cells, CellViewModel.ClickHandler clickHandler)
+    {
+        Init(cells, clickHandler);
+        CollectionViewSource.GetDefaultView(Cells).Refresh();
     }
 }

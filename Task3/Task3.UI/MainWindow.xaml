@@ -4,9 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
+        SizeToContent="Width"
         Title="MainWindow">
 
-        <Viewbox Stretch="Uniform">
+        <Viewbox Stretch="Uniform" Margin="25">
                 <Grid>
                         <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
@@ -21,19 +22,22 @@
                                 <ColumnDefinition />
                                 <ColumnDefinition />
                         </Grid.ColumnDefinitions>
-                        <ItemsControl x:Name="GameButtonsViewModel" ItemsSource="{Binding Path=Buttons}" Grid.Row="0" Grid.ColumnSpan="2">
+                        <ItemsControl x:Name="GameButtonsViewModel" ItemsSource="{Binding Path=Buttons}" Grid.Row="0" Grid.ColumnSpan="5">
                                 <ItemsControl.ItemTemplate>
                                         <DataTemplate>
                                                 <Button
                                                         Content="{Binding Path=Text}"
                                                         Command="{Binding Command}"
-                                                        HorizontalAlignment="Center" Margin="8">
+                                                        HorizontalAlignment="Center"
+                                                        Width="120"
+                                                        Padding="10"
+                                                        Margin="8">
                                                 </Button>
                                         </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                         </ItemsControl>
 
-                        <ItemsControl x:Name="GameBoardViewModel" ItemsSource="{Binding Path=Cells}" Grid.Row="1" Grid.Column= "0" Grid.ColumnSpan="5">
+                        <ItemsControl x:Name="GameBoardViewModel" ItemsSource="{Binding Path=Cells}" Grid.Row="1" Grid.Column= "0" Grid.ColumnSpan="5" Margin="30">
                                 <ItemsControl.ItemsPanel>
                                         <ItemsPanelTemplate >
                                                 <UniformGrid Rows="{Binding Path=Rows}" Columns="{Binding Path=Columns}"/>
@@ -56,14 +60,14 @@
                                 </ItemsControl.ItemTemplate>
                         </ItemsControl>
 
-                        <ItemsControl x:Name="GameDetailsViewModel" ItemsSource="{Binding Path=Details}" Grid.Row="2" Grid.Column="1">
+                        <ItemsControl x:Name="GameDetailsViewModel" ItemsSource="{Binding Path=Details}" Grid.Row="2" Grid.ColumnSpan="5">
                                 <ItemsControl.ItemTemplate>
                                         <DataTemplate>
                                                 <ContentControl
                                                         Name="Detail"
                                                         Content="{Binding}"
                                                         HorizontalAlignment="Center"
-                                                        Margin="9,0,0,0"
+                                                        Margin="5"
                                                         IsTabStop="False">
                                                 </ContentControl>
                                         </DataTemplate>

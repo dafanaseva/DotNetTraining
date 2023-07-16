@@ -58,9 +58,12 @@ internal sealed class Game
         return _scoreList.GetHighScore();
     }
 
-    public void StartNew()
+    public Cell[,] StartNew()
     {
         _isInitialized = false;
+
+        _cells = InitializeCellsHelper.CreateCells(_config.Width, _config.Height);
+        return _cells;
     }
 
     public bool IsWin()
