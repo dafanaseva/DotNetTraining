@@ -18,7 +18,7 @@ internal sealed class Controller : IObserver
         _carsWarehouse.AddObserver(this);
     }
 
-    public void Update(Item item)
+    public void Update(ITem item)
     {
         for (var i = 0; i < _carsWarehouse.Capacity; ++i)
         {

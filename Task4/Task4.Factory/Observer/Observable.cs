@@ -16,7 +16,7 @@ internal class Observable : IObservable
         _observers.Remove(observer);
     }
 
-    public void Notify(Item item)
+    public void Notify(ITem item)
     {
         foreach (var observer in _observers)
         {

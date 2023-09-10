@@ -6,5 +6,5 @@ internal interface IObservable
 {
     void AddObserver(IObserver observer);
     void RemoveObserver(IObserver observer);
-    void Notify(Item item);
+    void Notify(ITem item);
 }

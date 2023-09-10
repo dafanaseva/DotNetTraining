@@ -3,7 +3,7 @@ using Task4.Factory.Observer;
 
 namespace Task4.Factory.Warehouses;
 
-internal sealed class Warehouse<T>: Observable where T : Item
+internal sealed class Warehouse<T> : Observable where T : ITem
 {
     private const int MinItemsCount = 0;
     private const int MaxItemsCount = 100;
@@ -16,7 +16,7 @@ internal sealed class Warehouse<T>: Observable where T : Item
     {
         if (capacity is <= MinItemsCount or >= MaxItemsCount)
         {
-            throw new Exception();
+            throw new ArgumentException();
         }
 
         Capacity = capacity;
@@ -24,10 +24,16 @@ internal sealed class Warehouse<T>: Observable where T : Item
         _items = new Queue<T>();
     }
 
-    public T? GetItem()
+    public bool TryGetItem(out T result)
     {
+        if (_items.Count > 0)
+        {
+            result = _items.Dequeue();
+            return true;
+        }
 
-        return _items.Count > 0 ? _items.Dequeue() : null;
+        result = default!;
+        return false;
     }
 
     public void PutItem(T item)

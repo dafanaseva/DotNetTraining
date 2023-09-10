@@ -4,5 +4,5 @@ namespace Task4.Factory.Observer;
 
 internal interface IObserver
 {
-    void Update(Item item);
+    void Update(ITem item);
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Immutable;
 using Task4.Factory.Details;
+using Task4.Factory.Exceptions;
 using Task4.Factory.Warehouses;
 
 namespace Task4.Factory.Executors;
@@ -19,9 +20,19 @@ internal sealed class Worker
 
     public Car BuildCar()
     {
-        var accessory = _accessoryWarehouse.GetItem() ?? throw new NullReferenceException();
-        var body = _bodyWarehouse.GetItem() ?? throw new NullReferenceException();
-        var engine = _enginesWarehouse.GetItem() ??  throw new NullReferenceException();
+        if (!_accessoryWarehouse.TryGetItem(out var accessory))
+        {
+            throw new FailedGetITemException(nameof(accessory));
+        }
+        if (!_bodyWarehouse.TryGetItem(out var body))
+        {
+            throw new FailedGetITemException(nameof(body));
+        }
+
+        if (!_enginesWarehouse.TryGetItem(out var engine))
+        {
+            throw new FailedGetITemException(nameof(engine));
+        }
 
         return new Car(body, engine, ImmutableArray.Create(new[] { accessory }));
     }

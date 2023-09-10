@@ -3,7 +3,7 @@ using Task4.Factory.Warehouses;
 
 namespace Task4.Factory.Executors;
 
-internal sealed class Supplier<T> where T : Item, new()
+internal sealed class Supplier<T> where T : ITem, new()
 {
     private readonly Warehouse<T> _warehouse;
     private readonly TextWriter _textWriter;

@@ -15,9 +15,7 @@ internal sealed class Dealer
 
     public void Run()
     {
-        var car = _carWarehouse.GetItem();
-
-        if (car != null)
+        if (_carWarehouse.TryGetItem(out var car))
         {
             _textWriter.WriteLine($"The car is sold: {car.Id}");
         }

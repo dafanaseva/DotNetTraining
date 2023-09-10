@@ -1,6 +1,6 @@
 ﻿namespace Task4.Factory.Details;
 
-internal abstract class Item
+internal interface ITem
 {
     public Guid Id { get; set; }
 }
