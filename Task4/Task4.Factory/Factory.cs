@@ -5,7 +5,7 @@ using Task4.Factory.Warehouses;
 
 namespace Task4.Factory;
 
-internal sealed class Factory
+public sealed class Factory
 {
     private readonly Warehouse<Body> _bodyWarehouse;
     private readonly Warehouse<Engine> _enginesWarehouse;
@@ -15,8 +15,6 @@ internal sealed class Factory
     private readonly Supplier<Engine> _engineSupplier;
     private readonly Supplier<Body> _bodySupplier;
     private readonly List<Supplier<Accessory>> _accessorySuppliers;
-
-    private readonly Controller _controller;
 
     private readonly List<Dealer> _dealers;
 
@@ -38,7 +36,6 @@ internal sealed class Factory
         _accessorySuppliers = new List<Supplier<Accessory>>();
 
         _worker = new Worker(_bodyWarehouse, _enginesWarehouse, _accessoryWarehouse);
-        _controller = new Controller(_worker, _carWarehouse);
         _dealers = new List<Dealer>();
 
         for (var i = 0; i < config.DealerCount; i++)
@@ -50,5 +47,10 @@ internal sealed class Factory
     public void Start()
     {
         _textWriter.WriteLine("Start factory");
+    }
+
+    public void Stop()
+    {
+        _textWriter.WriteLine("Stop factory");
     }
 }

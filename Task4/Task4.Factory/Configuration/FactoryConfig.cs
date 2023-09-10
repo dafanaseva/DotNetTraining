@@ -1,6 +1,6 @@
 ﻿namespace Task4.Factory.Configuration;
 
-internal sealed class FactoryConfig
+public sealed class FactoryConfig
 {
     public int WarehouseEngineCapacity { get; set; } = 100;
     public int WarehouseBodyCapacity { get; set; } = 100;

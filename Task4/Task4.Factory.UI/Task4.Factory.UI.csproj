@@ -8,4 +8,8 @@
         <RootNamespace>Task4.Factory.UI</RootNamespace>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Task4.Factory\Task4.Factory.csproj" />
+    </ItemGroup>
+
 </Project>
